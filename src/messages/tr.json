@@ -1,0 +1,35 @@
+{
+  "nav": {
+    "home": "Ana Sayfa",
+    "stores": "Mağazalar",
+    "dining": "Yeme-İçme",
+    "campaigns": "Kampanyalar",
+    "events": "Etkinlikler",
+    "cinema": "Sinema",
+    "kids": "Çocuk & Eğlence",
+    "hours": "Çalışma Saatleri",
+    "map": "Harita",
+    "contact": "İletişim"
+  },
+  "common": {
+    "siteName": "CityMall Cyprus",
+    "language": "Dil",
+    "turkish": "Türkçe",
+    "english": "English",
+    "openMenu": "Menüyü aç",
+    "closeMenu": "Menüyü kapat"
+  },
+  "home": {
+    "title": "CityMall Cyprus",
+    "description": "Alışveriş, yeme-içme, etkinlik ve eğlenceyi tek çatı altında buluşturan modern yaşam merkezi konsepti."
+  },
+  "footer": {
+    "disclaimer": "Bu site CityMall Cyprus'un resmi sitesi değildir. Portföy ve konsept demonstrasyonu amacıyla hazırlanmıştır.",
+    "copyright": "Tüm hakları saklıdır."
+  },
+  "notFound": {
+    "title": "Sayfa bulunamadı",
+    "description": "Aradığınız sayfa taşınmış veya mevcut olmayabilir.",
+    "backHome": "Ana sayfaya dön"
+  }
+}

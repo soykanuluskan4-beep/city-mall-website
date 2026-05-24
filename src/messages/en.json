@@ -1,0 +1,35 @@
+{
+  "nav": {
+    "home": "Home",
+    "stores": "Stores",
+    "dining": "Dining",
+    "campaigns": "Campaigns",
+    "events": "Events",
+    "cinema": "Cinema",
+    "kids": "Kids & Entertainment",
+    "hours": "Opening Hours",
+    "map": "Map",
+    "contact": "Contact"
+  },
+  "common": {
+    "siteName": "CityMall Cyprus",
+    "language": "Language",
+    "turkish": "Türkçe",
+    "english": "English",
+    "openMenu": "Open menu",
+    "closeMenu": "Close menu"
+  },
+  "home": {
+    "title": "CityMall Cyprus",
+    "description": "A modern lifestyle mall concept bringing together shopping, dining, events and entertainment under one roof."
+  },
+  "footer": {
+    "disclaimer": "This site is not the official website of CityMall Cyprus. It was created for portfolio and concept demonstration purposes.",
+    "copyright": "All rights reserved."
+  },
+  "notFound": {
+    "title": "Page not found",
+    "description": "The page you are looking for may have moved or may not exist.",
+    "backHome": "Back to home"
+  }
+}
