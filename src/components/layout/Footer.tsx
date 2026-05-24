@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 
 const footerContent = {
@@ -54,9 +55,19 @@ export function Footer({ locale = "tr" }: FooterProps) {
     <footer className="border-t border-border-default bg-surface-muted">
       <div className="container grid gap-8 py-10 md:grid-cols-[1.4fr_1fr]">
         <section>
-          <h2 className="text-lg font-semibold text-text-primary">
-            CityMall Cyprus
-          </h2>
+          <div className="flex items-center gap-3">
+  <Image
+    src="/citymall-logo.png"
+    alt="CityMall Cyprus logo"
+    width={40}
+    height={40}
+    className="h-10 w-auto"
+  />
+
+  <h2 className="text-lg font-semibold text-text-primary">
+    CityMall Cyprus
+  </h2>
+</div>
 
           <p className="mt-3 max-w-xl text-sm leading-6 text-text-secondary">
             {content.disclaimer}

@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
@@ -86,12 +87,23 @@ export function Navbar() {
     <header className="sticky top-0 z-50 border-b border-border-default bg-surface-default/95 backdrop-blur">
       <div className="container flex min-h-16 items-center justify-between gap-4">
         <Link
-          href={`/${locale}`}
-          className="shrink-0 text-lg font-semibold tracking-tight text-text-primary"
-          onClick={() => setIsMenuOpen(false)}
-        >
-          CityMall Cyprus
-        </Link>
+  href={`/${locale}`}
+  className="flex shrink-0 items-center gap-3"
+  onClick={() => setIsMenuOpen(false)}
+>
+  <Image
+    src="/citymall-logo.png"
+    alt="CityMall Cyprus logo"
+    width={44}
+    height={44}
+    className="h-11 w-auto"
+    priority
+  />
+
+  <span className="text-lg font-semibold tracking-tight text-text-primary">
+    CityMall Cyprus
+  </span>
+</Link>
 
         <nav className="hidden items-center gap-5 text-sm font-medium text-text-secondary xl:flex">
           {navItems.map((item) => (
