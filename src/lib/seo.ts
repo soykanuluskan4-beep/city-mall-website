@@ -3,7 +3,7 @@ import type { Locale } from "@/types/content";
 
 export const siteConfig = {
   name: brand.name,
-  url: process.env.NEXT_PUBLIC_SITE_URL || "https://city-mall-website.vercel.app",
+ url: "https://city-mall-website.vercel.app",
   defaultLocale: "tr" as Locale,
   locales: ["tr", "en"] as const,
 };

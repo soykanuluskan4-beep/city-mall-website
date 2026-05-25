@@ -49,9 +49,9 @@ export function generateMetadata({
 const pageContent = {
   tr: {
     eyebrow: "CityMall Cyprus",
-    title: "Alışveriş, lezzet ve eğlenceyi tek çatı altında keşfet.",
+    title: "Gazimağusa'nın buluşma noktası.",
     description:
-      "CityMall Cyprus konsept sitesi; mağazalar, yeme-içme alanları, kampanyalar, etkinlikler ve ziyaret bilgilerini modern bir AVM deneyimiyle sunar.",
+  "CityMall Cyprus; mağazalar, yeme-içme alanları, kampanyalar, etkinlikler, sinema ve ziyaret bilgilerini modern bir AVM deneyimiyle sunar.",
     storesTitle: "Öne Çıkan Mağazalar",
     diningTitle: "Yeme-İçme",
     campaignsTitle: "Kampanyalar",
@@ -71,9 +71,9 @@ const pageContent = {
   },
   en: {
     eyebrow: "CityMall Cyprus",
-    title: "Discover shopping, dining and entertainment under one roof.",
+    title: "Famagusta's meeting point.",
     description:
-      "The CityMall Cyprus concept website presents stores, dining areas, campaigns, events and visitor information through a modern mall experience.",
+  "CityMall Cyprus brings stores, dining, campaigns, events, cinema and visitor information together in a modern mall experience.",
     storesTitle: "Featured Stores",
     diningTitle: "Dining",
     campaignsTitle: "Campaigns",

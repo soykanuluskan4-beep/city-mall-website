@@ -10,9 +10,9 @@ const inter = Inter({
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteConfig.url),
-  title: "CityMall Cyprus",
+  title: "CityMall Cyprus | Gazimağusa'nın buluşma noktası",
   description:
-    "CityMall Cyprus için hazırlanmış çok dilli AVM web sitesi konsepti.",
+    "CityMall Cyprus; mağazalar, yeme-içme, sinema, etkinlikler ve ziyaret bilgilerini bir araya getiren Gazimağusa odaklı AVM konsept sitesidir.",
   manifest: "/site.webmanifest",
   icons: {
     icon: "/citymall-logo.png",
@@ -20,17 +20,17 @@ export const metadata: Metadata = {
     apple: "/citymall-logo.png",
   },
   openGraph: {
-    title: "CityMall Cyprus",
+    title: "CityMall Cyprus | Gazimağusa'nın buluşma noktası",
     description:
-      "CityMall Cyprus için hazırlanmış çok dilli AVM web sitesi konsepti.",
+      "CityMall Cyprus; mağazalar, yeme-içme, sinema, etkinlikler ve ziyaret bilgilerini bir araya getiren Gazimağusa odaklı AVM konsept sitesidir.",
     siteName: "CityMall Cyprus",
     type: "website",
   },
   twitter: {
     card: "summary_large_image",
-    title: "CityMall Cyprus",
+    title: "CityMall Cyprus | Gazimağusa'nın buluşma noktası",
     description:
-      "CityMall Cyprus için hazırlanmış çok dilli AVM web sitesi konsepti.",
+      "CityMall Cyprus; mağazalar, yeme-içme, sinema, etkinlikler ve ziyaret bilgilerini bir araya getiren Gazimağusa odaklı AVM konsept sitesidir.",
   },
 };
 
