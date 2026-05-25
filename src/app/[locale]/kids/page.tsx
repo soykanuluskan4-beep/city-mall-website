@@ -3,6 +3,8 @@ import { notFound } from "next/navigation";
 import { events } from "@/data/events";
 import { stores } from "@/data/stores";
 import { locales } from "@/i18n/routing";
+import type { Metadata } from "next";
+import { createPageMetadata } from "@/lib/metadata";
 import { getLocalizedText } from "@/lib/locale";
 import type { Locale } from "@/types/content";
 
@@ -11,6 +13,31 @@ type KidsPageProps = {
     locale: string;
   };
 };
+
+export function generateMetadata({
+  params,
+}: {
+  params: { locale: string };
+}): Metadata {
+  const locale = params.locale as Locale;
+
+  if (!locales.includes(locale)) {
+    return {};
+  }
+
+  return createPageMetadata({
+    locale,
+    path: "/kids",
+    title:
+      locale === "tr"
+        ? "Çocuk & Eğlence | CityMall Cyprus"
+        : "Kids & Entertainment | CityMall Cyprus",
+    description:
+      locale === "tr"
+        ? "CityMall Cyprus çocuk mağazaları, aile etkinlikleri ve eğlence odaklı konsept alanlarını keşfedin."
+        : "Explore CityMall Cyprus kids stores, family events and entertainment-focused concept areas.",
+  });
+}
 
 const pageContent = {
   tr: {

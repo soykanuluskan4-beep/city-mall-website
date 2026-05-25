@@ -1,5 +1,8 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import type { Metadata } from "next";
+import { JsonLd, createItemListSchema } from "@/lib/schema";
+import { createPageMetadata } from "@/lib/metadata";
 import { events } from "@/data/events";
 import { locales } from "@/i18n/routing";
 import { getLocalizedText } from "@/lib/locale";
@@ -10,6 +13,31 @@ type EventsPageProps = {
     locale: string;
   };
 };
+
+export function generateMetadata({
+  params,
+}: {
+  params: { locale: string };
+}): Metadata {
+  const locale = params.locale as Locale;
+
+  if (!locales.includes(locale)) {
+    return {};
+  }
+
+  return createPageMetadata({
+    locale,
+    path: "/events",
+    title:
+      locale === "tr"
+        ? "Etkinlikler | CityMall Cyprus"
+        : "Events | CityMall Cyprus",
+    description:
+      locale === "tr"
+        ? "CityMall Cyprus etkinlik takvimini, aile etkinliklerini ve özel programları inceleyin."
+        : "Explore the CityMall Cyprus event calendar, family events and special programs.",
+  });
+}
 
 const pageContent = {
   tr: {
@@ -87,9 +115,16 @@ export default function EventsPage({ params }: EventsPageProps) {
 
   const content = pageContent[locale];
   const featuredEvents = events.filter((event) => event.featured);
+  const eventsSchema = createItemListSchema(
+  locale,
+  "/events",
+  events,
+  (event) => getLocalizedText(event.title, locale)
+);
 
   return (
-    <main className="bg-surface-default">
+  <main className="bg-surface-default">
+    <JsonLd data={eventsSchema} />
       <section className="border-b border-border-default bg-[radial-gradient(circle_at_top_right,rgba(17,24,39,0.10),transparent_34%),linear-gradient(180deg,#f9fafb_0%,#ffffff_100%)]">
         <div className="container grid gap-10 py-16 md:py-24 lg:grid-cols-[1fr_0.85fr] lg:items-end">
           <div>

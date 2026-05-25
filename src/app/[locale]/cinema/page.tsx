@@ -1,6 +1,9 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { movies } from "@/data/movies";
+import { JsonLd, createItemListSchema } from "@/lib/schema";
+import type { Metadata } from "next";
+import { createPageMetadata } from "@/lib/metadata";
 import { locales } from "@/i18n/routing";
 import { getLocalizedText } from "@/lib/locale";
 import type { Locale, MovieGenre } from "@/types/content";
@@ -10,6 +13,31 @@ type CinemaPageProps = {
     locale: string;
   };
 };
+
+export function generateMetadata({
+  params,
+}: {
+  params: { locale: string };
+}): Metadata {
+  const locale = params.locale as Locale;
+
+  if (!locales.includes(locale)) {
+    return {};
+  }
+
+  return createPageMetadata({
+    locale,
+    path: "/cinema",
+    title:
+      locale === "tr"
+        ? "Sinema | CityMall Cyprus"
+        : "Cinema | CityMall Cyprus",
+    description:
+      locale === "tr"
+        ? "CityMall Cyprus sinema programını, film türlerini ve seans saatlerini keşfedin."
+        : "Discover the CityMall Cyprus cinema program, movie genres and showtimes.",
+  });
+}
 
 const pageContent = {
   tr: {
@@ -79,9 +107,16 @@ export default function CinemaPage({ params }: CinemaPageProps) {
 
   const content = pageContent[locale];
   const featuredMovies = movies.filter((movie) => movie.featured);
+  const moviesSchema = createItemListSchema(
+  locale,
+  "/cinema",
+  movies,
+  (movie) => getLocalizedText(movie.title, locale)
+);
 
   return (
-    <main className="bg-surface-default">
+  <main className="bg-surface-default">
+    <JsonLd data={moviesSchema} />
       <section className="border-b border-border-default bg-brand-primary text-brand-foreground">
         <div className="container grid gap-10 py-16 md:py-24 lg:grid-cols-[1fr_0.8fr] lg:items-end">
           <div>

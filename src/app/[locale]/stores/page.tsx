@@ -2,6 +2,9 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { locales } from "@/i18n/routing";
 import { stores } from "@/data/stores";
+import { JsonLd, createItemListSchema } from "@/lib/schema";
+import type { Metadata } from "next";
+import { createPageMetadata } from "@/lib/metadata";
 import { getLocalizedText } from "@/lib/locale";
 import type { Locale } from "@/types/content";
 
@@ -10,6 +13,31 @@ type StoresPageProps = {
     locale: string;
   };
 };
+
+export function generateMetadata({
+  params,
+}: {
+  params: { locale: string };
+}): Metadata {
+  const locale = params.locale as Locale;
+
+  if (!locales.includes(locale)) {
+    return {};
+  }
+
+  return createPageMetadata({
+    locale,
+    path: "/stores",
+    title:
+      locale === "tr"
+        ? "Mağazalar | CityMall Cyprus"
+        : "Stores | CityMall Cyprus",
+    description:
+      locale === "tr"
+        ? "CityMall Cyprus mağazalarını kategori, kat ve öne çıkan seçeneklerle keşfedin."
+        : "Explore CityMall Cyprus stores by category, floor and featured selections.",
+  });
+}
 
 const pageContent = {
   tr: {
@@ -89,9 +117,16 @@ export default function StoresPage({ params }: StoresPageProps) {
 
   const content = pageContent[locale];
   const featuredStores = stores.filter((store) => store.featured);
-
+  const storesSchema = createItemListSchema(
+    locale,
+    "/stores",
+    stores,
+    (store) => getLocalizedText(store.name, locale)
+  );
+  
   return (
-    <main className="bg-surface-default">
+  <main className="bg-surface-default">
+    <JsonLd data={storesSchema} />
       <section className="border-b border-border-default bg-[linear-gradient(180deg,#f9fafb_0%,#ffffff_100%)]">
         <div className="container py-16 md:py-24">
           <p className="text-sm font-semibold uppercase tracking-[0.35em] text-text-muted">

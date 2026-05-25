@@ -12,6 +12,7 @@ const routes = [
   "/hours",
   "/map",
   "/contact",
+  "/privacy",
 ];
 
 export default function sitemap(): MetadataRoute.Sitemap {

@@ -1,18 +1,50 @@
+import type { Metadata } from "next";
 import Link from "next/link";
+import { notFound } from "next/navigation";
 import { campaigns } from "@/data/campaigns";
 import { diningPlaces } from "@/data/dining";
+import {
+  JsonLd,
+  createOrganizationSchema,
+  createShoppingMallSchema,
+} from "@/lib/schema";
 import { events } from "@/data/events";
 import { stores } from "@/data/stores";
-import { getLocalizedText } from "@/lib/locale";
 import { locales } from "@/i18n/routing";
+import { getLocalizedText } from "@/lib/locale";
+import { createPageMetadata } from "@/lib/metadata";
 import type { Locale } from "@/types/content";
-import { notFound } from "next/navigation";
 
 type HomePageProps = {
   params: {
     locale: string;
   };
 };
+
+export function generateMetadata({
+  params,
+}: {
+  params: { locale: string };
+}): Metadata {
+  const locale = params.locale as Locale;
+
+  if (!locales.includes(locale)) {
+    return {};
+  }
+
+  return createPageMetadata({
+    locale,
+    path: "",
+    title:
+      locale === "tr"
+        ? "CityMall Cyprus | Gazimağusa'nın buluşma noktası"
+        : "CityMall Cyprus | Famagusta's meeting point",
+    description:
+      locale === "tr"
+        ? "CityMall Cyprus konsept sitesinde mağazalar, yeme-içme seçenekleri, kampanyalar, etkinlikler, sinema ve ziyaret bilgilerini keşfedin."
+        : "Discover stores, dining options, campaigns, events, cinema and visitor information on the CityMall Cyprus concept website.",
+  });
+}
 
 const pageContent = {
   tr: {
@@ -69,6 +101,8 @@ export default function HomePage({ params }: HomePageProps) {
   }
 
   const content = pageContent[locale];
+  const organizationSchema = createOrganizationSchema(locale);
+  const shoppingMallSchema = createShoppingMallSchema(locale);
 
   const featuredStores = stores.filter((store) => store.featured).slice(0, 3);
   const featuredCampaigns = campaigns
@@ -80,7 +114,9 @@ export default function HomePage({ params }: HomePageProps) {
     .slice(0, 2);
 
   return (
-    <main className="bg-surface-default">
+  <main className="bg-surface-default">
+    <JsonLd data={organizationSchema} />
+    <JsonLd data={shoppingMallSchema} />
       <section className="relative overflow-hidden border-b border-border-default bg-[radial-gradient(circle_at_top_right,rgba(17,24,39,0.10),transparent_34%),linear-gradient(180deg,#f9fafb_0%,#ffffff_100%)]">
         <div className="container grid min-h-[720px] items-center gap-12 py-20 lg:grid-cols-[1.05fr_0.95fr]">
           <div>

@@ -1,5 +1,8 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import type { Metadata } from "next";
+import { JsonLd, createLocalBusinessSchema } from "@/lib/schema";
+import { createPageMetadata } from "@/lib/metadata";
 import { locales } from "@/i18n/routing";
 import type { Locale } from "@/types/content";
 
@@ -8,6 +11,31 @@ type ContactPageProps = {
     locale: string;
   };
 };
+
+export function generateMetadata({
+  params,
+}: {
+  params: { locale: string };
+}): Metadata {
+  const locale = params.locale as Locale;
+
+  if (!locales.includes(locale)) {
+    return {};
+  }
+
+  return createPageMetadata({
+    locale,
+    path: "/contact",
+    title:
+      locale === "tr"
+        ? "İletişim | CityMall Cyprus"
+        : "Contact | CityMall Cyprus",
+    description:
+      locale === "tr"
+        ? "CityMall Cyprus telefon, e-posta, adres ve ziyaretçi iletişim bilgilerini görüntüleyin."
+        : "View CityMall Cyprus phone, email, address and visitor contact information.",
+  });
+}
 
 const pageContent = {
   tr: {
@@ -76,9 +104,12 @@ export default function ContactPage({ params }: ContactPageProps) {
   }
 
   const content = pageContent[locale];
+const contactSchema = createLocalBusinessSchema(locale, "/contact");
 
   return (
-    <main className="bg-surface-default">
+  <main className="bg-surface-default">
+    <JsonLd data={contactSchema} />
+    
       <section className="border-b border-border-default bg-[radial-gradient(circle_at_top_right,rgba(17,24,39,0.10),transparent_34%),linear-gradient(180deg,#f9fafb_0%,#ffffff_100%)]">
         <div className="container grid gap-10 py-16 md:py-24 lg:grid-cols-[1fr_0.85fr] lg:items-end">
           <div>

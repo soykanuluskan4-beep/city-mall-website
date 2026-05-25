@@ -2,6 +2,9 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { campaigns } from "@/data/campaigns";
 import { locales } from "@/i18n/routing";
+import { JsonLd, createItemListSchema } from "@/lib/schema";
+import type { Metadata } from "next";
+import { createPageMetadata } from "@/lib/metadata";
 import { getLocalizedText } from "@/lib/locale";
 import type { Locale } from "@/types/content";
 
@@ -10,6 +13,31 @@ type CampaignsPageProps = {
     locale: string;
   };
 };
+
+export function generateMetadata({
+  params,
+}: {
+  params: { locale: string };
+}): Metadata {
+  const locale = params.locale as Locale;
+
+  if (!locales.includes(locale)) {
+    return {};
+  }
+
+  return createPageMetadata({
+    locale,
+    path: "/campaigns",
+    title:
+      locale === "tr"
+        ? "Kampanyalar | CityMall Cyprus"
+        : "Campaigns | CityMall Cyprus",
+    description:
+      locale === "tr"
+        ? "CityMall Cyprus kampanyalarını, sezon fırsatlarını ve ziyaretçilere özel avantajları inceleyin."
+        : "Browse CityMall Cyprus campaigns, seasonal offers and visitor-focused advantages.",
+  });
+}
 
 const pageContent = {
   tr: {
@@ -71,9 +99,16 @@ export default function CampaignsPage({ params }: CampaignsPageProps) {
 
   const content = pageContent[locale];
   const featuredCampaigns = campaigns.filter((campaign) => campaign.featured);
+  const campaignsSchema = createItemListSchema(
+  locale,
+  "/campaigns",
+  campaigns,
+  (campaign) => getLocalizedText(campaign.title, locale)
+);
 
   return (
-    <main className="bg-surface-default">
+  <main className="bg-surface-default">
+    <JsonLd data={campaignsSchema} />
       <section className="border-b border-border-default bg-[radial-gradient(circle_at_top_right,rgba(17,24,39,0.10),transparent_34%),linear-gradient(180deg,#f9fafb_0%,#ffffff_100%)]">
         <div className="container grid gap-10 py-16 md:py-24 lg:grid-cols-[1fr_0.85fr] lg:items-end">
           <div>

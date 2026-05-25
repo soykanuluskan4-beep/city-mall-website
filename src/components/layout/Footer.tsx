@@ -148,12 +148,24 @@ export function Footer({ locale = "tr" }: FooterProps) {
         </section>
       </div>
 
-      <div className="border-t border-border-default py-5">
-        <div className="container flex flex-col gap-3 text-xs text-text-muted md:flex-row md:items-center md:justify-between">
-          <p>{content.copyright}</p>
-          <p>{locale === "tr" ? "Çok dilli demo konsept" : "Multilingual demo concept"}</p>
-        </div>
-      </div>
+     <div className="border-t border-border-default py-5">
+  <div className="container flex flex-col gap-3 text-xs text-text-muted md:flex-row md:items-center md:justify-between">
+    <p>{content.copyright}</p>
+
+    <div className="flex flex-wrap items-center gap-3">
+      <Link
+        href={`/${locale}/privacy`}
+        className="transition hover:text-text-primary"
+      >
+        {locale === "tr" ? "Gizlilik ve Çerezler" : "Privacy and Cookies"}
+      </Link>
+
+      <span aria-hidden="true">·</span>
+
+      <p>{locale === "tr" ? "Çok dilli demo konsept" : "Multilingual demo concept"}</p>
+    </div>
+  </div>
+</div>
     </footer>
   );
 }

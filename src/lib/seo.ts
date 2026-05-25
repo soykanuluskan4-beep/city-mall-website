@@ -1,31 +1,42 @@
+import { brand } from "@/lib/brand";
 import type { Locale } from "@/types/content";
 
 export const siteConfig = {
-  name: "CityMall Cyprus",
-  url: process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000",
+  name: brand.name,
+  url: process.env.NEXT_PUBLIC_SITE_URL || "https://city-mall-website.vercel.app",
   defaultLocale: "tr" as Locale,
   locales: ["tr", "en"] as const,
 };
 
 export const seoContent = {
   tr: {
-    title: "CityMall Cyprus | AVM Web Sitesi Konsepti",
-    description:
-      "CityMall Cyprus için hazırlanmış çok dilli AVM web sitesi konsepti. Mağazalar, yeme-içme, kampanyalar, etkinlikler, sinema ve ziyaret bilgileri.",
-    ogTitle: "CityMall Cyprus",
-    ogDescription:
-      "Alışveriş, yeme-içme, etkinlik ve eğlenceyi tek çatı altında sunan modern AVM web sitesi konsepti.",
+    title: `${brand.name} | ${brand.voice.tr}`,
+    description: brand.description.tr,
+    ogTitle: brand.name,
+    ogDescription: brand.voice.tr,
   },
   en: {
-    title: "CityMall Cyprus | Mall Website Concept",
-    description:
-      "A multilingual mall website concept for CityMall Cyprus, featuring stores, dining, campaigns, events, cinema and visitor information.",
-    ogTitle: "CityMall Cyprus",
-    ogDescription:
-      "A modern mall website concept bringing shopping, dining, events and entertainment under one roof.",
+    title: `${brand.name} | ${brand.voice.en}`,
+    description: brand.description.en,
+    ogTitle: brand.name,
+    ogDescription: brand.voice.en,
   },
 };
 
 export function getSeoContent(locale: Locale) {
   return seoContent[locale] ?? seoContent[siteConfig.defaultLocale];
+}
+
+export function getCanonicalUrl(locale: Locale, path = "") {
+  const normalizedPath = path.startsWith("/") ? path : `/${path}`;
+  const cleanPath = normalizedPath === "/" ? "" : normalizedPath;
+
+  return `${siteConfig.url}/${locale}${cleanPath}`;
+}
+
+export function getAlternateLanguages(path = "") {
+  return {
+    tr: getCanonicalUrl("tr", path),
+    en: getCanonicalUrl("en", path),
+  };
 }

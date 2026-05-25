@@ -1,5 +1,8 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import { JsonLd, createOpeningHoursSchema } from "@/lib/schema";
+import type { Metadata } from "next";
+import { createPageMetadata } from "@/lib/metadata";
 import { openingHours } from "@/data/opening-hours";
 import { locales } from "@/i18n/routing";
 import { getLocalizedText } from "@/lib/locale";
@@ -10,6 +13,31 @@ type HoursPageProps = {
     locale: string;
   };
 };
+
+export function generateMetadata({
+  params,
+}: {
+  params: { locale: string };
+}): Metadata {
+  const locale = params.locale as Locale;
+
+  if (!locales.includes(locale)) {
+    return {};
+  }
+
+  return createPageMetadata({
+    locale,
+    path: "/hours",
+    title:
+      locale === "tr"
+        ? "Çalışma Saatleri | CityMall Cyprus"
+        : "Opening Hours | CityMall Cyprus",
+    description:
+      locale === "tr"
+        ? "CityMall Cyprus AVM, sinema ve yeme-içme çalışma saatlerini ve özel notları inceleyin."
+        : "View CityMall Cyprus mall, cinema and dining opening hours with special notes.",
+  });
+}
 
 const pageContent = {
   tr: {
@@ -52,9 +80,12 @@ export default function HoursPage({ params }: HoursPageProps) {
   }
 
   const content = pageContent[locale];
+  const hoursSchema = createOpeningHoursSchema(locale, openingHours.mall);
 
   return (
-    <main className="bg-surface-default">
+  <main className="bg-surface-default">
+    <JsonLd data={hoursSchema} />
+    
       <section className="border-b border-border-default bg-surface-muted">
         <div className="container grid gap-10 py-16 md:py-24 lg:grid-cols-[1fr_0.8fr] lg:items-end">
           <div>

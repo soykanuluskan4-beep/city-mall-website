@@ -1,6 +1,9 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { diningPlaces } from "@/data/dining";
+import { JsonLd, createItemListSchema } from "@/lib/schema";
+import type { Metadata } from "next";
+import { createPageMetadata } from "@/lib/metadata";
 import { locales } from "@/i18n/routing";
 import { getLocalizedText } from "@/lib/locale";
 import type { Locale } from "@/types/content";
@@ -10,6 +13,31 @@ type DiningPageProps = {
     locale: string;
   };
 };
+
+export function generateMetadata({
+  params,
+}: {
+  params: { locale: string };
+}): Metadata {
+  const locale = params.locale as Locale;
+
+  if (!locales.includes(locale)) {
+    return {};
+  }
+
+  return createPageMetadata({
+    locale,
+    path: "/dining",
+    title:
+      locale === "tr"
+        ? "Yeme-İçme | CityMall Cyprus"
+        : "Dining | CityMall Cyprus",
+    description:
+      locale === "tr"
+        ? "CityMall Cyprus yeme-içme alanındaki kafe, restoran, fast food ve tatlı seçeneklerini keşfedin."
+        : "Explore cafes, restaurants, fast food and dessert options in the CityMall Cyprus dining area.",
+  });
+}
 
 const pageContent = {
   tr: {
@@ -64,10 +92,17 @@ export default function DiningPage({ params }: DiningPageProps) {
   }
 
   const content = pageContent[locale];
+  const diningSchema = createItemListSchema(
+  locale,
+  "/dining",
+  diningPlaces,
+  (place) => getLocalizedText(place.name, locale)
+);
   const featuredDining = diningPlaces.filter((place) => place.featured);
 
   return (
-    <main className="bg-surface-default">
+  <main className="bg-surface-default">
+    <JsonLd data={diningSchema} />
       <section className="border-b border-border-default bg-brand-primary text-brand-foreground">
         <div className="container grid gap-10 py-16 md:py-24 lg:grid-cols-[1fr_0.75fr] lg:items-end">
           <div>

@@ -1,6 +1,9 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { locales } from "@/i18n/routing";
+import { JsonLd, createLocalBusinessSchema } from "@/lib/schema";
+import type { Metadata } from "next";
+import { createPageMetadata } from "@/lib/metadata";
 import type { Locale } from "@/types/content";
 
 type MapPageProps = {
@@ -8,6 +11,31 @@ type MapPageProps = {
     locale: string;
   };
 };
+
+export function generateMetadata({
+  params,
+}: {
+  params: { locale: string };
+}): Metadata {
+  const locale = params.locale as Locale;
+
+  if (!locales.includes(locale)) {
+    return {};
+  }
+
+  return createPageMetadata({
+    locale,
+    path: "/map",
+    title:
+      locale === "tr"
+        ? "Harita ve Yol Tarifi | CityMall Cyprus"
+        : "Map and Directions | CityMall Cyprus",
+    description:
+      locale === "tr"
+        ? "CityMall Cyprus konum, ulaşım, otopark ve ziyaret bilgilerini görüntüleyin."
+        : "View CityMall Cyprus location, access, parking and visitor information.",
+  });
+}
 
 const pageContent = {
   tr: {
@@ -80,9 +108,12 @@ export default function MapPage({ params }: MapPageProps) {
   }
 
   const content = pageContent[locale];
+  const mapSchema = createLocalBusinessSchema(locale, "/map");
 
   return (
-    <main className="bg-surface-default">
+  <main className="bg-surface-default">
+    <JsonLd data={mapSchema} />
+
       <section className="border-b border-border-default bg-[radial-gradient(circle_at_top_right,rgba(17,24,39,0.10),transparent_34%),linear-gradient(180deg,#f9fafb_0%,#ffffff_100%)]">
         <div className="container grid gap-10 py-16 md:py-24 lg:grid-cols-[1fr_0.85fr] lg:items-end">
           <div>

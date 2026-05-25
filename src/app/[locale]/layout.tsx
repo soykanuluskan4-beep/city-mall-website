@@ -1,10 +1,11 @@
 import type { Metadata } from "next";
 import { NextIntlClientProvider } from "next-intl";
+import { CookieBanner } from "@/components/common/CookieBanner";
 import { notFound } from "next/navigation";
 import { locales, type Locale } from "@/i18n/routing";
 import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
-import { getSeoContent, siteConfig } from "@/lib/seo";
+import { createPageMetadata } from "@/lib/metadata";
 
 type LocaleLayoutProps = {
   children: React.ReactNode;
@@ -28,45 +29,10 @@ export function generateMetadata({
     return {};
   }
 
-  const seo = getSeoContent(locale);
-  const url = `${siteConfig.url}/${locale}`;
-
-  return {
-    metadataBase: new URL(siteConfig.url),
-    title: {
-      default: seo.title,
-      template: `%s | ${siteConfig.name}`,
-    },
-    description: seo.description,
-    applicationName: siteConfig.name,
-    authors: [{ name: "CityMall Cyprus Concept" }],
-    creator: "CityMall Cyprus Concept",
-    publisher: "CityMall Cyprus Concept",
-    alternates: {
-      canonical: url,
-      languages: {
-        tr: `${siteConfig.url}/tr`,
-        en: `${siteConfig.url}/en`,
-      },
-    },
-    openGraph: {
-      type: "website",
-      locale: locale === "tr" ? "tr_TR" : "en_US",
-      url,
-      siteName: siteConfig.name,
-      title: seo.ogTitle,
-      description: seo.ogDescription,
-    },
-    twitter: {
-      card: "summary_large_image",
-      title: seo.ogTitle,
-      description: seo.ogDescription,
-    },
-    robots: {
-      index: true,
-      follow: true,
-    },
-  };
+  return createPageMetadata({
+    locale,
+    path: "",
+  });
 }
 
 export default async function LocaleLayout({
@@ -82,10 +48,11 @@ export default async function LocaleLayout({
   const messages = await getLocaleMessages(locale);
 
   return (
-    <NextIntlClientProvider locale={locale} messages={messages}>
-      <Navbar />
-      {children}
-      <Footer locale={locale} />
-    </NextIntlClientProvider>
-  );
+  <NextIntlClientProvider locale={locale} messages={messages}>
+    <Navbar />
+    {children}
+    <Footer locale={locale} />
+    <CookieBanner locale={locale} />
+  </NextIntlClientProvider>
+);
 }
