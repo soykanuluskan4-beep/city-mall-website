@@ -3,7 +3,6 @@ import Link from "next/link";
 
 const footerContent = {
   tr: {
-    tagline: "AVM konsept sitesi",
     description:
       "CityMall Cyprus için hazırlanmış çok dilli, modern ve responsive AVM web sitesi konsepti.",
     quickLinks: "Hızlı Linkler",
@@ -88,7 +87,7 @@ export function Footer({ locale = "tr" }: FooterProps) {
                 CityMall Cyprus
               </h2>
               <p className="text-xs font-medium text-text-muted">
-                {content.tagline}
+                
               </p>
             </div>
           </div>

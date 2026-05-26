@@ -40,7 +40,13 @@ export type MovieGenre =
   | "fantasy"
   | "other";
 
-export type Floor = "ground" | "first" | "second" | "food-court" | "cinema";
+export type Floor =
+  | "basement"
+  | "ground"
+  | "first"
+  | "second"
+  | "food-court"
+  | "cinema";
 
 export type BaseContentItem = {
   id: string;
@@ -78,6 +84,32 @@ export type DiningPlace = {
   logo?: string;
   coverImage?: string;
   cuisine?: LocalizedString;
+  cuisineType?:
+  | "turkish"
+  | "italian"
+  | "fast-food"
+  | "cafe"
+  | "dessert"
+  | "coffee"
+  | "healthy"
+  | "world"
+  | "snack";
+  cuisineTags?: Array<
+  | "turkish"
+  | "italian"
+  | "fast-food"
+  | "cafe"
+  | "dessert"
+  | "coffee"
+  | "healthy"
+  | "world"
+  | "snack"
+>;
+
+  priceRange?: "₺" | "₺₺" | "₺₺₺";
+  workingHours?: LocalizedString;
+  menuUrl?: string;
+  reservationPhone?: string;
   phone?: string;
   website?: string;
   featured?: boolean;
