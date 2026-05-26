@@ -62,6 +62,8 @@ export type Store = {
   website?: string;
   instagram?: string;
   featured?: boolean;
+  isNew?: boolean;
+isComingSoon?: boolean;
 };
 
 export type DiningPlace = {

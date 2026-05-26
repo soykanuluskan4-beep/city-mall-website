@@ -111,7 +111,17 @@ function getPlainValue(value: unknown) {
 }
 
 function normalize(value: string) {
-  return value.toLocaleLowerCase("tr-TR").trim();
+  return value
+    .toLocaleLowerCase("tr-TR")
+    .replaceAll("ı", "i")
+    .replaceAll("ğ", "g")
+    .replaceAll("ü", "u")
+    .replaceAll("ş", "s")
+    .replaceAll("ö", "o")
+    .replaceAll("ç", "c")
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .trim();
 }
 
 function buildSearchResults(locale: Locale): SearchResult[] {
@@ -213,6 +223,33 @@ function buildSearchResults(locale: Locale): SearchResult[] {
   ].filter((item) => item.title);
 }
 
+function rankResult(result: SearchResult, query: string) {
+  if (!query) {
+    return 0;
+  }
+
+  const title = normalize(result.title);
+  const keywords = normalize(result.keywords);
+
+  if (title === query) {
+    return 0;
+  }
+
+  if (title.startsWith(query)) {
+    return 1;
+  }
+
+  if (title.includes(query)) {
+    return 2;
+  }
+
+  if (keywords.includes(query)) {
+    return 3;
+  }
+
+  return 4;
+}
+
 export function SearchOverlay({ locale, isOpen, onClose }: SearchOverlayProps) {
   const copy = content[locale];
   const inputRef = useRef<HTMLInputElement>(null);
@@ -222,21 +259,29 @@ export function SearchOverlay({ locale, isOpen, onClose }: SearchOverlayProps) {
   const allResults = useMemo(() => buildSearchResults(locale), [locale]);
 
   const filteredResults = useMemo(() => {
-  const normalizedQuery = normalize(query);
+    const normalizedQuery = normalize(query);
 
-  return allResults
-    .filter((item) => {
-      const matchesQuery =
-        !normalizedQuery || normalize(item.keywords).includes(normalizedQuery);
+    return allResults
+      .filter((item) => {
+        const matchesQuery =
+          !normalizedQuery || normalize(item.keywords).includes(normalizedQuery);
 
-      const matchesFilter =
-        activeFilter === "all" || item.filter === activeFilter;
+        const matchesFilter =
+          activeFilter === "all" || item.filter === activeFilter;
 
-      return matchesQuery && matchesFilter;
-    })
-    .sort((a, b) => a.title.localeCompare(b.title, locale))
-    .slice(0, 12);
-}, [activeFilter, allResults, locale, query]);
+        return matchesQuery && matchesFilter;
+      })
+      .sort((a, b) => {
+        const rankA = rankResult(a, normalizedQuery);
+        const rankB = rankResult(b, normalizedQuery);
+
+        if (rankA !== rankB) {
+          return rankA - rankB;
+        }
+
+        return a.title.localeCompare(b.title, locale);
+      });
+  }, [activeFilter, allResults, locale, query]);
 
   useEffect(() => {
     if (!isOpen) {
@@ -347,45 +392,45 @@ export function SearchOverlay({ locale, isOpen, onClose }: SearchOverlayProps) {
 
         <div className="flex-1 overflow-y-auto p-5 md:p-6">
           {filteredResults.length ? (
-  <div>
-    <p className="mb-4 text-sm font-medium text-text-muted">
-      {filteredResults.length} {copy.result}
-    </p>
+            <div>
+              <p className="mb-4 text-sm font-medium text-text-muted">
+                {filteredResults.length} {copy.result}
+              </p>
 
-    <div className="grid gap-3">
-      {filteredResults.map((result) => (
-        <Link
-          key={result.id}
-          href={result.href}
-          onClick={onClose}
-          className="group rounded-3xl border border-border-default bg-surface-muted p-5 transition hover:-translate-y-0.5 hover:bg-surface-subtle hover:shadow-card"
-        >
-          <div className="flex flex-wrap items-center gap-3">
-            <span className="rounded-full bg-surface-default px-3 py-1 text-xs font-semibold text-text-muted shadow-card">
-              {result.type}
-            </span>
+              <div className="grid gap-3">
+                {filteredResults.map((result) => (
+                  <Link
+                    key={result.id}
+                    href={result.href}
+                    onClick={onClose}
+                    className="group rounded-3xl border border-border-default bg-surface-muted p-5 transition hover:-translate-y-0.5 hover:bg-surface-subtle hover:shadow-card"
+                  >
+                    <div className="flex flex-wrap items-center gap-3">
+                      <span className="rounded-full bg-surface-default px-3 py-1 text-xs font-semibold text-text-muted shadow-card">
+                        {result.type}
+                      </span>
 
-            <h3 className="text-lg font-semibold text-text-primary">
-              {result.title}
-            </h3>
-          </div>
+                      <h3 className="text-lg font-semibold text-text-primary">
+                        {result.title}
+                      </h3>
+                    </div>
 
-          {result.description ? (
-            <p className="mt-3 line-clamp-2 text-sm leading-6 text-text-secondary">
-              {result.description}
-            </p>
-          ) : null}
-        </Link>
-      ))}
-    </div>
-  </div>
-) : (
-  <div className="flex min-h-60 items-center justify-center rounded-3xl border border-dashed border-border-default bg-surface-muted p-8 text-center">
-    <p className="text-sm font-medium text-text-muted">
-      {copy.empty}
-    </p>
-  </div>
-)}
+                    {result.description ? (
+                      <p className="mt-3 line-clamp-2 text-sm leading-6 text-text-secondary">
+                        {result.description}
+                      </p>
+                    ) : null}
+                  </Link>
+                ))}
+              </div>
+            </div>
+          ) : (
+            <div className="flex min-h-60 items-center justify-center rounded-3xl border border-dashed border-border-default bg-surface-muted p-8 text-center">
+              <p className="text-sm font-medium text-text-muted">
+                {copy.empty}
+              </p>
+            </div>
+          )}
         </div>
       </div>
     </div>
