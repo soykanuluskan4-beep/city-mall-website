@@ -94,11 +94,18 @@ export type Campaign = BaseContentItem & {
 };
 
 export type Event = BaseContentItem & {
+  detailDescription?: LocalizedString;
+  image: string;
   date: string;
   endDate?: string;
+  startTime?: string;
+  endTime?: string;
+  duration?: LocalizedString;
   location: LocalizedString;
+  category?: string;
   status: EventStatus;
   audience?: LocalizedString;
+  featured?: boolean;
 };
 
 export type MovieShowtime = {
