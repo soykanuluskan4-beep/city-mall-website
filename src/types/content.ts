@@ -83,6 +83,10 @@ export type DiningPlace = {
 
 export type Campaign = BaseContentItem & {
   storeName?: LocalizedString;
+  detailDescription?: LocalizedString;
+  category?: string;
+  storeCount?: number;
+  participatingStores?: string[];
   startDate: string;
   endDate: string;
   status: CampaignStatus;
