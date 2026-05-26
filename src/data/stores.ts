@@ -51,6 +51,7 @@ export const stores: Store[] = [
     floor: "first",
     logo: "/images/stores/home-style-logo.png",
     coverImage: "/images/stores/home-style-cover.jpg",
+    featured: true,
   },
   {
     id: "store-004",
@@ -67,6 +68,7 @@ export const stores: Store[] = [
     floor: "ground",
     logo: "/images/stores/beauty-room-logo.png",
     coverImage: "/images/stores/beauty-room-cover.jpg",
+    featured: true,
   },
   {
     id: "store-005",
@@ -100,5 +102,40 @@ export const stores: Store[] = [
     floor: "second",
     logo: "/images/stores/kids-world-logo.png",
     coverImage: "/images/stores/kids-world-cover.jpg",
+    featured: true,
+  },
+  {
+    id: "store-007",
+    slug: "step-up",
+    name: {
+      tr: "Step Up",
+      en: "Step Up",
+    },
+    description: {
+      tr: "Günlük kullanım ve özel kombinler için ayakkabı ve aksesuar seçenekleri.",
+      en: "Shoes and accessories for everyday use and special outfits.",
+    },
+    category: "fashion",
+    floor: "ground",
+    logo: "/images/stores/step-up-logo.png",
+    coverImage: "/images/stores/step-up-cover.jpg",
+    featured: true,
+  },
+  {
+    id: "store-008",
+    slug: "book-corner",
+    name: {
+      tr: "Book Corner",
+      en: "Book Corner",
+    },
+    description: {
+      tr: "Kitap, kırtasiye ve hediye seçenekleriyle sakin bir keşif noktası.",
+      en: "A calm discovery point for books, stationery and gift selections.",
+    },
+    category: "home",
+    floor: "first",
+    logo: "/images/stores/book-corner-logo.png",
+    coverImage: "/images/stores/book-corner-cover.jpg",
+    featured: true,
   },
 ];

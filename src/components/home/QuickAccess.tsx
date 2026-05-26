@@ -98,7 +98,7 @@ export function QuickAccess({ locale }: QuickAccessProps) {
             </p>
           </div>
 
-          <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-5">
+          <div className="grid grid-cols-6 gap-3 lg:grid-cols-5">
             {copy.items.map((item) => {
               const Icon = item.icon;
 
@@ -106,17 +106,21 @@ export function QuickAccess({ locale }: QuickAccessProps) {
                 <Link
                   key={item.href}
                   href={`/${locale}/${item.href}`}
-                  className="group rounded-3xl border border-border-default bg-surface-muted p-5 transition hover:-translate-y-1 hover:bg-surface-subtle hover:shadow-card"
+                  className={`group col-span-3 rounded-3xl border border-border-default bg-surface-muted p-4 transition hover:-translate-y-1 hover:bg-surface-subtle hover:shadow-card min-[420px]:col-span-2 lg:col-span-1 ${
+                    item.href === "events"
+                      ? "min-[420px]:col-start-2 lg:col-start-auto"
+                      : ""
+                  }`}
                 >
-                  <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-surface-default text-text-primary shadow-card transition group-hover:bg-brand-primary group-hover:text-brand-foreground">
+                  <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-surface-default text-text-primary shadow-card transition group-hover:bg-brand-primary group-hover:text-brand-foreground md:h-12 md:w-12">
                     <Icon className="h-5 w-5" aria-hidden="true" />
                   </div>
 
-                  <h2 className="mt-4 text-base font-semibold text-text-primary">
+                  <h2 className="mt-4 text-sm font-semibold text-text-primary md:text-base">
                     {item.label}
                   </h2>
 
-                  <p className="mt-1 text-sm text-text-muted">
+                  <p className="mt-1 text-xs text-text-muted md:text-sm">
                     {item.description}
                   </p>
                 </Link>

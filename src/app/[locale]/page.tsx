@@ -1,6 +1,10 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { locales } from "@/i18n/routing";
+import { StatsSection } from "@/components/home/StatsSection";
+import { VisitSummary } from "@/components/home/VisitSummary";
+import { FeaturedStores } from "@/components/home/FeaturedStores";
+import { CampaignSlider } from "@/components/home/CampaignSlider";
 import { HeroSection } from "@/components/home/HeroSection";
 import { QuickAccess } from "@/components/home/QuickAccess";
 import { createPageMetadata } from "@/lib/metadata";
@@ -58,7 +62,11 @@ export default function HomePage({ params }: HomePageProps) {
       <JsonLd data={shoppingMallSchema} />
 
       <HeroSection locale={locale} />
-      <QuickAccess locale={locale} />
+<QuickAccess locale={locale} />
+<CampaignSlider locale={locale} />
+<FeaturedStores locale={locale} />
+<StatsSection locale={locale} />
+<VisitSummary locale={locale} />
     </main>
   );
 }
