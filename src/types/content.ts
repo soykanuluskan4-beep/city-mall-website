@@ -36,6 +36,8 @@ export type MovieGenre =
   | "family"
   | "thriller"
   | "adventure"
+  | "romance"
+  | "fantasy"
   | "other";
 
 export type Floor = "ground" | "first" | "second" | "food-court" | "cinema";
@@ -63,7 +65,7 @@ export type Store = {
   instagram?: string;
   featured?: boolean;
   isNew?: boolean;
-isComingSoon?: boolean;
+  isComingSoon?: boolean;
 };
 
 export type DiningPlace = {
@@ -122,6 +124,12 @@ export type Movie = {
   durationMinutes: number;
   ageRating?: string;
   posterImage?: string;
+  heroImage?: string;
+  director?: string;
+  cast?: string[];
+  language?: LocalizedString;
+  status?: "nowShowing" | "comingSoon";
+  releaseDate?: string;
   trailerUrl?: string;
   showtimes: MovieShowtime[];
   featured?: boolean;
