@@ -1,12 +1,6 @@
 "use client";
 
-import {
-  Clock3,
-  MapPin,
-  Search,
-  SearchX,
-  Sparkles,
-} from "lucide-react";
+import { Clock3, MapPin, Search, SearchX, Sparkles } from "lucide-react";
 import { useMemo, useState } from "react";
 import { stores } from "@/data/stores";
 import { getLocalizedText } from "@/lib/locale";
@@ -44,9 +38,9 @@ const content = {
     floorTitle: "Kat",
     statusTitle: "Durum",
     totalStores: "mağaza",
-listedStores: "mağaza listeleniyor",
-results: "sonuç",
-newThisMonth: "Bu Ay Açıldı",
+    listedStores: "mağaza listeleniyor",
+    results: "sonuç",
+    newThisMonth: "Bu Ay Açıldı",
     comingSoon: "Yakında Aramızda",
     noResultsTitle: "Sonuç bulunamadı",
     noResultsText: "Filtreleri değiştirerek tekrar deneyin.",
@@ -87,9 +81,9 @@ newThisMonth: "Bu Ay Açıldı",
     floorTitle: "Floor",
     statusTitle: "Status",
     totalStores: "stores",
-listedStores: "stores listed",
-results: "results",
-newThisMonth: "Newly Opened",
+    listedStores: "stores listed",
+    results: "results",
+    newThisMonth: "Newly Opened",
     comingSoon: "Coming Soon",
     noResultsTitle: "No stores found",
     noResultsText: "Try changing your filters.",
@@ -247,8 +241,7 @@ function StoreCard({ store, locale }: { store: Store; locale: Locale }) {
   const categoryLabel =
     copy.categoryLabels[store.category as StoreCategory] ?? store.category;
 
-  const floorLabel =
-    copy.floorLabels[store.floor as StoreFloor] ?? store.floor;
+  const floorLabel = copy.floorLabels[store.floor as StoreFloor] ?? store.floor;
 
   const badgeClass =
     categoryBadgeStyles[store.category] ?? "bg-surface-muted text-text-primary";
@@ -256,12 +249,14 @@ function StoreCard({ store, locale }: { store: Store; locale: Locale }) {
   const accentClass = categoryAccentStyles[store.category] ?? "bg-border-default";
 
   return (
-    <article className="group overflow-hidden rounded-[1.5rem] border border-border-default bg-surface-default shadow-card transition duration-300 hover:-translate-y-1 hover:shadow-elevated">
+    <article className="group w-full max-w-full min-w-0 overflow-hidden rounded-[1.5rem] border border-border-default bg-surface-default shadow-card transition duration-300 hover:-translate-y-1 hover:shadow-elevated">
       <div className={`h-2 w-full ${accentClass}`} />
 
-      <div className="p-5">
+      <div className="min-w-0 p-5">
         <div className="mb-4 flex flex-wrap items-center gap-2">
-          <span className={`rounded-full px-3 py-1 text-xs font-semibold ${badgeClass}`}>
+          <span
+            className={`rounded-full px-3 py-1 text-xs font-semibold ${badgeClass}`}
+          >
             {categoryLabel}
           </span>
 
@@ -283,11 +278,11 @@ function StoreCard({ store, locale }: { store: Store; locale: Locale }) {
           ) : null}
         </div>
 
-        <h3 className="text-2xl font-semibold tracking-tight text-text-primary">
+        <h3 className="break-words text-2xl font-semibold tracking-tight text-text-primary">
           {name}
         </h3>
 
-        <p className="mt-3 line-clamp-2 min-h-[48px] text-sm leading-6 text-text-secondary">
+        <p className="mt-3 line-clamp-2 min-h-[48px] break-words text-sm leading-6 text-text-secondary">
           {description}
         </p>
       </div>
@@ -310,11 +305,10 @@ function HighlightCard({
   const categoryLabel =
     copy.categoryLabels[store.category as StoreCategory] ?? store.category;
 
-  const floorLabel =
-    copy.floorLabels[store.floor as StoreFloor] ?? store.floor;
+  const floorLabel = copy.floorLabels[store.floor as StoreFloor] ?? store.floor;
 
   return (
-    <article className="min-w-[240px] rounded-[1.5rem] border border-border-default bg-surface-default p-4 shadow-card transition hover:-translate-y-0.5 hover:shadow-elevated md:min-w-0">
+    <article className="w-[240px] shrink-0 rounded-[1.5rem] border border-border-default bg-surface-default p-4 shadow-card transition hover:-translate-y-0.5 hover:shadow-elevated md:w-full md:min-w-0">
       <div className="flex items-center justify-between gap-3">
         <span
           className={`rounded-full px-3 py-1 text-xs font-semibold ${
@@ -331,7 +325,9 @@ function HighlightCard({
         </span>
       </div>
 
-      <h3 className="mt-5 text-lg font-semibold text-text-primary">{name}</h3>
+      <h3 className="mt-5 break-words text-lg font-semibold text-text-primary">
+        {name}
+      </h3>
 
       <p className="mt-1 text-sm text-text-muted">{categoryLabel}</p>
     </article>
@@ -352,13 +348,10 @@ export function StoresExplorer({ locale }: StoresExplorerProps) {
   );
 
   const comingSoonStores = useMemo(
-    () =>
-      sortStoresByName(
-        stores.filter((store) => store.isComingSoon),
-        locale
-      ),
+    () => sortStoresByName(stores.filter((store) => store.isComingSoon), locale),
     [locale]
   );
+
   const isSearching = query.trim() !== "";
 
   const filtersActive = hasActiveFilters(
@@ -439,42 +432,42 @@ export function StoresExplorer({ locale }: StoresExplorerProps) {
   }
 
   function resetFilters() {
-  setQuery("");
-  setCategoryFilter("all");
-  setFloorFilter("all");
-  setStatusFilter("all");
-}
+    setQuery("");
+    setCategoryFilter("all");
+    setFloorFilter("all");
+    setStatusFilter("all");
+  }
 
   return (
-    <main className="bg-surface-default">
-      <section className="border-b border-border-default bg-surface-muted/45 py-12 md:py-16">
+    <main className="w-full max-w-full overflow-x-hidden bg-surface-default">
+      <section className="w-full max-w-full border-b border-border-default bg-surface-muted/45 py-12 md:py-16">
         <div className="container">
-          <div className="flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
-            <div>
+          <div className="flex min-w-0 flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
+            <div className="min-w-0">
               <p className="text-sm font-semibold uppercase tracking-[0.3em] text-text-muted">
                 {copy.eyebrow}
               </p>
 
-              <h1 className="mt-5 max-w-5xl text-4xl font-semibold tracking-tight text-text-primary md:text-6xl">
+              <h1 className="mt-5 max-w-5xl break-words text-4xl font-semibold tracking-tight text-text-primary md:text-6xl">
                 {copy.title}
               </h1>
 
-              <p className="mt-5 max-w-3xl text-base leading-8 text-text-secondary md:text-lg">
+              <p className="mt-5 max-w-3xl break-words text-base leading-8 text-text-secondary md:text-lg">
                 {copy.description}
               </p>
             </div>
 
-            <div className="w-fit rounded-full border border-border-default bg-surface-default px-5 py-3 text-sm font-semibold text-text-primary shadow-card">
+            <div className="w-fit shrink-0 rounded-full border border-border-default bg-surface-default px-5 py-3 text-sm font-semibold text-text-primary shadow-card">
               {stores.length} {copy.totalStores}
             </div>
           </div>
         </div>
       </section>
 
-      <section className="border-b border-border-default bg-surface-default py-8">
+      <section className="w-full max-w-full border-b border-border-default bg-surface-default py-8">
         <div className="container">
-          <div className="grid gap-5 lg:grid-cols-2">
-            <div className="rounded-[2rem] border border-border-default bg-surface-muted p-5">
+          <div className="grid min-w-0 gap-5 lg:grid-cols-2">
+            <div className="w-full max-w-full overflow-hidden rounded-[2rem] border border-border-default bg-surface-muted p-5">
               <div className="mb-4 flex items-center gap-2">
                 <Sparkles className="h-5 w-5 text-emerald-600" />
                 <h2 className="text-xl font-semibold text-text-primary">
@@ -482,19 +475,21 @@ export function StoresExplorer({ locale }: StoresExplorerProps) {
                 </h2>
               </div>
 
-              <div className="flex gap-3 overflow-x-auto pb-2 md:grid md:grid-cols-2 md:overflow-visible">
-                {newStores.slice(0, 4).map((store) => (
-                  <HighlightCard
-                    key={store.id}
-                    store={store}
-                    locale={locale}
-                    variant="new"
-                  />
-                ))}
+              <div className="w-full max-w-full overflow-x-auto pb-2 [-webkit-overflow-scrolling:touch] md:overflow-visible">
+                <div className="flex w-max gap-3 md:grid md:w-full md:grid-cols-2">
+                  {newStores.slice(0, 4).map((store) => (
+                    <HighlightCard
+                      key={store.id}
+                      store={store}
+                      locale={locale}
+                      variant="new"
+                    />
+                  ))}
+                </div>
               </div>
             </div>
 
-            <div className="rounded-[2rem] border border-border-default bg-surface-muted p-5">
+            <div className="w-full max-w-full overflow-hidden rounded-[2rem] border border-border-default bg-surface-muted p-5">
               <div className="mb-4 flex items-center gap-2">
                 <Clock3 className="h-5 w-5 text-amber-600" />
                 <h2 className="text-xl font-semibold text-text-primary">
@@ -502,184 +497,202 @@ export function StoresExplorer({ locale }: StoresExplorerProps) {
                 </h2>
               </div>
 
-              <div className="flex gap-3 overflow-x-auto pb-2 md:grid md:grid-cols-2 md:overflow-visible">
-                {comingSoonStores.slice(0, 4).map((store) => (
-                  <HighlightCard
-                    key={store.id}
-                    store={store}
-                    locale={locale}
-                    variant="comingSoon"
-                  />
-                ))}
+              <div className="w-full max-w-full overflow-x-auto pb-2 [-webkit-overflow-scrolling:touch] md:overflow-visible">
+                <div className="flex w-max gap-3 md:grid md:w-full md:grid-cols-2">
+                  {comingSoonStores.slice(0, 4).map((store) => (
+                    <HighlightCard
+                      key={store.id}
+                      store={store}
+                      locale={locale}
+                      variant="comingSoon"
+                    />
+                  ))}
+                </div>
               </div>
             </div>
           </div>
         </div>
       </section>
 
-      <section className="border-b border-border-default bg-surface-default py-8">
+      <section className="w-full max-w-full border-b border-border-default bg-surface-default py-8">
         <div className="container">
-          <div className="rounded-[2rem] border border-border-default bg-surface-default p-4 shadow-card md:p-5">
-            <div className="flex items-center gap-3 rounded-2xl border border-border-default bg-surface-muted px-4 py-3">
+          <div className="w-full max-w-full overflow-hidden rounded-[2rem] border border-border-default bg-surface-default p-4 shadow-card md:p-5">
+            <div className="flex min-w-0 items-center gap-3 rounded-2xl border border-border-default bg-surface-muted px-4 py-3">
               <Search className="h-5 w-5 shrink-0 text-text-muted" />
               <input
                 value={query}
                 onChange={(event) => setQuery(event.target.value)}
                 placeholder={copy.searchPlaceholder}
-                className="w-full bg-transparent text-base font-medium text-text-primary outline-none placeholder:text-text-muted"
+                className="min-w-0 flex-1 bg-transparent text-base font-medium text-text-primary outline-none placeholder:text-text-muted"
               />
             </div>
 
-            <div className="mt-5 grid gap-5 xl:grid-cols-[1.4fr_0.8fr_0.8fr]">
-              <div>
+            <div className="mt-5 grid min-w-0 gap-5 xl:grid-cols-[1.4fr_0.8fr_0.8fr]">
+              <div className="min-w-0">
                 <p className="mb-2 text-xs font-semibold uppercase tracking-[0.2em] text-text-muted">
                   {copy.categoryTitle}
                 </p>
 
-                <div className="flex gap-2 overflow-x-auto pb-1">
-                  {categoryFilters.map((filter) => (
-                    <button
-                      key={filter}
-                      type="button"
-                      onClick={() => setCategoryFilter(filter)}
-                      className={`whitespace-nowrap rounded-full border px-4 py-2 text-sm font-semibold transition ${
-                        categoryFilter === filter
-                          ? "border-brand-primary bg-brand-primary text-brand-foreground"
-                          : "border-border-default bg-surface-muted text-text-secondary hover:bg-surface-subtle hover:text-text-primary"
-                      }`}
-                    >
-                      {copy.categoryLabels[filter]}
-                    </button>
-                  ))}
+                <div className="w-full max-w-full overflow-x-auto pb-1 [-webkit-overflow-scrolling:touch]">
+                  <div className="flex w-max gap-2 px-1">
+                    {categoryFilters.map((filter) => (
+                      <button
+                        key={filter}
+                        type="button"
+                        onClick={() => setCategoryFilter(filter)}
+                        className={`whitespace-nowrap rounded-full border px-4 py-2 text-sm font-semibold transition ${
+                          categoryFilter === filter
+                            ? "border-brand-primary bg-brand-primary text-brand-foreground"
+                            : "border-border-default bg-surface-muted text-text-secondary hover:bg-surface-subtle hover:text-text-primary"
+                        }`}
+                      >
+                        {copy.categoryLabels[filter]}
+                      </button>
+                    ))}
+                  </div>
                 </div>
               </div>
 
-              <div>
+              <div className="min-w-0">
                 <p className="mb-2 text-xs font-semibold uppercase tracking-[0.2em] text-text-muted">
                   {copy.floorTitle}
                 </p>
 
-                <div className="flex gap-2 overflow-x-auto pb-1">
-                  {floorFilters.map((filter) => (
-                    <button
-                      key={filter}
-                      type="button"
-                      onClick={() => setFloorFilter(filter)}
-                      className={`whitespace-nowrap rounded-full border px-4 py-2 text-sm font-semibold transition ${
-                        floorFilter === filter
-                          ? "border-brand-primary bg-brand-primary text-brand-foreground"
-                          : "border-border-default bg-surface-muted text-text-secondary hover:bg-surface-subtle hover:text-text-primary"
-                      }`}
-                    >
-                      {copy.floorLabels[filter]}
-                    </button>
-                  ))}
+                <div className="w-full max-w-full overflow-x-auto pb-1 [-webkit-overflow-scrolling:touch]">
+                  <div className="flex w-max gap-2 px-1">
+                    {floorFilters.map((filter) => (
+                      <button
+                        key={filter}
+                        type="button"
+                        onClick={() => setFloorFilter(filter)}
+                        className={`whitespace-nowrap rounded-full border px-4 py-2 text-sm font-semibold transition ${
+                          floorFilter === filter
+                            ? "border-brand-primary bg-brand-primary text-brand-foreground"
+                            : "border-border-default bg-surface-muted text-text-secondary hover:bg-surface-subtle hover:text-text-primary"
+                        }`}
+                      >
+                        {copy.floorLabels[filter]}
+                      </button>
+                    ))}
+                  </div>
                 </div>
               </div>
 
-              <div>
+              <div className="min-w-0">
                 <p className="mb-2 text-xs font-semibold uppercase tracking-[0.2em] text-text-muted">
                   {copy.statusTitle}
                 </p>
 
-                <div className="flex gap-2 overflow-x-auto pb-1">
-                  {statusFilters.map((filter) => (
-                    <button
-                      key={filter}
-                      type="button"
-                      onClick={() => setStatusFilter(filter)}
-                      className={`whitespace-nowrap rounded-full border px-4 py-2 text-sm font-semibold transition ${
-                        statusFilter === filter
-                          ? "border-brand-primary bg-brand-primary text-brand-foreground"
-                          : "border-border-default bg-surface-muted text-text-secondary hover:bg-surface-subtle hover:text-text-primary"
-                      }`}
-                    >
-                      {copy.statusLabels[filter]}
-                    </button>
-                  ))}
+                <div className="w-full max-w-full overflow-x-auto pb-1 [-webkit-overflow-scrolling:touch]">
+                  <div className="flex w-max gap-2 px-1">
+                    {statusFilters.map((filter) => (
+                      <button
+                        key={filter}
+                        type="button"
+                        onClick={() => setStatusFilter(filter)}
+                        className={`whitespace-nowrap rounded-full border px-4 py-2 text-sm font-semibold transition ${
+                          statusFilter === filter
+                            ? "border-brand-primary bg-brand-primary text-brand-foreground"
+                            : "border-border-default bg-surface-muted text-text-secondary hover:bg-surface-subtle hover:text-text-primary"
+                        }`}
+                      >
+                        {copy.statusLabels[filter]}
+                      </button>
+                    ))}
+                  </div>
                 </div>
               </div>
             </div>
 
-            <div className="mt-5 flex flex-col gap-4 border-t border-border-default pt-5 lg:flex-row lg:items-center lg:justify-between">
+            <div className="mt-5 flex min-w-0 flex-col gap-4 border-t border-border-default pt-5 lg:flex-row lg:items-center lg:justify-between">
               <div className="flex flex-wrap items-center gap-3">
-  <p className="text-sm font-semibold text-text-secondary">
-    {filteredStores.length}{" "}
-    {isSearching ? copy.results : filtersActive ? copy.listedStores : copy.totalStores}
-  </p>
+                <p className="text-sm font-semibold text-text-secondary">
+                  {filteredStores.length}{" "}
+                  {isSearching
+                    ? copy.results
+                    : filtersActive
+                      ? copy.listedStores
+                      : copy.totalStores}
+                </p>
 
-  {filtersActive ? (
-    <button
-      type="button"
-      onClick={resetFilters}
-      className="rounded-full border border-border-default bg-surface-muted px-3 py-1.5 text-xs font-semibold text-text-secondary transition hover:bg-surface-subtle hover:text-text-primary"
-    >
-      {copy.resetFilters}
-    </button>
-  ) : null}
-</div>
+                {filtersActive ? (
+                  <button
+                    type="button"
+                    onClick={resetFilters}
+                    className="rounded-full border border-border-default bg-surface-muted px-3 py-1.5 text-xs font-semibold text-text-secondary transition hover:bg-surface-subtle hover:text-text-primary"
+                  >
+                    {copy.resetFilters}
+                  </button>
+                ) : null}
+              </div>
 
-              <div className="flex gap-1 overflow-x-auto pb-1">
-                {alphabet.map((letter) => {
-                  const isAvailable = availableLetters.has(letter);
+              <div className="w-full max-w-full overflow-x-auto pb-1 [-webkit-overflow-scrolling:touch] lg:w-auto">
+                <div className="flex w-max gap-1">
+                  {alphabet.map((letter) => {
+                    const isAvailable = availableLetters.has(letter);
 
-                  return (
-                    <button
-                      key={letter}
-                      type="button"
-                      disabled={!isAvailable}
-                      onClick={() => scrollToLetter(letter)}
-                      className={`h-8 w-8 shrink-0 rounded-full text-xs font-semibold transition ${
-                        isAvailable
-                          ? "bg-surface-muted text-text-primary hover:bg-brand-primary hover:text-brand-foreground"
-                          : "cursor-not-allowed bg-surface-muted text-text-muted/35"
-                      }`}
-                    >
-                      {letter}
-                    </button>
-                  );
-                })}
+                    return (
+                      <button
+                        key={letter}
+                        type="button"
+                        disabled={!isAvailable}
+                        onClick={() => scrollToLetter(letter)}
+                        className={`h-8 w-8 shrink-0 rounded-full text-xs font-semibold transition ${
+                          isAvailable
+                            ? "bg-surface-muted text-text-primary hover:bg-brand-primary hover:text-brand-foreground"
+                            : "cursor-not-allowed bg-surface-muted text-text-muted/35"
+                        }`}
+                      >
+                        {letter}
+                      </button>
+                    );
+                  })}
+                </div>
               </div>
             </div>
           </div>
         </div>
       </section>
 
-      <section className="py-10 md:py-14">
+      <section className="w-full max-w-full py-10 md:py-14">
         <div className="container">
           {filteredStores.length ? (
-  isSearching ? (
-    <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4">
-      {filteredStores.map((store) => (
-        <StoreCard key={store.id} store={store} locale={locale} />
-      ))}
-    </div>
-  ) : (
-    <div className="space-y-12">
-      {groupedStores.map((group) => (
-        <div
-          key={group.letter}
-          id={`stores-letter-${group.letter}`}
-          className="scroll-mt-28"
-        >
-          <div className="mb-5 flex items-center gap-4">
-            <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-text-primary text-lg font-semibold text-white">
-              {group.letter}
-            </div>
+            isSearching ? (
+              <div className="grid w-full max-w-full min-w-0 grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4">
+                {filteredStores.map((store) => (
+                  <StoreCard key={store.id} store={store} locale={locale} />
+                ))}
+              </div>
+            ) : (
+              <div className="w-full max-w-full min-w-0 space-y-12">
+                {groupedStores.map((group) => (
+                  <div
+                    key={group.letter}
+                    id={`stores-letter-${group.letter}`}
+                    className="w-full max-w-full min-w-0 scroll-mt-28"
+                  >
+                    <div className="mb-5 flex min-w-0 items-center gap-4">
+                      <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-text-primary text-lg font-semibold text-white">
+                        {group.letter}
+                      </div>
 
-            <div className="h-px flex-1 bg-border-default" />
-          </div>
+                      <div className="h-px min-w-0 flex-1 bg-border-default" />
+                    </div>
 
-          <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4">
-            {group.stores.map((store) => (
-              <StoreCard key={store.id} store={store} locale={locale} />
-            ))}
-          </div>
-        </div>
-      ))}
-    </div>
-  )
-) : (
+                    <div className="grid w-full max-w-full min-w-0 grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4">
+                      {group.stores.map((store) => (
+                        <StoreCard
+                          key={store.id}
+                          store={store}
+                          locale={locale}
+                        />
+                      ))}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )
+          ) : (
             <div className="flex min-h-[360px] flex-col items-center justify-center rounded-[2rem] border border-dashed border-border-default bg-surface-muted p-8 text-center">
               <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-surface-default text-text-muted shadow-card">
                 <SearchX className="h-6 w-6" aria-hidden="true" />
@@ -694,13 +707,12 @@ export function StoresExplorer({ locale }: StoresExplorerProps) {
               </p>
 
               <button
-  type="button"
-  onClick={resetFilters}
-  className="mt-5 rounded-full bg-brand-primary px-5 py-3 text-sm font-semibold text-brand-foreground shadow-card transition hover:-translate-y-0.5 hover:opacity-90"
->
-  {copy.resetFilters}
-</button>
-
+                type="button"
+                onClick={resetFilters}
+                className="mt-5 rounded-full bg-brand-primary px-5 py-3 text-sm font-semibold text-brand-foreground shadow-card transition hover:-translate-y-0.5 hover:opacity-90"
+              >
+                {copy.resetFilters}
+              </button>
             </div>
           )}
         </div>
