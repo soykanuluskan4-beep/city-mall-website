@@ -1,10 +1,11 @@
 import Link from "next/link";
 import {
-  CalendarDays,
-  Clapperboard,
-  MapPinned,
   ShoppingBag,
   Utensils,
+  Tag,
+  Clapperboard,
+  CalendarDays,
+  MapPinned,
 } from "lucide-react";
 import type { Locale } from "@/types/content";
 
@@ -29,7 +30,13 @@ const content = {
         icon: Utensils,
       },
       {
-        label: "Sinema",
+        label: "Kampanyalar",
+        description: "Fırsatları incele",
+        href: "campaigns",
+        icon: Tag,
+      },
+      {
+        label: "Cinemall",
         description: "Film ve seanslar",
         href: "cinema",
         icon: Clapperboard,
@@ -42,8 +49,8 @@ const content = {
       },
       {
         label: "Ziyaret Planla",
-        description: "Harita ve ulaşım",
-        href: "map",
+        description: "Saatler ve ulaşım",
+        href: "hours",
         icon: MapPinned,
       },
     ],
@@ -64,7 +71,13 @@ const content = {
         icon: Utensils,
       },
       {
-        label: "Cinema",
+        label: "Campaigns",
+        description: "Discover offers",
+        href: "campaigns",
+        icon: Tag,
+      },
+      {
+        label: "Cinemall",
         description: "Movies and showtimes",
         href: "cinema",
         icon: Clapperboard,
@@ -77,8 +90,8 @@ const content = {
       },
       {
         label: "Plan Visit",
-        description: "Map and access",
-        href: "map",
+        description: "Hours and access",
+        href: "hours",
         icon: MapPinned,
       },
     ],
@@ -98,7 +111,7 @@ export function QuickAccess({ locale }: QuickAccessProps) {
             </p>
           </div>
 
-          <div className="grid grid-cols-6 gap-3 lg:grid-cols-5">
+          <div className="grid grid-cols-2 gap-4 lg:grid-cols-3">
             {copy.items.map((item) => {
               const Icon = item.icon;
 
