@@ -56,8 +56,8 @@ export function getOpeningStatus(
       isOpen: false,
       statusText:
         locale === "tr"
-          ? `Kapalı · Bugün ${OPEN_TIME}'da açılıyor`
-          : `Closed · Opens today at ${OPEN_TIME}`,
+          ? `Şu an kapalı · Bugün ${OPEN_TIME}'da açılıyor`
+          : `Closed now · Opens today at ${OPEN_TIME}`,
       nextOpenTime: OPEN_TIME,
     };
   }
@@ -66,8 +66,8 @@ export function getOpeningStatus(
     isOpen: false,
     statusText:
       locale === "tr"
-        ? `Kapalı · Yarın ${OPEN_TIME}'da açılıyor`
-        : `Closed · Opens tomorrow at ${OPEN_TIME}`,
+        ? `Şu an kapalı · Yarın ${OPEN_TIME}'da açılıyor`
+        : `Closed now · Opens tomorrow at ${OPEN_TIME}`,
     nextOpenTime: OPEN_TIME,
   };
 }
