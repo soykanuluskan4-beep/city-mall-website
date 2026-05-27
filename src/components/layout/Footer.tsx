@@ -4,40 +4,39 @@ import Link from "next/link";
 const footerContent = {
   tr: {
     description:
-      "CityMall Cyprus için hazırlanmış çok dilli, modern ve responsive AVM web sitesi konsepti.",
+      "CityMall Cyprus’ta alışveriş, yeme-içme, eğlence, Cinemall ve ziyaretçi hizmetlerini tek noktada keşfedin.",
     quickLinks: "Hızlı Linkler",
     visit: "Ziyaret",
-    disclaimer:
-      "Bu site CityMall Cyprus'un resmi sitesi değildir. Portföy ve konsept demonstrasyonu amacıyla hazırlanmıştır.",
-    copyright: "© 2026 CityMall Cyprus konsept demo. Tüm hakları saklıdır.",
+    copyright: "© 2026 CityMall Cyprus. Tüm hakları saklıdır.",
     links: {
       stores: "Mağazalar",
       dining: "Yeme-İçme",
       campaigns: "Kampanyalar",
       events: "Etkinlikler",
-      cinema: "Sinema",
+      cinema: "Cinemall",
       kids: "Çocuk & Eğlence",
+      services: "Hizmetler",
+      giftCard: "Hediye Kartı",
       hours: "Çalışma Saatleri",
       map: "Harita",
       contact: "İletişim",
     },
   },
   en: {
-    tagline: "Mall concept site",
     description:
-      "A multilingual, modern and responsive mall website concept prepared for CityMall Cyprus.",
+      "Explore shopping, dining, entertainment, Cinemall and visitor services at CityMall Cyprus.",
     quickLinks: "Quick Links",
     visit: "Visit",
-    disclaimer:
-      "This site is not the official website of CityMall Cyprus. It was created for portfolio and concept demonstration purposes.",
-    copyright: "© 2026 CityMall Cyprus concept demo. All rights reserved.",
+    copyright: "© 2026 CityMall Cyprus. All rights reserved.",
     links: {
       stores: "Stores",
       dining: "Dining",
       campaigns: "Campaigns",
       events: "Events",
-      cinema: "Cinema",
+      cinema: "Cinemall",
       kids: "Kids & Entertainment",
+      services: "Services",
+      giftCard: "Gift Card",
       hours: "Opening Hours",
       map: "Map",
       contact: "Contact",
@@ -55,6 +54,8 @@ const mainFooterLinks = [
 ] as const;
 
 const visitFooterLinks = [
+  { href: "services", key: "services" },
+  { href: "gift-card", key: "giftCard" },
   { href: "hours", key: "hours" },
   { href: "map", key: "map" },
   { href: "contact", key: "contact" },
@@ -86,21 +87,12 @@ export function Footer({ locale = "tr" }: FooterProps) {
               <h2 className="text-lg font-semibold tracking-tight text-text-primary">
                 CityMall Cyprus
               </h2>
-              <p className="text-xs font-medium text-text-muted">
-                
-              </p>
             </div>
           </div>
 
           <p className="mt-5 max-w-xl text-sm leading-6 text-text-secondary">
             {content.description}
           </p>
-
-          <div className="mt-6 rounded-2xl border border-border-default bg-surface-default p-4 shadow-card">
-            <p className="text-xs leading-5 text-text-muted">
-              {content.disclaimer}
-            </p>
-          </div>
         </section>
 
         <section>
@@ -147,24 +139,38 @@ export function Footer({ locale = "tr" }: FooterProps) {
         </section>
       </div>
 
-     <div className="border-t border-border-default py-5">
-  <div className="container flex flex-col gap-3 text-xs text-text-muted md:flex-row md:items-center md:justify-between">
-    <p>{content.copyright}</p>
+      <div className="border-t border-border-default py-5">
+        <div className="container flex flex-col gap-3 text-xs text-text-muted md:flex-row md:items-center md:justify-between">
+          <p>{content.copyright}</p>
 
-    <div className="flex flex-wrap items-center gap-3">
-      <Link
-        href={`/${locale}/privacy`}
-        className="transition hover:text-text-primary"
-      >
-        {locale === "tr" ? "Gizlilik ve Çerezler" : "Privacy and Cookies"}
-      </Link>
+          <div className="flex flex-wrap items-center gap-3">
+            <Link
+              href={`/${locale}/privacy`}
+              className="transition hover:text-text-primary"
+            >
+              {locale === "tr" ? "Gizlilik ve Çerezler" : "Privacy and Cookies"}
+            </Link>
 
-      <span aria-hidden="true">·</span>
+            <span aria-hidden="true">·</span>
 
-      <p>{locale === "tr" ? "Çok dilli demo konsept" : "Multilingual demo concept"}</p>
-    </div>
-  </div>
-</div>
+            <Link
+              href={`/${locale}/services`}
+              className="transition hover:text-text-primary"
+            >
+              {content.links.services}
+            </Link>
+
+            <span aria-hidden="true">·</span>
+
+            <Link
+              href={`/${locale}/gift-card`}
+              className="transition hover:text-text-primary"
+            >
+              {content.links.giftCard}
+            </Link>
+          </div>
+        </div>
+      </div>
     </footer>
   );
 }
