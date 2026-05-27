@@ -119,7 +119,7 @@ export function QuickAccess({ locale }: QuickAccessProps) {
                 <Link
                   key={item.href}
                   href={`/${locale}/${item.href}`}
-                  className={`group col-span-3 rounded-3xl border border-border-default bg-surface-muted p-4 transition hover:-translate-y-1 hover:bg-surface-subtle hover:shadow-card min-[420px]:col-span-2 lg:col-span-1 ${
+                  className={`group rounded-3xl border border-border-default bg-surface-muted p-4 transition hover:-translate-y-1 hover:bg-surface-subtle hover:shadow-card ${
                     item.href === "events"
                       ? "min-[420px]:col-start-2 lg:col-start-auto"
                       : ""
