@@ -50,8 +50,8 @@ export function HeroSection({ locale }: HeroSectionProps) {
             CityMall Cyprus
           </p>
 
-          <h1 className="max-w-[11ch] break-words text-[clamp(3rem,12vw,4.75rem)] font-semibold leading-[0.92] tracking-tight text-white md:max-w-5xl md:text-7xl md:leading-[0.95] lg:text-8xl">
-             {copy.title}
+          <h1 className="max-w-[14ch] text-[clamp(2.75rem,10.5vw,4.2rem)] font-semibold leading-[0.95] tracking-tight text-white [overflow-wrap:normal] [word-break:normal] md:max-w-5xl md:text-7xl md:leading-[0.95] lg:text-8xl">
+            {copy.title}
           </h1>
 
           <p className="mt-6 max-w-[28rem] break-words text-xl leading-8 text-white/85 md:max-w-2xl md:text-2xl">
