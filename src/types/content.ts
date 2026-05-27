@@ -74,6 +74,17 @@ export type Store = {
   isComingSoon?: boolean;
 };
 
+export type DiningCuisineType =
+  | "turkish"
+  | "italian"
+  | "fast-food"
+  | "cafe"
+  | "dessert"
+  | "coffee"
+  | "healthy"
+  | "world"
+  | "snack";
+
 export type DiningPlace = {
   id: string;
   slug: string;
@@ -84,28 +95,8 @@ export type DiningPlace = {
   logo?: string;
   coverImage?: string;
   cuisine?: LocalizedString;
-  cuisineType?:
-  | "turkish"
-  | "italian"
-  | "fast-food"
-  | "cafe"
-  | "dessert"
-  | "coffee"
-  | "healthy"
-  | "world"
-  | "snack";
-  cuisineTags?: Array<
-  | "turkish"
-  | "italian"
-  | "fast-food"
-  | "cafe"
-  | "dessert"
-  | "coffee"
-  | "healthy"
-  | "world"
-  | "snack"
->;
-
+  cuisineType?: DiningCuisineType;
+  cuisineTags?: DiningCuisineType[];
   priceRange?: "₺" | "₺₺" | "₺₺₺";
   workingHours?: LocalizedString;
   menuUrl?: string;
@@ -113,6 +104,27 @@ export type DiningPlace = {
   phone?: string;
   website?: string;
   featured?: boolean;
+};
+
+export type ServiceCategory =
+  | "comfort"
+  | "family"
+  | "accessibility"
+  | "safety"
+  | "finance"
+  | "parking"
+  | "guest-services";
+
+export type ServiceStatus = "available" | "ask-info" | "seasonal";
+
+export type MallService = {
+  id: string;
+  slug: string;
+  title: LocalizedString;
+  description: LocalizedString;
+  location: LocalizedString;
+  category: ServiceCategory;
+  status: ServiceStatus;
 };
 
 export type Campaign = BaseContentItem & {

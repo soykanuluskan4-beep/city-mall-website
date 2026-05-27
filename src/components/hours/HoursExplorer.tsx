@@ -345,11 +345,11 @@ export function HoursExplorer({ locale }: HoursExplorerProps) {
     ...copy.planningCards.parking,
   },
   {
-    id: "services-info",
-    icon: BadgeCheck,
-    href: `/${locale}/contact`,
-    ...copy.planningCards.services,
-  },
+  id: "services-info",
+  icon: BadgeCheck,
+  href: `/${locale}/services`,
+  ...copy.planningCards.services,
+},
   {
     id: "accessibility-info",
     icon: Accessibility,
