@@ -332,31 +332,31 @@ export function HoursExplorer({ locale }: HoursExplorerProps) {
   }, [locale]);
 
   const planningCards = [
-    {
-      id: "getting-here",
-      icon: Navigation,
-      href: `/${locale}/contact`,
-      ...copy.planningCards.gettingHere,
-    },
-    {
-      id: "parking-info",
-      icon: Car,
-      href: "#parking-info",
-      ...copy.planningCards.parking,
-    },
-    {
-      id: "services-info",
-      icon: BadgeCheck,
-      href: "#services-info",
-      ...copy.planningCards.services,
-    },
-    {
-      id: "accessibility-info",
-      icon: Accessibility,
-      href: "#accessibility-info",
-      ...copy.planningCards.accessibility,
-    },
-  ];
+  {
+    id: "getting-here",
+    icon: Navigation,
+    href: `/${locale}/map#directions`,
+    ...copy.planningCards.gettingHere,
+  },
+  {
+    id: "parking-info",
+    icon: Car,
+    href: `/${locale}/map#parking`,
+    ...copy.planningCards.parking,
+  },
+  {
+    id: "services-info",
+    icon: BadgeCheck,
+    href: `/${locale}/contact`,
+    ...copy.planningCards.services,
+  },
+  {
+    id: "accessibility-info",
+    icon: Accessibility,
+    href: `/${locale}/map#parking`,
+    ...copy.planningCards.accessibility,
+  },
+];
 
   return (
     <main className="overflow-x-hidden bg-surface-default">
