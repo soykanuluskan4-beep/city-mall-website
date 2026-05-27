@@ -1,0 +1,429 @@
+import Link from "next/link";
+import {
+  ArrowRight,
+  Building2,
+  CalendarDays,
+  Film,
+  MapPin,
+  ShoppingBag,
+  Sparkles,
+  Store,
+  Utensils,
+  UsersRound,
+} from "lucide-react";
+import type { Locale } from "@/types/content";
+
+type AboutPageClientProps = {
+  locale: Locale;
+};
+
+const content = {
+  tr: {
+    eyebrow: "Hakkımızda",
+    title: "Gazimağusa için modern AVM deneyimi.",
+    description:
+      "CityMall Cyprus; mağazaları, yeme-içme alanları, Cinemall deneyimi, etkinlikleri ve ziyaretçi hizmetleriyle Gazimağusa’da modern bir yaşam ve buluşma alanı sunar.",
+    heroBadge: "CityMall Cyprus",
+    storyTitle: "CityMall Cyprus’un hikayesi",
+    storyText:
+      "CityMall Cyprus, ziyaretçilerin günlük ihtiyaçlarını, alışveriş deneyimini, sosyal buluşmaları ve eğlence seçeneklerini tek çatı altında bir araya getiren modern bir AVM deneyimi sunmak için tasarlanmıştır. Marka karması, yeme-içme noktaları, Cinemall ve etkinlik alanlarıyla hem ailelere hem gençlere hem de günlük ziyaretçilere hitap eden canlı bir merkez olmayı hedefler.",
+    imageTitle: "Gazimağusa için modern bir ziyaret deneyimi",
+    imageText:
+      "AVM deneyimi sadece alışverişten ibaret değildir; ulaşım, hizmetler, etkinlikler, sinema ve yeme-içme seçenekleriyle bütünsel bir ziyaret planı sunar.",
+    statsTitle: "Rakamlarla CityMall",
+    statsText:
+      "Aşağıdaki değerler site konseptinde kullanılan genel sunum bilgileridir. Ticari teslim öncesi gerçek AVM verileriyle güncellenmelidir.",
+    stats: [
+      {
+        value: "50+",
+        label: "Mağaza ve marka",
+      },
+      {
+        value: "15",
+        label: "Yeme-içme noktası",
+      },
+      {
+        value: "4",
+        label: "Ziyaretçi katı",
+      },
+      {
+        value: "1",
+        label: "Cinemall deneyimi",
+      },
+    ],
+    visionTitle: "Vizyonumuz",
+    visionText:
+      "CityMall Cyprus’u Gazimağusa’da sadece bir alışveriş noktası değil, ziyaretçilerin zaman geçirmekten keyif aldığı, güvenli, erişilebilir ve canlı bir yaşam merkezi olarak konumlandırmak.",
+    missionTitle: "Misyonumuz",
+    missionText:
+      "Ziyaretçilere kolay ulaşılabilir, düzenli, aile dostu ve güncel bir AVM deneyimi sunarken markalar için görünür, değerli ve sürdürülebilir bir ticari ortam oluşturmak.",
+    experienceTitle: "CityMall deneyimi",
+    experienceText:
+      "Alışverişten yeme-içmeye, Cinemall’dan etkinliklere kadar her ziyaretin daha planlı ve keyifli olması için bölümler tek çatı altında sunulur.",
+    experiences: [
+      {
+        title: "Alışveriş",
+        text: "Moda, teknoloji, ev yaşamı, çocuk ve hizmet kategorilerinde mağazalar.",
+      },
+      {
+        title: "Yeme-İçme",
+        text: "Food Court, restoranlar, cafeler ve hızlı servis noktaları.",
+      },
+      {
+        title: "Cinemall",
+        text: "Film seansları, vizyon filmleri ve sinema deneyimi.",
+      },
+      {
+        title: "Etkinlikler",
+        text: "Aile, çocuk, müzik, spor ve özel gün etkinlikleri.",
+      },
+    ],
+    valuesTitle: "Kurumsal yaklaşım",
+    values: [
+      "Ziyaretçi odaklı deneyim",
+      "Erişilebilir ve kolay yönlendirme",
+      "Aile dostu sosyal alanlar",
+      "Markalar için güçlü ticari görünürlük",
+      "Güncel, şeffaf ve yönetilebilir dijital iletişim",
+    ],
+    ctaTitle: "CityMall Cyprus ile iletişime geçin.",
+    ctaText:
+      "Ziyaret, marka iş birlikleri, kiralama ve kurumsal talepler için ilgili sayfalardan bize ulaşabilirsiniz.",
+    ctaContact: "İletişime Geç",
+    ctaLeasing: "Kiralama Başvurusu",
+  },
+  en: {
+    eyebrow: "About Us",
+    title: "A modern mall experience in Famagusta.",
+    description:
+      "CityMall Cyprus offers a modern lifestyle and meeting destination in Famagusta with stores, dining areas, Cinemall, events and visitor services.",
+    heroBadge: "CityMall Cyprus",
+    storyTitle: "The CityMall Cyprus story",
+    storyText:
+      "CityMall Cyprus is designed to bring daily needs, shopping experiences, social gatherings and entertainment options together under one roof. With its brand mix, dining points, Cinemall and event areas, it aims to be a lively destination for families, young visitors and daily guests.",
+    imageTitle: "A modern visit experience for Famagusta",
+    imageText:
+      "A mall experience is not only about shopping; it includes directions, services, events, cinema and dining options in one complete visit plan.",
+    statsTitle: "CityMall in Numbers",
+    statsText:
+      "The values below are general presentation figures used for the website concept. They should be updated with verified mall data before commercial handoff.",
+    stats: [
+      {
+        value: "50+",
+        label: "Stores and brands",
+      },
+      {
+        value: "15",
+        label: "Dining points",
+      },
+      {
+        value: "4",
+        label: "Visitor floors",
+      },
+      {
+        value: "1",
+        label: "Cinemall experience",
+      },
+    ],
+    visionTitle: "Our Vision",
+    visionText:
+      "To position CityMall Cyprus not only as a shopping destination in Famagusta, but as a safe, accessible and lively lifestyle center where visitors enjoy spending time.",
+    missionTitle: "Our Mission",
+    missionText:
+      "To offer visitors an accessible, organized, family-friendly and up-to-date mall experience while creating a visible, valuable and sustainable commercial environment for brands.",
+    experienceTitle: "CityMall experience",
+    experienceText:
+      "From shopping and dining to Cinemall and events, every visit is supported with clear sections in one place.",
+    experiences: [
+      {
+        title: "Shopping",
+        text: "Stores across fashion, technology, home living, kids and services.",
+      },
+      {
+        title: "Dining",
+        text: "Food Court, restaurants, cafes and quick-service points.",
+      },
+      {
+        title: "Cinemall",
+        text: "Movie showtimes, current releases and cinema experience.",
+      },
+      {
+        title: "Events",
+        text: "Family, kids, music, sports and special-day events.",
+      },
+    ],
+    valuesTitle: "Corporate approach",
+    values: [
+      "Visitor-focused experience",
+      "Accessible and easy navigation",
+      "Family-friendly social spaces",
+      "Strong commercial visibility for brands",
+      "Up-to-date, transparent and manageable digital communication",
+    ],
+    ctaTitle: "Get in touch with CityMall Cyprus.",
+    ctaText:
+      "For visits, brand partnerships, leasing and corporate requests, reach us through the related pages.",
+    ctaContact: "Contact Us",
+    ctaLeasing: "Leasing Application",
+  },
+};
+
+const experienceIcons = [ShoppingBag, Utensils, Film, CalendarDays];
+
+export function AboutPageClient({ locale }: AboutPageClientProps) {
+  const copy = content[locale];
+
+  return (
+    <main className="overflow-x-hidden bg-surface-default">
+      <section className="relative isolate overflow-hidden bg-text-primary text-white">
+        <div className="absolute inset-0 -z-10 bg-[radial-gradient(circle_at_top_left,rgba(255,255,255,0.18),transparent_38%),linear-gradient(135deg,rgba(17,24,39,1),rgba(42,49,63,1))]" />
+
+        <div className="container grid gap-10 py-16 md:py-24 lg:grid-cols-[1fr_0.78fr] lg:items-center">
+          <div className="min-w-0">
+            <p className="text-sm font-semibold uppercase tracking-[0.35em] text-white/60">
+              {copy.eyebrow}
+            </p>
+
+            <h1 className="mt-5 max-w-[13ch] text-[clamp(2.75rem,11vw,4rem)] font-semibold leading-[0.95] tracking-tight text-white [overflow-wrap:normal] [word-break:normal] md:max-w-5xl md:text-7xl md:leading-[0.95]">
+              {copy.title}
+            </h1>
+
+            <p className="mt-6 max-w-3xl break-words text-base leading-7 text-white/78 md:text-xl md:leading-8">
+              {copy.description}
+            </p>
+
+            <div className="mt-8 flex flex-col gap-3 min-[420px]:flex-row min-[420px]:flex-wrap">
+              <Link
+                href={`/${locale}/contact`}
+                className="inline-flex items-center justify-center gap-2 rounded-full bg-brand-primary px-6 py-3 text-sm font-semibold text-brand-foreground shadow-card transition hover:-translate-y-0.5 hover:opacity-90"
+              >
+                {copy.ctaContact}
+                <ArrowRight className="h-4 w-4" aria-hidden="true" />
+              </Link>
+
+              <Link
+                href={`/${locale}/leasing`}
+                className="inline-flex items-center justify-center gap-2 rounded-full border border-white/20 bg-white/10 px-6 py-3 text-sm font-semibold text-white backdrop-blur transition hover:bg-white/20"
+              >
+                {copy.ctaLeasing}
+              </Link>
+            </div>
+          </div>
+
+          <div className="w-full max-w-full min-w-0">
+            <div className="relative overflow-hidden rounded-[2rem] border border-white/15 bg-white/10 p-4 shadow-elevated backdrop-blur md:p-5">
+              <div
+                className="min-h-[360px] rounded-[1.5rem] bg-cover bg-center"
+                style={{
+                  backgroundImage:
+                    "linear-gradient(180deg, rgba(17,24,39,0.12), rgba(17,24,39,0.74)), url('https://images.unsplash.com/photo-1519567241046-7f570eee3ce6?auto=format&fit=crop&w=1200&q=80')",
+                }}
+              />
+
+              <div className="absolute bottom-8 left-8 right-8 rounded-3xl border border-white/15 bg-white/15 p-5 text-white backdrop-blur">
+                <p className="text-xs font-semibold uppercase tracking-[0.25em] text-white/62">
+                  {copy.heroBadge}
+                </p>
+
+                <p className="mt-3 text-2xl font-semibold tracking-tight">
+                  {locale === "tr"
+                    ? "Alışverişten daha fazlası"
+                    : "More than shopping"}
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section className="py-12 md:py-16">
+        <div className="container grid gap-8 lg:grid-cols-[0.9fr_1.1fr] lg:items-center">
+          <div className="rounded-[2rem] border border-border-default bg-surface-muted p-6 shadow-card md:p-8">
+            <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-brand-primary text-brand-foreground">
+              <Building2 className="h-6 w-6" aria-hidden="true" />
+            </div>
+
+            <h2 className="mt-6 text-3xl font-semibold tracking-tight text-text-primary md:text-4xl">
+              {copy.storyTitle}
+            </h2>
+
+            <p className="mt-5 text-base leading-8 text-text-secondary">
+              {copy.storyText}
+            </p>
+          </div>
+
+          <div className="grid gap-5 sm:grid-cols-2">
+            <article className="rounded-[2rem] border border-border-default bg-surface-default p-6 shadow-card">
+              <MapPin className="h-8 w-8 text-text-primary" aria-hidden="true" />
+              <h3 className="mt-5 text-2xl font-semibold tracking-tight text-text-primary">
+                {copy.imageTitle}
+              </h3>
+              <p className="mt-3 text-sm leading-6 text-text-secondary">
+                {copy.imageText}
+              </p>
+            </article>
+
+            <article className="rounded-[2rem] border border-border-default bg-text-primary p-6 text-white shadow-card">
+              <Sparkles className="h-8 w-8 text-white" aria-hidden="true" />
+              <h3 className="mt-5 text-2xl font-semibold tracking-tight">
+                {copy.valuesTitle}
+              </h3>
+              <ul className="mt-4 space-y-2 text-sm leading-6 text-white/72">
+                {copy.values.slice(0, 3).map((value) => (
+                  <li key={value} className="flex gap-2">
+                    <span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-brand-primary" />
+                    <span>{value}</span>
+                  </li>
+                ))}
+              </ul>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section className="border-y border-border-default bg-surface-muted/45 py-12 md:py-16">
+        <div className="container">
+          <div className="mb-8">
+            <p className="text-sm font-semibold uppercase tracking-[0.3em] text-text-muted">
+              {copy.statsTitle}
+            </p>
+
+            <h2 className="mt-4 text-4xl font-semibold tracking-tight text-text-primary md:text-5xl">
+              {copy.statsTitle}
+            </h2>
+
+            <p className="mt-4 max-w-3xl text-base leading-7 text-text-secondary">
+              {copy.statsText}
+            </p>
+          </div>
+
+          <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+            {copy.stats.map((stat) => (
+              <article
+                key={stat.label}
+                className="rounded-[2rem] border border-border-default bg-surface-default p-6 shadow-card"
+              >
+                <p className="text-5xl font-semibold tracking-tight text-text-primary">
+                  {stat.value}
+                </p>
+
+                <p className="mt-3 text-sm font-semibold text-text-secondary">
+                  {stat.label}
+                </p>
+              </article>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section className="py-12 md:py-16">
+        <div className="container grid gap-5 md:grid-cols-2">
+          <article className="rounded-[2rem] border border-border-default bg-surface-default p-6 shadow-card md:p-8">
+            <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-brand-primary text-brand-foreground">
+              <UsersRound className="h-5 w-5" aria-hidden="true" />
+            </div>
+
+            <h2 className="mt-6 text-3xl font-semibold tracking-tight text-text-primary">
+              {copy.visionTitle}
+            </h2>
+
+            <p className="mt-4 text-sm leading-7 text-text-secondary">
+              {copy.visionText}
+            </p>
+          </article>
+
+          <article className="rounded-[2rem] border border-border-default bg-surface-default p-6 shadow-card md:p-8">
+            <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-brand-primary text-brand-foreground">
+              <Store className="h-5 w-5" aria-hidden="true" />
+            </div>
+
+            <h2 className="mt-6 text-3xl font-semibold tracking-tight text-text-primary">
+              {copy.missionTitle}
+            </h2>
+
+            <p className="mt-4 text-sm leading-7 text-text-secondary">
+              {copy.missionText}
+            </p>
+          </article>
+        </div>
+      </section>
+
+      <section className="border-y border-border-default bg-surface-muted/45 py-12 md:py-16">
+        <div className="container">
+          <div className="mb-8">
+            <p className="text-sm font-semibold uppercase tracking-[0.3em] text-text-muted">
+              {copy.experienceTitle}
+            </p>
+
+            <h2 className="mt-4 text-4xl font-semibold tracking-tight text-text-primary md:text-5xl">
+              {copy.experienceTitle}
+            </h2>
+
+            <p className="mt-4 max-w-3xl text-base leading-7 text-text-secondary">
+              {copy.experienceText}
+            </p>
+          </div>
+
+          <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-4">
+            {copy.experiences.map((experience, index) => {
+              const Icon = experienceIcons[index] ?? Sparkles;
+
+              return (
+                <article
+                  key={experience.title}
+                  className="rounded-[2rem] border border-border-default bg-surface-default p-6 shadow-card"
+                >
+                  <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-brand-primary text-brand-foreground">
+                    <Icon className="h-5 w-5" aria-hidden="true" />
+                  </div>
+
+                  <h3 className="mt-5 text-2xl font-semibold tracking-tight text-text-primary">
+                    {experience.title}
+                  </h3>
+
+                  <p className="mt-3 text-sm leading-6 text-text-secondary">
+                    {experience.text}
+                  </p>
+                </article>
+              );
+            })}
+          </div>
+        </div>
+      </section>
+
+      <section className="py-12 md:py-16">
+        <div className="container">
+          <div className="rounded-[2rem] border border-border-default bg-text-primary p-6 text-white shadow-elevated md:p-8">
+            <div className="flex flex-col gap-6 md:flex-row md:items-center md:justify-between">
+              <div>
+                <h2 className="text-3xl font-semibold tracking-tight md:text-4xl">
+                  {copy.ctaTitle}
+                </h2>
+
+                <p className="mt-3 max-w-2xl text-sm leading-6 text-white/72">
+                  {copy.ctaText}
+                </p>
+              </div>
+
+              <div className="flex flex-wrap gap-3">
+                <Link
+                  href={`/${locale}/contact`}
+                  className="rounded-full bg-white px-5 py-3 text-sm font-semibold text-text-primary transition hover:bg-surface-muted"
+                >
+                  {copy.ctaContact}
+                </Link>
+
+                <Link
+                  href={`/${locale}/leasing`}
+                  className="rounded-full border border-white/20 bg-white/10 px-5 py-3 text-sm font-semibold text-white transition hover:bg-white/20"
+                >
+                  {copy.ctaLeasing}
+                </Link>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+  );
+}

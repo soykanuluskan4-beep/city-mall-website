@@ -1,11 +1,11 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { LegalPage } from "@/components/corporate/LegalPage";
+import { LeasingPageClient } from "@/components/corporate/LeasingPageClient";
 import { locales } from "@/i18n/routing";
 import { createPageMetadata } from "@/lib/metadata";
 import type { Locale } from "@/types/content";
 
-type PrivacyPageProps = {
+type LeasingPageProps = {
   params: {
     locale: string;
   };
@@ -24,24 +24,24 @@ export function generateMetadata({
 
   return createPageMetadata({
     locale,
-    path: "/privacy",
+    path: "/leasing",
     title:
       locale === "tr"
-        ? "Gizlilik ve Çerezler | CityMall Cyprus"
-        : "Privacy & Cookies | CityMall Cyprus",
+        ? "Kiralama | CityMall Cyprus"
+        : "Leasing | CityMall Cyprus",
     description:
       locale === "tr"
-        ? "CityMall Cyprus gizlilik politikası, çerez kullanımı ve kişisel veri bilgilendirmesini inceleyin."
-        : "Review CityMall Cyprus privacy policy, cookie usage and personal data information.",
+        ? "CityMall Cyprus’ta mağaza, kiosk, food court veya etkinlik alanı kiralama başvurusu yapın."
+        : "Apply for retail, kiosk, food court or event space leasing at CityMall Cyprus.",
   });
 }
 
-export default function PrivacyPage({ params }: PrivacyPageProps) {
+export default function LeasingPage({ params }: LeasingPageProps) {
   const locale = params.locale as Locale;
 
   if (!locales.includes(locale)) {
     notFound();
   }
 
-  return <LegalPage locale={locale} type="privacy" />;
+  return <LeasingPageClient locale={locale} />;
 }
