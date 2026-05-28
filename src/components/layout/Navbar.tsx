@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { Search } from "lucide-react";
+import { ChevronDown, Search } from "lucide-react";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import { MegaMenu } from "@/components/layout/MegaMenu";
@@ -18,12 +18,20 @@ const navLabels = {
     dining: "Yeme-İçme",
     campaigns: "Kampanyalar",
     events: "Etkinlikler",
-    cinema: "Sinema",
+    cinema: "Cinemall",
     kids: "Çocuk & Eğlence",
     hours: "Saatler",
     map: "Harita",
+    services: "Hizmetler",
+    giftCard: "Hediye Kartı",
+    about: "Hakkımızda",
+    leasing: "Kiralama",
     contact: "İletişim",
     privacy: "Gizlilik",
+    more: "Daha Fazla",
+    mainSections: "Ana Bölümler",
+    visitGroup: "Ziyaret",
+    corporateGroup: "Kurumsal",
     menu: "Menü",
     close: "Kapat",
     openMenu: "Menüyü aç",
@@ -35,12 +43,20 @@ const navLabels = {
     dining: "Dining",
     campaigns: "Campaigns",
     events: "Events",
-    cinema: "Cinema",
+    cinema: "Cinemall",
     kids: "Kids & Entertainment",
     hours: "Hours",
     map: "Map",
+    services: "Services",
+    giftCard: "Gift Card",
+    about: "About Us",
+    leasing: "Leasing",
     contact: "Contact",
     privacy: "Privacy",
+    more: "More",
+    mainSections: "Main Sections",
+    visitGroup: "Visit",
+    corporateGroup: "Corporate",
     menu: "Menu",
     close: "Close",
     openMenu: "Open menu",
@@ -49,23 +65,74 @@ const navLabels = {
   },
 };
 
-const navItems = [
+type Locale = keyof typeof navLabels;
+type NavKey = keyof (typeof navLabels)["tr"];
+
+type NavItem = {
+  href: string;
+  key: NavKey;
+};
+
+const desktopNavItems = [
   { href: "stores", key: "stores" },
   { href: "dining", key: "dining" },
   { href: "campaigns", key: "campaigns" },
   { href: "events", key: "events" },
   { href: "cinema", key: "cinema" },
-  { href: "kids", key: "kids" },
-] as const;
-
-const utilityNavItems = [
   { href: "hours", key: "hours" },
   { href: "map", key: "map" },
-  { href: "contact", key: "contact" },
-  { href: "privacy", key: "privacy" },
-] as const;
+] as const satisfies readonly NavItem[];
 
-function getLocaleFromPathname(pathname: string) {
+const compactDesktopItems = [
+  { href: "stores", key: "stores" },
+  { href: "dining", key: "dining" },
+  { href: "campaigns", key: "campaigns" },
+  { href: "events", key: "events" },
+  { href: "cinema", key: "cinema" },
+] as const satisfies readonly NavItem[];
+
+const moreNavItems = [
+  { href: "hours", key: "hours" },
+  { href: "map", key: "map" },
+  { href: "services", key: "services" },
+  { href: "gift-card", key: "giftCard" },
+] as const satisfies readonly NavItem[];
+
+const mobileNavGroups = [
+  {
+    titleKey: "mainSections",
+    items: [
+      { href: "stores", key: "stores" },
+      { href: "dining", key: "dining" },
+      { href: "campaigns", key: "campaigns" },
+      { href: "events", key: "events" },
+      { href: "cinema", key: "cinema" },
+      { href: "kids", key: "kids" },
+    ],
+  },
+  {
+    titleKey: "visitGroup",
+    items: [
+      { href: "hours", key: "hours" },
+      { href: "map", key: "map" },
+      { href: "services", key: "services" },
+      { href: "gift-card", key: "giftCard" },
+    ],
+  },
+  {
+    titleKey: "corporateGroup",
+    items: [
+      { href: "about", key: "about" },
+      { href: "leasing", key: "leasing" },
+      { href: "contact", key: "contact" },
+    ],
+  },
+] as const satisfies readonly {
+  titleKey: NavKey;
+  items: readonly NavItem[];
+}[];
+
+function getLocaleFromPathname(pathname: string): Locale {
   const segment = pathname.split("/")[1];
 
   if (segment === "en" || segment === "tr") {
@@ -75,7 +142,7 @@ function getLocaleFromPathname(pathname: string) {
   return "tr";
 }
 
-function switchLocalePath(pathname: string, nextLocale: "tr" | "en") {
+function switchLocalePath(pathname: string, nextLocale: Locale) {
   const segments = pathname.split("/");
 
   if (segments[1] === "tr" || segments[1] === "en") {
@@ -84,6 +151,10 @@ function switchLocalePath(pathname: string, nextLocale: "tr" | "en") {
   }
 
   return `/${nextLocale}`;
+}
+
+function isActivePath(pathname: string, href: string) {
+  return pathname === href || pathname.startsWith(`${href}/`);
 }
 
 export function Navbar() {
@@ -95,12 +166,11 @@ export function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMegaMenuOpen, setIsMegaMenuOpen] = useState(false);
+  const [isMoreMenuOpen, setIsMoreMenuOpen] = useState(false);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [openingStatus, setOpeningStatus] = useState<OpeningStatus | null>(
     null
   );
-
-  const allMobileItems = [...navItems, ...utilityNavItems];
 
   useEffect(() => {
     function handleScroll() {
@@ -133,7 +203,59 @@ export function Navbar() {
   function openSearch() {
     setIsMenuOpen(false);
     setIsMegaMenuOpen(false);
+    setIsMoreMenuOpen(false);
     setIsSearchOpen(true);
+  }
+
+  function renderDesktopLink(item: NavItem, paddingClass = "px-4") {
+    const href = `/${locale}/${item.href}`;
+    const isActive = isActivePath(pathname, href);
+
+    if (item.href === "stores") {
+      return (
+        <div
+          key={item.href}
+          className="relative"
+          onMouseEnter={() => setIsMegaMenuOpen(true)}
+          onMouseLeave={() => setIsMegaMenuOpen(false)}
+        >
+          <Link
+            href={href}
+            aria-haspopup="true"
+            aria-expanded={isMegaMenuOpen}
+            onFocus={() => setIsMegaMenuOpen(true)}
+            className={`rounded-full ${paddingClass} py-2 transition ${
+              isActive || isMegaMenuOpen
+                ? "bg-surface-default text-text-primary shadow-card"
+                : "hover:bg-surface-default hover:text-text-primary"
+            }`}
+          >
+            {labels[item.key]}
+          </Link>
+
+          {isMegaMenuOpen ? (
+            <MegaMenu
+              locale={locale}
+              onNavigate={() => setIsMegaMenuOpen(false)}
+            />
+          ) : null}
+        </div>
+      );
+    }
+
+    return (
+      <Link
+        key={item.href}
+        href={href}
+        className={`rounded-full ${paddingClass} py-2 transition ${
+          isActive
+            ? "bg-surface-default text-text-primary shadow-card"
+            : "hover:bg-surface-default hover:text-text-primary"
+        }`}
+      >
+        {labels[item.key]}
+      </Link>
+    );
   }
 
   return (
@@ -153,7 +275,11 @@ export function Navbar() {
           <Link
             href={`/${locale}`}
             className="flex shrink-0 items-center gap-3"
-            onClick={() => setIsMenuOpen(false)}
+            onClick={() => {
+              setIsMenuOpen(false);
+              setIsMegaMenuOpen(false);
+              setIsMoreMenuOpen(false);
+            }}
             aria-label="CityMall Cyprus home"
           >
             <span
@@ -197,109 +323,67 @@ export function Navbar() {
           ) : null}
 
           <nav className="relative hidden items-center gap-1 rounded-full border border-border-default bg-surface-muted p-1 text-sm font-medium text-text-secondary xl:flex">
-            {navItems.map((item) => {
-              const href = `/${locale}/${item.href}`;
-              const isActive = pathname === href;
-
-              if (item.href === "stores") {
-                return (
-                  <div
-                    key={item.href}
-                    className="relative"
-                    onMouseEnter={() => setIsMegaMenuOpen(true)}
-                    onMouseLeave={() => setIsMegaMenuOpen(false)}
-                  >
-                    <Link
-                      href={href}
-                      aria-haspopup="true"
-                      aria-expanded={isMegaMenuOpen}
-                      onFocus={() => setIsMegaMenuOpen(true)}
-                      className={`rounded-full px-4 py-2 transition ${
-                        isActive || isMegaMenuOpen
-                          ? "bg-surface-default text-text-primary shadow-card"
-                          : "hover:bg-surface-default hover:text-text-primary"
-                      }`}
-                    >
-                      {labels[item.key]}
-                    </Link>
-
-                    {isMegaMenuOpen ? (
-                      <MegaMenu
-                        locale={locale}
-                        onNavigate={() => setIsMegaMenuOpen(false)}
-                      />
-                    ) : null}
-                  </div>
-                );
-              }
-
-              return (
-                <Link
-                  key={item.href}
-                  href={href}
-                  className={`rounded-full px-4 py-2 transition ${
-                    isActive
-                      ? "bg-surface-default text-text-primary shadow-card"
-                      : "hover:bg-surface-default hover:text-text-primary"
-                  }`}
-                >
-                  {labels[item.key]}
-                </Link>
-              );
-            })}
+            {desktopNavItems.map((item) => renderDesktopLink(item))}
           </nav>
 
           <nav className="relative hidden items-center gap-1 rounded-full border border-border-default bg-surface-muted p-1 text-sm font-medium text-text-secondary lg:flex xl:hidden">
-            {navItems.slice(0, 4).map((item) => {
-              const href = `/${locale}/${item.href}`;
-              const isActive = pathname === href;
+            {compactDesktopItems.map((item) =>
+              renderDesktopLink(item, "px-3")
+            )}
 
-              if (item.href === "stores") {
-                return (
-                  <div
-                    key={item.href}
-                    className="relative"
-                    onMouseEnter={() => setIsMegaMenuOpen(true)}
-                    onMouseLeave={() => setIsMegaMenuOpen(false)}
-                  >
-                    <Link
-                      href={href}
-                      aria-haspopup="true"
-                      aria-expanded={isMegaMenuOpen}
-                      onFocus={() => setIsMegaMenuOpen(true)}
-                      className={`rounded-full px-3 py-2 transition ${
-                        isActive || isMegaMenuOpen
-                          ? "bg-surface-default text-text-primary shadow-card"
-                          : "hover:bg-surface-default hover:text-text-primary"
-                      }`}
-                    >
-                      {labels[item.key]}
-                    </Link>
-
-                    {isMegaMenuOpen ? (
-                      <MegaMenu
-                        locale={locale}
-                        onNavigate={() => setIsMegaMenuOpen(false)}
-                      />
-                    ) : null}
-                  </div>
-                );
-              }
-
-              return (
-                <Link
-                  key={item.href}
-                  href={href}
-                  className={`rounded-full px-3 py-2 transition ${
-                    isActive
-                      ? "bg-surface-default text-text-primary shadow-card"
-                      : "hover:bg-surface-default hover:text-text-primary"
+            <div
+              className="relative"
+              onMouseEnter={() => setIsMoreMenuOpen(true)}
+              onMouseLeave={() => setIsMoreMenuOpen(false)}
+            >
+              <button
+                type="button"
+                className={`inline-flex items-center gap-1 rounded-full px-3 py-2 transition ${
+                  moreNavItems.some((item) =>
+                    isActivePath(pathname, `/${locale}/${item.href}`)
+                  ) || isMoreMenuOpen
+                    ? "bg-surface-default text-text-primary shadow-card"
+                    : "hover:bg-surface-default hover:text-text-primary"
+                }`}
+                aria-haspopup="true"
+                aria-expanded={isMoreMenuOpen}
+                onFocus={() => setIsMoreMenuOpen(true)}
+              >
+                {labels.more}
+                <ChevronDown
+                  className={`h-4 w-4 transition ${
+                    isMoreMenuOpen ? "rotate-180" : ""
                   }`}
-                >
-                  {labels[item.key]}
-                </Link>
-              );
-            })}
+                  aria-hidden="true"
+                />
+              </button>
+
+              {isMoreMenuOpen ? (
+                <div className="absolute right-0 top-full z-50 mt-3 w-56 rounded-3xl border border-border-default bg-surface-default p-2 shadow-elevated">
+                  <div className="grid gap-1">
+                    {moreNavItems.map((item) => {
+                      const href = `/${locale}/${item.href}`;
+                      const isActive = isActivePath(pathname, href);
+
+                      return (
+                        <Link
+                          key={item.href}
+                          href={href}
+                          className={`rounded-2xl px-4 py-3 text-sm font-semibold transition ${
+                            isActive
+                              ? "bg-brand-primary text-brand-foreground"
+                              : "text-text-secondary hover:bg-surface-muted hover:text-text-primary"
+                          }`}
+                          onClick={() => setIsMoreMenuOpen(false)}
+                        >
+                          {labels[item.key]}
+                        </Link>
+                      );
+                    })}
+                  </div>
+                </div>
+              ) : null}
+            </div>
           </nav>
 
           <div className="flex items-center gap-2">
@@ -315,7 +399,11 @@ export function Navbar() {
             <Link
               href={`/${locale}/contact`}
               className="hidden rounded-full bg-brand-primary px-4 py-2.5 text-sm font-semibold text-brand-foreground shadow-card transition hover:-translate-y-0.5 hover:opacity-90 md:inline-flex"
-              onClick={() => setIsMenuOpen(false)}
+              onClick={() => {
+                setIsMenuOpen(false);
+                setIsMegaMenuOpen(false);
+                setIsMoreMenuOpen(false);
+              }}
             >
               {labels.contact}
             </Link>
@@ -368,8 +456,8 @@ export function Navbar() {
 
         {isMenuOpen ? (
           <div className="border-t border-border-default bg-surface-default lg:hidden">
-            <nav className="container grid gap-2 py-4">
-              <div className="mb-2 flex items-center rounded-2xl border border-border-default bg-surface-muted p-1">
+            <nav className="container grid gap-5 py-4">
+              <div className="flex items-center rounded-2xl border border-border-default bg-surface-muted p-1">
                 <Link
                   href={switchLocalePath(pathname, "tr")}
                   className={`flex-1 rounded-xl px-4 py-3 text-center text-sm font-semibold transition ${
@@ -395,33 +483,35 @@ export function Navbar() {
                 </Link>
               </div>
 
-              {allMobileItems.map((item) => {
-                const href = `/${locale}/${item.href}`;
-                const isActive = pathname === href;
+              {mobileNavGroups.map((group) => (
+                <section key={group.titleKey} className="grid gap-2">
+                  <p className="px-1 text-xs font-semibold uppercase tracking-[0.22em] text-text-muted">
+                    {labels[group.titleKey]}
+                  </p>
 
-                return (
-                  <Link
-                    key={item.href}
-                    href={href}
-                    className={`rounded-2xl px-4 py-3 text-sm font-semibold transition ${
-                      isActive
-                        ? "bg-brand-primary text-brand-foreground shadow-card"
-                        : "bg-surface-muted text-text-secondary hover:bg-surface-subtle hover:text-text-primary"
-                    }`}
-                    onClick={() => setIsMenuOpen(false)}
-                  >
-                    {labels[item.key]}
-                  </Link>
-                );
-              })}
+                  <div className="grid gap-2">
+                    {group.items.map((item) => {
+                      const href = `/${locale}/${item.href}`;
+                      const isActive = isActivePath(pathname, href);
 
-              <Link
-                href={`/${locale}/contact`}
-                className="mt-2 rounded-2xl bg-brand-primary px-4 py-3 text-center text-sm font-semibold text-brand-foreground shadow-card"
-                onClick={() => setIsMenuOpen(false)}
-              >
-                {labels.contact}
-              </Link>
+                      return (
+                        <Link
+                          key={item.href}
+                          href={href}
+                          className={`rounded-2xl px-4 py-3 text-sm font-semibold transition ${
+                            isActive
+                              ? "bg-brand-primary text-brand-foreground shadow-card"
+                              : "bg-surface-muted text-text-secondary hover:bg-surface-subtle hover:text-text-primary"
+                          }`}
+                          onClick={() => setIsMenuOpen(false)}
+                        >
+                          {labels[item.key]}
+                        </Link>
+                      );
+                    })}
+                  </div>
+                </section>
+              ))}
             </nav>
           </div>
         ) : null}

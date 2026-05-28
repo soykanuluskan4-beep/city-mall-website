@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { stores } from "@/data/stores";
 import { getLocalizedText } from "@/lib/locale";
-import type { Locale } from "@/types/content";
+import type { Locale, StoreCategory } from "@/types/content";
 
 type MegaMenuProps = {
   locale: Locale;
@@ -10,9 +10,9 @@ type MegaMenuProps = {
 
 const categoryContent = {
   tr: {
-    title: "Kategoriler",
-    featured: "Öne Çıkan Mağazalar",
-    viewAll: "Tüm Mağazaları Gör →",
+    title: "Mağaza Kategorileri",
+    featured: "Öne Çıkan Markalar",
+    viewAll: "Tüm Mağazaları Keşfet →",
     categories: [
       "Moda",
       "Elektronik",
@@ -20,12 +20,24 @@ const categoryContent = {
       "Spor",
       "Ev & Yaşam",
       "Çocuk",
+      "Kitap & Kırtasiye",
     ],
+    categoryLabels: {
+      fashion: "Moda",
+      electronics: "Elektronik",
+      home: "Ev & Yaşam",
+      beauty: "Güzellik",
+      sports: "Spor",
+      books: "Kitap",
+      services: "Hizmet",
+      kids: "Çocuk",
+      other: "Diğer",
+    },
   },
   en: {
-    title: "Categories",
-    featured: "Featured Stores",
-    viewAll: "View All Stores →",
+    title: "Store Categories",
+    featured: "Featured Brands",
+    viewAll: "Explore All Stores →",
     categories: [
       "Fashion",
       "Electronics",
@@ -33,7 +45,19 @@ const categoryContent = {
       "Sports",
       "Home & Living",
       "Kids",
+      "Books & Stationery",
     ],
+    categoryLabels: {
+      fashion: "Fashion",
+      electronics: "Electronics",
+      home: "Home & Living",
+      beauty: "Beauty",
+      sports: "Sports",
+      books: "Books",
+      services: "Services",
+      kids: "Kids",
+      other: "Other",
+    },
   },
 };
 
@@ -82,6 +106,9 @@ export function MegaMenu({ locale, onNavigate }: MegaMenuProps) {
             {featuredStores.map((store) => {
               const storeName = getLocalizedText(store.name, locale);
               const description = getLocalizedText(store.description, locale);
+              const categoryLabel =
+                content.categoryLabels[store.category as StoreCategory] ??
+                store.category;
 
               return (
                 <Link
@@ -101,7 +128,7 @@ export function MegaMenu({ locale, onNavigate }: MegaMenuProps) {
                       </h3>
 
                       <span className="rounded-full bg-surface-default px-3 py-1 text-xs font-semibold text-text-muted shadow-card">
-                        {store.category}
+                        {categoryLabel}
                       </span>
                     </div>
 
