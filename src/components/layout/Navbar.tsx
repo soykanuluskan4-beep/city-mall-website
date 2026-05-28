@@ -79,6 +79,7 @@ const desktopNavItems = [
   { href: "campaigns", key: "campaigns" },
   { href: "events", key: "events" },
   { href: "cinema", key: "cinema" },
+  { href: "kids", key: "kids" },
   { href: "hours", key: "hours" },
   { href: "map", key: "map" },
 ] as const satisfies readonly NavItem[];
@@ -92,6 +93,7 @@ const compactDesktopItems = [
 ] as const satisfies readonly NavItem[];
 
 const moreNavItems = [
+  { href: "kids", key: "kids" },
   { href: "hours", key: "hours" },
   { href: "map", key: "map" },
   { href: "services", key: "services" },
@@ -331,59 +333,58 @@ export function Navbar() {
               renderDesktopLink(item, "px-3")
             )}
 
-            <div
-              className="relative"
-              onMouseEnter={() => setIsMoreMenuOpen(true)}
-              onMouseLeave={() => setIsMoreMenuOpen(false)}
+            <div className="relative">
+  <button
+    type="button"
+    className={`inline-flex items-center gap-1 rounded-full px-3 py-2 transition ${
+      moreNavItems.some((item) =>
+        isActivePath(pathname, `/${locale}/${item.href}`)
+      ) || isMoreMenuOpen
+        ? "bg-surface-default text-text-primary shadow-card"
+        : "hover:bg-surface-default hover:text-text-primary"
+    }`}
+    aria-haspopup="true"
+    aria-expanded={isMoreMenuOpen}
+    onClick={() => {
+      setIsMoreMenuOpen((current) => !current);
+      setIsMegaMenuOpen(false);
+    }}
+  >
+    {labels.more}
+    <ChevronDown
+      className={`h-4 w-4 transition ${
+        isMoreMenuOpen ? "rotate-180" : ""
+      }`}
+      aria-hidden="true"
+    />
+  </button>
+
+  {isMoreMenuOpen ? (
+    <div className="absolute right-0 top-full z-50 mt-2 w-56 rounded-3xl border border-border-default bg-surface-default p-2 shadow-elevated">
+      <div className="grid gap-1">
+        {moreNavItems.map((item) => {
+          const href = `/${locale}/${item.href}`;
+          const isActive = isActivePath(pathname, href);
+
+          return (
+            <Link
+              key={item.href}
+              href={href}
+              className={`rounded-2xl px-4 py-3 text-sm font-semibold transition ${
+                isActive
+                  ? "bg-brand-primary text-brand-foreground"
+                  : "text-text-secondary hover:bg-surface-muted hover:text-text-primary"
+              }`}
+              onClick={() => setIsMoreMenuOpen(false)}
             >
-              <button
-                type="button"
-                className={`inline-flex items-center gap-1 rounded-full px-3 py-2 transition ${
-                  moreNavItems.some((item) =>
-                    isActivePath(pathname, `/${locale}/${item.href}`)
-                  ) || isMoreMenuOpen
-                    ? "bg-surface-default text-text-primary shadow-card"
-                    : "hover:bg-surface-default hover:text-text-primary"
-                }`}
-                aria-haspopup="true"
-                aria-expanded={isMoreMenuOpen}
-                onFocus={() => setIsMoreMenuOpen(true)}
-              >
-                {labels.more}
-                <ChevronDown
-                  className={`h-4 w-4 transition ${
-                    isMoreMenuOpen ? "rotate-180" : ""
-                  }`}
-                  aria-hidden="true"
-                />
-              </button>
-
-              {isMoreMenuOpen ? (
-                <div className="absolute right-0 top-full z-50 mt-3 w-56 rounded-3xl border border-border-default bg-surface-default p-2 shadow-elevated">
-                  <div className="grid gap-1">
-                    {moreNavItems.map((item) => {
-                      const href = `/${locale}/${item.href}`;
-                      const isActive = isActivePath(pathname, href);
-
-                      return (
-                        <Link
-                          key={item.href}
-                          href={href}
-                          className={`rounded-2xl px-4 py-3 text-sm font-semibold transition ${
-                            isActive
-                              ? "bg-brand-primary text-brand-foreground"
-                              : "text-text-secondary hover:bg-surface-muted hover:text-text-primary"
-                          }`}
-                          onClick={() => setIsMoreMenuOpen(false)}
-                        >
-                          {labels[item.key]}
-                        </Link>
-                      );
-                    })}
-                  </div>
-                </div>
-              ) : null}
-            </div>
+              {labels[item.key]}
+            </Link>
+          );
+        })}
+      </div>
+    </div>
+  ) : null}
+</div>
           </nav>
 
           <div className="flex items-center gap-2">
