@@ -4,7 +4,7 @@ import { Clock3, MapPin, Search, SearchX, Sparkles } from "lucide-react";
 import { useMemo, useState } from "react";
 import { stores } from "@/data/stores";
 import { getLocalizedText } from "@/lib/locale";
-import type { Locale, Store } from "@/types/content";
+import type { Locale, Store, StoreOccasion } from "@/types/content";
 
 type StoresExplorerProps = {
   locale: Locale;
@@ -24,6 +24,7 @@ type StoreCategory = Exclude<CategoryFilter, "all">;
 type FloorFilter = "all" | "basement" | "ground" | "first" | "second";
 type StoreFloor = Exclude<FloorFilter, "all">;
 type StatusFilter = "all" | "new" | "comingSoon";
+type OccasionFilter = "all" | StoreOccasion;
 
 const alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("");
 
@@ -37,13 +38,15 @@ const content = {
     categoryTitle: "Kategori",
     floorTitle: "Kat",
     statusTitle: "Durum",
+    occasionTitle: "Özel Gün",
     totalStores: "mağaza",
     listedStores: "mağaza listeleniyor",
     results: "sonuç",
     newThisMonth: "Yeni Açılanlar",
     comingSoon: "Yakında CityMall’de",
     noResultsTitle: "Aradığın mağaza bulunamadı",
-    noResultsText: "Farklı bir arama deneyebilir veya filtreleri sıfırlayabilirsin.",
+    noResultsText:
+      "Kategori, kat, durum veya özel gün filtresini değiştirerek tekrar deneyebilirsin.",
     resetFilters: "Filtreleri Temizle",
     categoryLabels: {
       all: "Tümü",
@@ -56,16 +59,32 @@ const content = {
       books: "Kitap & Kırtasiye",
     },
     floorLabels: {
-  all: "Tümü",
-  basement: "-1. Kat",
-  ground: "Zemin Kat",
-  first: "1. Kat",
-  second: "2. Kat",
-},
+      all: "Tümü",
+      basement: "-1. Kat",
+      ground: "Zemin Kat",
+      first: "1. Kat",
+      second: "2. Kat",
+    },
     statusLabels: {
       all: "Tümü",
       new: "Yeni Açılanlar",
       comingSoon: "Yakında",
+    },
+    occasionLabels: {
+      all: "Tümü",
+      birthday: "Doğum Günü",
+      "mothers-day": "Anneler Günü",
+      "fathers-day": "Babalar Günü",
+      valentines: "Sevgililer Günü",
+      anniversary: "Yıl Dönümü",
+      "back-to-school": "Okula Dönüş",
+      graduation: "Mezuniyet",
+      eid: "Bayram",
+      "new-year": "Yılbaşı",
+      summer: "Yaz",
+      kids: "Çocuk",
+      "baby-newborn": "Bebek & Yeni Doğan",
+      "new-home": "Yeni Ev",
     },
     badges: {
       new: "Yeni",
@@ -81,13 +100,15 @@ const content = {
     categoryTitle: "Category",
     floorTitle: "Floor",
     statusTitle: "Status",
+    occasionTitle: "Occasion",
     totalStores: "stores",
     listedStores: "stores listed",
     results: "results",
     newThisMonth: "Newly Opened",
     comingSoon: "Coming Soon to CityMall",
     noResultsTitle: "No matching stores found",
-    noResultsText: "Try another search or clear your filters.",
+    noResultsText:
+      "Try changing the category, floor, status or occasion filter.",
     resetFilters: "Clear Filters",
     categoryLabels: {
       all: "All",
@@ -100,16 +121,32 @@ const content = {
       books: "Books & Stationery",
     },
     floorLabels: {
-  all: "All",
-  basement: "Basement Floor",
-  ground: "Ground Floor",
-  first: "1st Floor",
-  second: "2nd Floor",
-},
+      all: "All",
+      basement: "Basement Floor",
+      ground: "Ground Floor",
+      first: "1st Floor",
+      second: "2nd Floor",
+    },
     statusLabels: {
       all: "All",
       new: "Newly Opened",
       comingSoon: "Coming Soon",
+    },
+    occasionLabels: {
+      all: "All",
+      birthday: "Birthday",
+      "mothers-day": "Mother’s Day",
+      "fathers-day": "Father’s Day",
+      valentines: "Valentine’s Day",
+      anniversary: "Anniversary",
+      "back-to-school": "Back to School",
+      graduation: "Graduation",
+      eid: "Eid",
+      "new-year": "New Year",
+      summer: "Summer",
+      kids: "Kids",
+      "baby-newborn": "Baby & Newborn",
+      "new-home": "New Home",
     },
     badges: {
       new: "New",
@@ -136,7 +173,25 @@ const floorFilters: FloorFilter[] = [
   "first",
   "second",
 ];
+
 const statusFilters: StatusFilter[] = ["all", "new", "comingSoon"];
+
+const occasionFilters: OccasionFilter[] = [
+  "all",
+  "birthday",
+  "mothers-day",
+  "fathers-day",
+  "valentines",
+  "anniversary",
+  "back-to-school",
+  "graduation",
+  "eid",
+  "new-year",
+  "summer",
+  "kids",
+  "baby-newborn",
+  "new-home",
+];
 
 const categoryBadgeStyles: Record<string, string> = {
   fashion: "bg-[#f7efe7] text-[#6f4b2f]",
@@ -190,6 +245,7 @@ function getStoreSearchText(store: Store, locale: Locale) {
       getLocalizedText(store.description, locale),
       store.category,
       store.floor,
+      ...(store.occasions ?? []),
     ].join(" ")
   );
 }
@@ -231,13 +287,15 @@ function hasActiveFilters(
   query: string,
   categoryFilter: CategoryFilter,
   floorFilter: FloorFilter,
-  statusFilter: StatusFilter
+  statusFilter: StatusFilter,
+  occasionFilter: OccasionFilter
 ) {
   return (
     query.trim() !== "" ||
     categoryFilter !== "all" ||
     floorFilter !== "all" ||
-    statusFilter !== "all"
+    statusFilter !== "all" ||
+    occasionFilter !== "all"
   );
 }
 
@@ -349,6 +407,8 @@ export function StoresExplorer({ locale }: StoresExplorerProps) {
   const [categoryFilter, setCategoryFilter] = useState<CategoryFilter>("all");
   const [floorFilter, setFloorFilter] = useState<FloorFilter>("all");
   const [statusFilter, setStatusFilter] = useState<StatusFilter>("all");
+  const [occasionFilter, setOccasionFilter] =
+    useState<OccasionFilter>("all");
 
   const newStores = useMemo(
     () => sortStoresByName(stores.filter((store) => store.isNew), locale),
@@ -366,7 +426,8 @@ export function StoresExplorer({ locale }: StoresExplorerProps) {
     query,
     categoryFilter,
     floorFilter,
-    statusFilter
+    statusFilter,
+    occasionFilter
   );
 
   const filteredStores = useMemo(() => {
@@ -394,7 +455,17 @@ export function StoresExplorer({ locale }: StoresExplorerProps) {
           (statusFilter === "new" && store.isNew) ||
           (statusFilter === "comingSoon" && store.isComingSoon);
 
-        return matchesQuery && matchesCategory && matchesFloor && matchesStatus;
+        const matchesOccasion =
+          occasionFilter === "all" ||
+          store.occasions?.includes(occasionFilter);
+
+        return (
+          matchesQuery &&
+          matchesCategory &&
+          matchesFloor &&
+          matchesStatus &&
+          matchesOccasion
+        );
       })
       .sort((a, b) => {
         const rankA = rankStore(a, locale, normalizedQuery);
@@ -409,7 +480,14 @@ export function StoresExplorer({ locale }: StoresExplorerProps) {
           locale
         );
       });
-  }, [categoryFilter, floorFilter, locale, query, statusFilter]);
+  }, [
+    categoryFilter,
+    floorFilter,
+    locale,
+    occasionFilter,
+    query,
+    statusFilter,
+  ]);
 
   const availableLetters = useMemo(() => {
     return new Set(
@@ -444,6 +522,7 @@ export function StoresExplorer({ locale }: StoresExplorerProps) {
     setCategoryFilter("all");
     setFloorFilter("all");
     setStatusFilter("all");
+    setOccasionFilter("all");
   }
 
   return (
@@ -535,7 +614,7 @@ export function StoresExplorer({ locale }: StoresExplorerProps) {
               />
             </div>
 
-            <div className="mt-5 grid min-w-0 gap-5 xl:grid-cols-[1.4fr_0.8fr_0.8fr]">
+            <div className="mt-5 grid min-w-0 gap-5 xl:grid-cols-[1.2fr_0.75fr_0.75fr_1.25fr]">
               <div className="min-w-0">
                 <p className="mb-2 text-xs font-semibold uppercase tracking-[0.2em] text-text-muted">
                   {copy.categoryTitle}
@@ -605,6 +684,31 @@ export function StoresExplorer({ locale }: StoresExplorerProps) {
                         }`}
                       >
                         {copy.statusLabels[filter]}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              </div>
+
+              <div className="min-w-0">
+                <p className="mb-2 text-xs font-semibold uppercase tracking-[0.2em] text-text-muted">
+                  {copy.occasionTitle}
+                </p>
+
+                <div className="w-full max-w-full overflow-x-auto pb-1 [-webkit-overflow-scrolling:touch]">
+                  <div className="flex w-max gap-2 px-1">
+                    {occasionFilters.map((filter) => (
+                      <button
+                        key={filter}
+                        type="button"
+                        onClick={() => setOccasionFilter(filter)}
+                        className={`whitespace-nowrap rounded-full border px-4 py-2 text-sm font-semibold transition ${
+                          occasionFilter === filter
+                            ? "border-brand-primary bg-brand-primary text-brand-foreground"
+                            : "border-border-default bg-surface-muted text-text-secondary hover:bg-surface-subtle hover:text-text-primary"
+                        }`}
+                      >
+                        {copy.occasionLabels[filter]}
                       </button>
                     ))}
                   </div>

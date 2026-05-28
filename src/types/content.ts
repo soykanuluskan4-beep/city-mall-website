@@ -16,6 +16,21 @@ export type StoreCategory =
   | "kids"
   | "other";
 
+export type StoreOccasion =
+  | "birthday"
+  | "mothers-day"
+  | "fathers-day"
+  | "valentines"
+  | "anniversary"
+  | "back-to-school"
+  | "graduation"
+  | "eid"
+  | "new-year"
+  | "summer"
+  | "kids"
+  | "baby-newborn"
+  | "new-home";
+
 export type DiningCategory =
   | "restaurant"
   | "cafe"
@@ -64,6 +79,7 @@ export type Store = {
   description: LocalizedString;
   category: StoreCategory;
   floor: Floor;
+  occasions?: StoreOccasion[];
   logo?: string;
   coverImage?: string;
   phone?: string;
