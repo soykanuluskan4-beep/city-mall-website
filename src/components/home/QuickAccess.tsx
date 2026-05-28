@@ -6,6 +6,8 @@ import {
   Clapperboard,
   CalendarDays,
   MapPinned,
+  Gift,
+  Gamepad2,
 } from "lucide-react";
 import type { Locale } from "@/types/content";
 
@@ -53,6 +55,19 @@ const content = {
         href: "hours",
         icon: MapPinned,
       },
+
+      {
+  label: "Çocuk & Eğlence",
+  description: "FunLab ve aile aktiviteleri",
+  href: "kids",
+  icon: Gamepad2,
+},
+{
+  label: "Hediye Kartı",
+  description: "Sevdiklerine seçim özgürlüğü",
+  href: "gift-card",
+  icon: Gift,
+      },
     ],
   },
   en: {
@@ -94,6 +109,19 @@ const content = {
         href: "hours",
         icon: MapPinned,
       },
+
+      {
+  label: "Kids & Entertainment",
+  description: "FunLab and family activities",
+  href: "kids",
+  icon: Gamepad2,
+},
+{
+  label: "Gift Card",
+  description: "Give the freedom to choose",
+  href: "gift-card",
+  icon: Gift,
+      },
     ],
   },
 };
@@ -111,7 +139,7 @@ export function QuickAccess({ locale }: QuickAccessProps) {
             </p>
           </div>
 
-          <div className="grid grid-cols-2 gap-4 lg:grid-cols-3">
+          <div className="grid grid-cols-2 gap-4 lg:grid-cols-4">
             {copy.items.map((item) => {
               const Icon = item.icon;
 
@@ -119,11 +147,7 @@ export function QuickAccess({ locale }: QuickAccessProps) {
                 <Link
                   key={item.href}
                   href={`/${locale}/${item.href}`}
-                  className={`group rounded-3xl border border-border-default bg-surface-muted p-4 transition hover:-translate-y-1 hover:bg-surface-subtle hover:shadow-card ${
-                    item.href === "events"
-                      ? "min-[420px]:col-start-2 lg:col-start-auto"
-                      : ""
-                  }`}
+                  className="group rounded-3xl border border-border-default bg-surface-muted p-4 transition hover:-translate-y-1 hover:bg-surface-subtle hover:shadow-card"
                 >
                   <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-surface-default text-text-primary shadow-card transition group-hover:bg-brand-primary group-hover:text-brand-foreground md:h-12 md:w-12">
                     <Icon className="h-5 w-5" aria-hidden="true" />

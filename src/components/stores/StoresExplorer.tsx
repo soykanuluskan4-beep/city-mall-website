@@ -21,7 +21,7 @@ type CategoryFilter =
   | "books";
 
 type StoreCategory = Exclude<CategoryFilter, "all">;
-type FloorFilter = "all" | "ground" | "first" | "second";
+type FloorFilter = "all" | "basement" | "ground" | "first" | "second";
 type StoreFloor = Exclude<FloorFilter, "all">;
 type StatusFilter = "all" | "new" | "comingSoon";
 
@@ -56,11 +56,12 @@ const content = {
       books: "Kitap & Kırtasiye",
     },
     floorLabels: {
-      all: "Tümü",
-      ground: "Zemin Kat",
-      first: "1. Kat",
-      second: "2. Kat",
-    },
+  all: "Tümü",
+  basement: "-1. Kat",
+  ground: "Zemin Kat",
+  first: "1. Kat",
+  second: "2. Kat",
+},
     statusLabels: {
       all: "Tümü",
       new: "Yeni Açılanlar",
@@ -99,11 +100,12 @@ const content = {
       books: "Books & Stationery",
     },
     floorLabels: {
-      all: "All",
-      ground: "Ground Floor",
-      first: "1st Floor",
-      second: "2nd Floor",
-    },
+  all: "All",
+  basement: "Basement Floor",
+  ground: "Ground Floor",
+  first: "1st Floor",
+  second: "2nd Floor",
+},
     statusLabels: {
       all: "All",
       new: "Newly Opened",
@@ -127,7 +129,13 @@ const categoryFilters: CategoryFilter[] = [
   "books",
 ];
 
-const floorFilters: FloorFilter[] = ["all", "ground", "first", "second"];
+const floorFilters: FloorFilter[] = [
+  "all",
+  "basement",
+  "ground",
+  "first",
+  "second",
+];
 const statusFilters: StatusFilter[] = ["all", "new", "comingSoon"];
 
 const categoryBadgeStyles: Record<string, string> = {

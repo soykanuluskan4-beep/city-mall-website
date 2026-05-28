@@ -34,49 +34,105 @@ export function generateMetadata({
         : "Kids & Entertainment | CityMall Cyprus",
     description:
       locale === "tr"
-        ? "CityMall Cyprus çocuk mağazaları, aile etkinlikleri ve eğlence odaklı alanlarını keşfedin."
-        : "Explore CityMall Cyprus kids stores, family events and entertainment-focused areas.",
+        ? "CityMall Cyprus’ta FunLab oyun alanı, çocuk mağazaları, aile etkinlikleri ve çocuklara özel ziyaret seçeneklerini keşfedin."
+        : "Explore FunLab, kids stores, family events and child-friendly visit options at CityMall Cyprus.",
   });
 }
 
 const pageContent = {
   tr: {
     eyebrow: "Çocuk & Eğlence",
-    title: "Aileler ve çocuklar için keyifli bir AVM deneyimi.",
+    title: "FunLab ile çocuklar için daha eğlenceli bir CityMall günü.",
     description:
-      "Çocuk mağazaları, aile etkinlikleri ve eğlence odaklı alanlarla CityMall Cyprus’ta daha renkli bir ziyaret deneyimi.",
+      "Oyun alanları, çocuk mağazaları, aile etkinlikleri ve Cinemall seçenekleriyle CityMall Cyprus’ta çocuklu ziyaretleri daha kolay planlayın.",
     familyHighlights: "Aile Dostu Öne Çıkanlar",
     kidsStores: "Çocuk Mağazaları",
-    familyEvents: "Aile Etkinlikleri",
+    familyEvents: "Çocuk & Aile Etkinlikleri",
+    funlabTitle: "FunLab oyun ve eğlence alanı",
+    funlabText:
+      "Çocukların enerjisini atabileceği, ailelerin alışveriş molasını daha keyifli hale getirebileceği eğlence alanı.",
+    funlabLocationLabel: "Konum",
+    funlabLocation: "2. Kat",
+    funlabAudienceLabel: "Hedef Kitle",
+    funlabAudience: "Çocuklar ve aileler",
     location: "Konum",
     audience: "Hedef Kitle",
-    backHome: "Ana sayfaya dön",
-    exploreEvents: "Etkinlikleri Gör",
+    storesEyebrow: "Mağazalar",
+    eventsEyebrow: "Etkinlikler",
+    kidsLabel: "Çocuk",
+    backHome: "Ana Sayfaya Dön",
+    exploreEvents: "Etkinlik Takvimine Bak",
+    exploreStores: "Mağazaları Keşfet",
     features: [
+      "FunLab oyun ve eğlence alanı",
       "Çocuk ve aile odaklı mağazalar",
-      "Hafta sonu etkinlikleri",
-      "Eğlence ve oyun konseptleri",
+      "Hafta sonu çocuk etkinlikleri",
     ],
-    emptyEvents: "Şu anda listelenen aile etkinliği bulunmuyor.",
+    funlabCards: [
+      {
+        title: "Oyun molası",
+        text: "Alışveriş arasında çocuklar için hareketli ve eğlenceli bir durak.",
+      },
+      {
+        title: "Aileyle kolay plan",
+        text: "Mağaza, yemek ve etkinlik planını çocuklu ziyaretlere göre düzenleyin.",
+      },
+      {
+        title: "Hafta sonu programı",
+        text: "Atölye, oyun günü ve aile etkinlikleriyle ziyareti zenginleştirin.",
+      },
+    ],
+    storesText:
+      "Çocuk giyim, oyuncak ve aile alışverişine uygun mağazaları keşfedin.",
+    emptyStores: "Şu anda listelenen çocuk mağazası bulunmuyor.",
+    emptyEvents: "Şu anda listelenen çocuk ve aile etkinliği bulunmuyor.",
   },
   en: {
     eyebrow: "Kids & Entertainment",
-    title: "A pleasant mall experience for families and children.",
+    title: "A more fun CityMall day for kids with FunLab.",
     description:
-      "A more colorful visit experience at CityMall Cyprus with kids stores, family events and entertainment-focused areas.",
+      "Plan family visits at CityMall Cyprus with play areas, kids stores, family events and Cinemall options.",
     familyHighlights: "Family-Friendly Highlights",
     kidsStores: "Kids Stores",
-    familyEvents: "Family Events",
+    familyEvents: "Kids & Family Events",
+    funlabTitle: "FunLab games and entertainment area",
+    funlabText:
+      "An entertainment area where children can enjoy play time and families can turn a shopping break into a more enjoyable visit.",
+    funlabLocationLabel: "Location",
+    funlabLocation: "2nd Floor",
+    funlabAudienceLabel: "Audience",
+    funlabAudience: "Children and families",
     location: "Location",
     audience: "Audience",
-    backHome: "Back to home",
-    exploreEvents: "View Events",
+    storesEyebrow: "Stores",
+    eventsEyebrow: "Events",
+    kidsLabel: "Kids",
+    backHome: "Back to Home",
+    exploreEvents: "View Event Calendar",
+    exploreStores: "Explore Stores",
     features: [
+      "FunLab games and entertainment area",
       "Kids and family-focused stores",
-      "Weekend events",
-      "Entertainment and play concepts",
+      "Weekend kids events",
     ],
-    emptyEvents: "There are no listed family events at the moment.",
+    funlabCards: [
+      {
+        title: "Play break",
+        text: "An active and entertaining stop for children during a CityMall visit.",
+      },
+      {
+        title: "Easy family planning",
+        text: "Plan stores, dining and events around a child-friendly visit.",
+      },
+      {
+        title: "Weekend program",
+        text: "Add workshops, game days and family events to your visit.",
+      },
+    ],
+    storesText:
+      "Explore stores suitable for kidswear, toys and family shopping.",
+    emptyStores: "There are no listed kids stores at the moment.",
+    emptyEvents: "There are no listed kids and family events at the moment.",
   },
 };
 
@@ -134,10 +190,10 @@ export default function KidsPage({ params }: KidsPageProps) {
               </Link>
 
               <Link
-                href={`/${locale}`}
+                href={`/${locale}/stores`}
                 className="rounded-full border border-border-default bg-surface-default px-6 py-3 text-sm font-semibold text-text-primary transition hover:bg-surface-subtle"
               >
-                {content.backHome}
+                {content.exploreStores}
               </Link>
             </div>
           </div>
@@ -161,10 +217,65 @@ export default function KidsPage({ params }: KidsPageProps) {
         </div>
       </section>
 
-      <section className="container grid gap-8 py-16 md:py-20 lg:grid-cols-[0.75fr_1.25fr]">
+      <section className="container py-16 md:py-20">
+        <div className="grid gap-8 rounded-[2rem] border border-border-default bg-text-primary p-6 text-white shadow-elevated md:p-8 lg:grid-cols-[0.9fr_1.1fr] lg:p-10">
+          <div>
+            <p className="text-sm font-semibold uppercase tracking-[0.3em] text-white/55">
+              FunLab
+            </p>
+
+            <h2 className="mt-4 text-3xl font-semibold tracking-tight md:text-5xl">
+              {content.funlabTitle}
+            </h2>
+
+            <p className="mt-5 max-w-xl text-base leading-7 text-white/72">
+              {content.funlabText}
+            </p>
+
+            <div className="mt-8 grid gap-3 sm:grid-cols-2">
+              <div className="rounded-2xl border border-white/10 bg-white/[0.06] p-4">
+                <p className="text-xs font-semibold uppercase tracking-[0.2em] text-white/45">
+                  {content.funlabLocationLabel}
+                </p>
+                <p className="mt-2 text-lg font-semibold text-white">
+                  {content.funlabLocation}
+                </p>
+              </div>
+
+              <div className="rounded-2xl border border-white/10 bg-white/[0.06] p-4">
+                <p className="text-xs font-semibold uppercase tracking-[0.2em] text-white/45">
+                  {content.funlabAudienceLabel}
+                </p>
+                <p className="mt-2 text-lg font-semibold text-white">
+                  {content.funlabAudience}
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <div className="grid gap-4">
+            {content.funlabCards.map((card) => (
+              <article
+                key={card.title}
+                className="rounded-2xl border border-white/10 bg-white/[0.06] p-5"
+              >
+                <h3 className="text-xl font-semibold tracking-tight text-white">
+                  {card.title}
+                </h3>
+
+                <p className="mt-3 text-sm leading-6 text-white/68">
+                  {card.text}
+                </p>
+              </article>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section className="container grid gap-8 pb-16 md:pb-20 lg:grid-cols-[0.75fr_1.25fr]">
         <div>
           <p className="text-sm font-semibold uppercase tracking-[0.25em] text-text-muted">
-            Stores
+            {content.storesEyebrow}
           </p>
 
           <h2 className="mt-3 text-3xl font-semibold text-text-primary">
@@ -172,32 +283,36 @@ export default function KidsPage({ params }: KidsPageProps) {
           </h2>
 
           <p className="mt-4 leading-7 text-text-secondary">
-            {locale === "tr"
-              ? "Çocuk giyim, oyuncak ve aile alışverişine uygun mağazalar."
-              : "Stores suitable for kidswear, toys and family shopping."}
+            {content.storesText}
           </p>
         </div>
 
-        <div className="grid gap-5 md:grid-cols-2">
-          {kidsStores.map((store) => (
-            <article
-              key={store.id}
-              className="rounded-2xl border border-border-default bg-surface-default p-6 shadow-card transition hover:-translate-y-1 hover:shadow-elevated"
-            >
-              <p className="text-xs font-semibold uppercase tracking-[0.2em] text-text-muted">
-                Kids
-              </p>
+        {kidsStores.length > 0 ? (
+          <div className="grid gap-5 md:grid-cols-2">
+            {kidsStores.map((store) => (
+              <article
+                key={store.id}
+                className="rounded-2xl border border-border-default bg-surface-default p-6 shadow-card transition hover:-translate-y-1 hover:shadow-elevated"
+              >
+                <p className="text-xs font-semibold uppercase tracking-[0.2em] text-text-muted">
+                  {content.kidsLabel}
+                </p>
 
-              <h3 className="mt-4 text-2xl font-semibold text-text-primary">
-                {getLocalizedText(store.name, locale)}
-              </h3>
+                <h3 className="mt-4 text-2xl font-semibold text-text-primary">
+                  {getLocalizedText(store.name, locale)}
+                </h3>
 
-              <p className="mt-4 line-clamp-4 text-sm leading-6 text-text-secondary">
-                {getLocalizedText(store.description, locale)}
-              </p>
-            </article>
-          ))}
-        </div>
+                <p className="mt-4 line-clamp-4 text-sm leading-6 text-text-secondary">
+                  {getLocalizedText(store.description, locale)}
+                </p>
+              </article>
+            ))}
+          </div>
+        ) : (
+          <div className="rounded-2xl border border-border-default bg-surface-default p-8 text-text-secondary shadow-card">
+            {content.emptyStores}
+          </div>
+        )}
       </section>
 
       <section className="border-y border-border-default bg-surface-muted">
@@ -205,7 +320,7 @@ export default function KidsPage({ params }: KidsPageProps) {
           <div className="mb-8 flex flex-wrap items-end justify-between gap-4">
             <div>
               <p className="text-sm font-semibold uppercase tracking-[0.25em] text-text-muted">
-                Events
+                {content.eventsEyebrow}
               </p>
 
               <h2 className="mt-3 text-3xl font-semibold text-text-primary">

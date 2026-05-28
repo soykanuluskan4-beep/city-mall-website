@@ -21,14 +21,13 @@ const footerContent = {
     corporate: "Kurumsal",
     contact: "İletişim",
     social: "Sosyal Medya",
-    appTitle: "CityMall cebinizde",
     newsletterTitle: "CityMall’dan haber alın",
     newsletterText:
       "Kampanyalar, etkinlikler ve duyurular için e-posta adresinizi bırakın.",
     newsletterPlaceholder: "E-posta adresiniz",
     newsletterButton: "Abone Ol",
     newsletterSuccess:
-  "Teşekkürler. E-posta adresiniz bilgilendirme listesi için alınmıştır.",
+      "Teşekkürler. E-posta adresiniz bilgilendirme listesi için alınmıştır.",
     copyright: "© 2026 CityMall Cyprus. Tüm hakları saklıdır.",
     contactInfo: {
       addressLabel: "Adres",
@@ -46,6 +45,7 @@ const footerContent = {
       campaigns: "Kampanyalar",
       events: "Etkinlikler",
       cinema: "Cinemall",
+      kids: "Çocuk & Eğlence",
       giftCard: "Hediye Kartı",
       hours: "Çalışma Saatleri",
       map: "Harita",
@@ -70,14 +70,13 @@ const footerContent = {
     corporate: "Corporate",
     contact: "Contact",
     social: "Social Media",
-    appTitle: "CityMall in your pocket",
     newsletterTitle: "Stay updated with CityMall",
     newsletterText:
       "Leave your email for campaigns, events and announcements.",
     newsletterPlaceholder: "Your email address",
     newsletterButton: "Subscribe",
     newsletterSuccess:
-  "Thank you. Your email address has been received for updates.",
+      "Thank you. Your email address has been received for updates.",
     copyright: "© 2026 CityMall Cyprus. All rights reserved.",
     contactInfo: {
       addressLabel: "Address",
@@ -95,6 +94,7 @@ const footerContent = {
       campaigns: "Campaigns",
       events: "Events",
       cinema: "Cinemall",
+      kids: "Kids & Entertainment",
       giftCard: "Gift Card",
       hours: "Opening Hours",
       map: "Map",
@@ -119,6 +119,7 @@ const quickLinks = [
   { href: "campaigns", key: "campaigns" },
   { href: "events", key: "events" },
   { href: "cinema", key: "cinema" },
+  { href: "kids", key: "kids" },
   { href: "gift-card", key: "giftCard" },
 ] as const;
 
@@ -238,28 +239,27 @@ export function Footer({ locale = "tr" }: FooterProps) {
             </p>
 
             <div className="mt-6">
-  <p className="text-xs font-semibold uppercase tracking-[0.22em] text-white/45">
-    {content.social}
-  </p>
+              <p className="text-xs font-semibold uppercase tracking-[0.22em] text-white/45">
+                {content.social}
+              </p>
 
-  <div className="mt-3 flex flex-wrap gap-2">
-    {socialLinks.map((item) => {
-      const Icon = item.icon;
+              <div className="mt-3 flex flex-wrap gap-2">
+                {socialLinks.map((item) => {
+                  const Icon = item.icon;
 
-      return (
-        <Link
-          key={item.label}
-          href={`/${locale}/contact`}
-          aria-label={item.label}
-          className="flex h-11 w-11 items-center justify-center rounded-full border border-white/10 bg-white/10 text-white transition hover:-translate-y-0.5 hover:bg-white/18"
-        >
-          <Icon className="h-5 w-5" aria-hidden="true" />
-        </Link>
-      );
-    })}
-  </div>
-</div>
-
+                  return (
+                    <Link
+                      key={item.label}
+                      href={`/${locale}/contact`}
+                      aria-label={item.label}
+                      className="flex h-11 w-11 items-center justify-center rounded-full border border-white/10 bg-white/10 text-white transition hover:-translate-y-0.5 hover:bg-white/18"
+                    >
+                      <Icon className="h-5 w-5" aria-hidden="true" />
+                    </Link>
+                  );
+                })}
+              </div>
+            </div>
           </section>
 
           <FooterLinkColumn
