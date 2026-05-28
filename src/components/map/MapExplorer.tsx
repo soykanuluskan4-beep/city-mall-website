@@ -95,8 +95,8 @@ const content = {
       "Otopark bilgileri ticari teslim öncesinde CityMall tarafından doğrulanmalıdır.",
     parkingCards: [
       {
-        title: "500+ Araçlık Alan",
-        text: "Demo kapasite bilgisi. Gerçek kapasite teslim öncesi güncellenmelidir.",
+        title: "Geniş Otopark Alanı",
+         text: "Otopark kullanımı, giriş noktaları ve uygun alan bilgileri ziyaret sırasında yönlendirmelerle takip edilebilir.",
       },
       {
         title: "Ana Giriş Yönlendirmesi",
@@ -165,8 +165,8 @@ const content = {
       "Parking information should be verified by CityMall before commercial handoff.",
     parkingCards: [
       {
-        title: "500+ Vehicle Area",
-        text: "Demo capacity information. Real capacity should be updated before handoff.",
+        title: "Spacious Parking Area",
+         text: "Parking areas, entrance points and available directions can be followed through on-site guidance during your visit.",
       },
       {
         title: "Main Entrance Directions",

@@ -11,15 +11,15 @@ type CookieBannerProps = {
 const content = {
   tr: {
     title: "Çerez bilgilendirmesi",
-    text: "Bu demo site, tercihlerinizi hatırlamak ve ziyaret deneyimini iyileştirmek için temel çerez/yerel depolama kullanabilir.",
-    privacy: "Gizlilik ve Çerezler",
-    accept: "Kabul Et",
+text: "Tercihlerinizi hatırlamak ve ziyaret deneyimini iyileştirmek için temel çerezler ve yerel depolama kullanılabilir.",
+privacy: "Gizlilik ve Çerezler",
+accept: "Kabul Et",
   },
   en: {
     title: "Cookie notice",
-    text: "This demo site may use basic cookies/local storage to remember your preferences and improve the visitor experience.",
-    privacy: "Privacy and Cookies",
-    accept: "Accept",
+text: "Basic cookies and local storage may be used to remember your preferences and improve the visitor experience.",
+privacy: "Privacy and Cookies",
+accept: "Accept",
   },
 };
 

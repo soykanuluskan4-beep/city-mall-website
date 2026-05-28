@@ -74,18 +74,22 @@ export function CampaignCountdown({
   }
 
   if (status === "expired") {
-    return <span>{locale === "tr" ? "Sona erdi" : "Expired"}</span>;
+    return <span>{locale === "tr" ? "Kampanya sona erdi" : "Campaign ended"}</span>;
   }
 
   const daysLeft = getDayDifference(end);
 
   if (daysLeft === 0) {
-    return <span>{locale === "tr" ? "Bugün bitiyor" : "Ends today"}</span>;
+    return (
+      <span>
+        {locale === "tr" ? "Son gün" : "Last day"}
+      </span>
+    );
   }
 
   return (
     <span>
-      {locale === "tr" ? `${daysLeft} gün kaldı` : `${daysLeft} days left`}
+      {locale === "tr" ? `Son ${daysLeft} gün` : `${daysLeft} days left`}
     </span>
   );
 }

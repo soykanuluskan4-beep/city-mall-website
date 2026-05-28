@@ -11,13 +11,13 @@ export const brand = {
     en: "Famagusta's meeting point.",
   },
   description: {
-    tr: "Alışveriş, yeme-içme, sinema, etkinlik ve ziyaret bilgilerini modern bir AVM deneyimiyle bir araya getiren CityMall Cyprus konsept sitesi.",
-    en: "A CityMall Cyprus concept website bringing shopping, dining, cinema, events and visitor information together through a modern mall experience.",
+    tr: "Alışveriş, yeme-içme, sinema, etkinlik ve ziyaret bilgilerini modern bir AVM deneyimiyle bir araya getiren CityMall Cyprus sitesi.",
+    en: "A CityMall Cyprus website bringing shopping, dining, cinema, events and visitor information together through a modern mall experience.",
   },
   disclaimer: {
-    tr: "Bu site CityMall Cyprus'un resmi sitesi değildir. Portföy ve konsept demonstrasyonu amacıyla hazırlanmıştır.",
-    en: "This site is not the official website of CityMall Cyprus. It was created for portfolio and concept demonstration purposes.",
-  },
+  tr: "Güncel mağaza, etkinlik ve ziyaret bilgileri için CityMall Cyprus iletişim kanallarını kontrol edebilirsiniz.",
+  en: "For current store, event and visit information, please check the CityMall Cyprus contact channels.",
+},
 } as const;
 
 export function getBrandVoice(locale: Locale) {

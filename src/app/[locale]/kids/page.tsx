@@ -34,8 +34,8 @@ export function generateMetadata({
         : "Kids & Entertainment | CityMall Cyprus",
     description:
       locale === "tr"
-        ? "CityMall Cyprus çocuk mağazaları, aile etkinlikleri ve eğlence odaklı konsept alanlarını keşfedin."
-        : "Explore CityMall Cyprus kids stores, family events and entertainment-focused concept areas.",
+        ? "CityMall Cyprus çocuk mağazaları, aile etkinlikleri ve eğlence odaklı alanlarını keşfedin."
+        : "Explore CityMall Cyprus kids stores, family events and entertainment-focused areas.",
   });
 }
 
@@ -44,7 +44,7 @@ const pageContent = {
     eyebrow: "Çocuk & Eğlence",
     title: "Aileler ve çocuklar için keyifli bir AVM deneyimi.",
     description:
-      "Çocuk mağazaları, aile etkinlikleri ve eğlence odaklı konsept alanlarla CityMall Cyprus’ta daha renkli bir ziyaret deneyimi.",
+      "Çocuk mağazaları, aile etkinlikleri ve eğlence odaklı alanlarla CityMall Cyprus’ta daha renkli bir ziyaret deneyimi.",
     familyHighlights: "Aile Dostu Öne Çıkanlar",
     kidsStores: "Çocuk Mağazaları",
     familyEvents: "Aile Etkinlikleri",
@@ -63,7 +63,7 @@ const pageContent = {
     eyebrow: "Kids & Entertainment",
     title: "A pleasant mall experience for families and children.",
     description:
-      "A more colorful visit experience at CityMall Cyprus with kids stores, family events and entertainment-focused concept areas.",
+      "A more colorful visit experience at CityMall Cyprus with kids stores, family events and entertainment-focused areas.",
     familyHighlights: "Family-Friendly Highlights",
     kidsStores: "Kids Stores",
     familyEvents: "Family Events",
@@ -173,8 +173,8 @@ export default function KidsPage({ params }: KidsPageProps) {
 
           <p className="mt-4 leading-7 text-text-secondary">
             {locale === "tr"
-              ? "Çocuk giyim, oyuncak ve aile alışverişine uygun konsept mağazalar."
-              : "Concept stores suitable for kidswear, toys and family shopping."}
+              ? "Çocuk giyim, oyuncak ve aile alışverişine uygun mağazalar."
+              : "Stores suitable for kidswear, toys and family shopping."}
           </p>
         </div>
 

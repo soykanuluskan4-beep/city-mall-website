@@ -12,21 +12,19 @@ type LocaleCatchAllNotFoundPageProps = {
 const content = {
   tr: {
     title: "Sayfa bulunamadı",
-    description:
-      "Aradığınız sayfa taşınmış, kaldırılmış veya henüz oluşturulmamış olabilir.",
+description: "Aradığınız sayfa taşınmış veya artık mevcut olmayabilir.",
     home: "Ana sayfaya dön",
     contact: "İletişim",
     disclaimer:
-      "Bu çalışma CityMall Cyprus'un resmi sitesi değildir. Portföy ve konsept demonstrasyonu amacıyla hazırlanmıştır.",
+  "Aradığınız sayfa taşınmış veya artık mevcut olmayabilir. CityMall Cyprus sayfalarına ana sayfadan devam edebilirsiniz.",
   },
   en: {
     title: "Page not found",
-    description:
-      "The page you are looking for may have moved, been removed, or has not been created yet.",
+description: "The page you are looking for may have moved or may no longer be available.",
     home: "Back to home",
     contact: "Contact",
     disclaimer:
-      "This site is not the official website of CityMall Cyprus. It was created for portfolio and concept demonstration purposes.",
+  "The page you are looking for may have moved or may no longer be available. You can continue from the CityMall Cyprus home page.",
   },
 };
 

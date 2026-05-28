@@ -16,17 +16,17 @@ type CampaignCardProps = {
 
 const content = {
   tr: {
-    details: "Detayları Gör",
+    details: "Kampanyayı İncele",
     validIn: "mağazada geçerli",
-    until: "Bitiş",
+    until: "Son gün",
     statusLabels: {
-      active: "Aktif",
-      upcoming: "Yakında",
-      expired: "Biten",
+      active: "Devam Ediyor",
+      upcoming: "Yakında Başlıyor",
+      expired: "Sona Erdi",
     },
     categoryLabels: {
       fashion: "Moda",
-      food: "Yiyecek",
+      food: "Yeme-İçme",
       electronics: "Elektronik",
       kids: "Çocuk",
       family: "Aile",
@@ -35,17 +35,17 @@ const content = {
     },
   },
   en: {
-    details: "View Details",
+    details: "View Campaign",
     validIn: "stores participating",
-    until: "Ends",
+    until: "Last day",
     statusLabels: {
-      active: "Active",
-      upcoming: "Coming Soon",
-      expired: "Expired",
+      active: "Now Running",
+      upcoming: "Starting Soon",
+      expired: "Ended",
     },
     categoryLabels: {
       fashion: "Fashion",
-      food: "Food",
+      food: "Dining",
       electronics: "Electronics",
       kids: "Kids",
       family: "Family",

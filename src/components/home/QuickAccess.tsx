@@ -15,82 +15,82 @@ type QuickAccessProps = {
 
 const content = {
   tr: {
-    title: "Hızlı Erişim",
+    title: "Hızlıca Planla",
     items: [
       {
         label: "Mağazalar",
-        description: "Markaları keşfet",
+        description: "Tüm markalara göz at",
         href: "stores",
         icon: ShoppingBag,
       },
       {
         label: "Yeme-İçme",
-        description: "Lezzet durakları",
+        description: "Lezzet molanı seç",
         href: "dining",
         icon: Utensils,
       },
       {
         label: "Kampanyalar",
-        description: "Fırsatları incele",
+        description: "Güncel fırsatları yakala",
         href: "campaigns",
         icon: Tag,
       },
       {
         label: "Cinemall",
-        description: "Film ve seanslar",
+        description: "Seansları kontrol et",
         href: "cinema",
         icon: Clapperboard,
       },
       {
         label: "Etkinlikler",
-        description: "Güncel program",
+        description: "Takvimde neler var bak",
         href: "events",
         icon: CalendarDays,
       },
       {
         label: "Ziyaret Planla",
-        description: "Saatler ve ulaşım",
+        description: "Saatler, ulaşım ve rota",
         href: "hours",
         icon: MapPinned,
       },
     ],
   },
   en: {
-    title: "Quick Access",
+    title: "Plan Quickly",
     items: [
       {
         label: "Stores",
-        description: "Explore brands",
+        description: "Browse all brands",
         href: "stores",
         icon: ShoppingBag,
       },
       {
         label: "Dining",
-        description: "Food destinations",
+        description: "Pick your dining break",
         href: "dining",
         icon: Utensils,
       },
       {
         label: "Campaigns",
-        description: "Discover offers",
+        description: "Catch current offers",
         href: "campaigns",
         icon: Tag,
       },
       {
         label: "Cinemall",
-        description: "Movies and showtimes",
+        description: "Check showtimes",
         href: "cinema",
         icon: Clapperboard,
       },
       {
         label: "Events",
-        description: "Current program",
+        description: "See what’s on",
         href: "events",
         icon: CalendarDays,
       },
       {
         label: "Plan Visit",
-        description: "Hours and access",
+        description: "Hours, access and route",
         href: "hours",
         icon: MapPinned,
       },

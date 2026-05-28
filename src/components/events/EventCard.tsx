@@ -12,28 +12,28 @@ type EventCardProps = {
 
 const content = {
   tr: {
-    details: "Detaylar",
+    details: "Etkinlik Detaylarını Gör",
     time: "Saat",
     categoryLabels: {
       music: "Müzik",
       kids: "Çocuk",
       fashion: "Moda",
       sports: "Spor",
-      food: "Yemek",
+      food: "Yeme-İçme",
       family: "Aile",
       cinema: "Sinema",
       general: "Genel",
     },
   },
   en: {
-    details: "Details",
+    details: "View Event Details",
     time: "Time",
     categoryLabels: {
       music: "Music",
       kids: "Kids",
       fashion: "Fashion",
       sports: "Sports",
-      food: "Food",
+      food: "Dining",
       family: "Family",
       cinema: "Cinema",
       general: "General",

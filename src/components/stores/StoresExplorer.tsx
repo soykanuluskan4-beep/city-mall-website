@@ -30,21 +30,21 @@ const alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("");
 const content = {
   tr: {
     eyebrow: "Mağazalar",
-    title: "CityMall Cyprus mağazalarını keşfet.",
+    title: "CityMall mağazalarını keşfet.",
     description:
-      "Markaları arayın, kategoriye göre filtreleyin ve alışveriş rotanızı kolayca oluşturun.",
-    searchPlaceholder: "Mağaza ara...",
+      "Markaları arayın, kategoriye göre filtreleyin ve alışveriş rotanızı kolayca planlayın.",
+    searchPlaceholder: "Mağaza, marka veya kategori ara...",
     categoryTitle: "Kategori",
     floorTitle: "Kat",
     statusTitle: "Durum",
     totalStores: "mağaza",
     listedStores: "mağaza listeleniyor",
     results: "sonuç",
-    newThisMonth: "Bu Ay Açıldı",
-    comingSoon: "Yakında Aramızda",
-    noResultsTitle: "Sonuç bulunamadı",
-    noResultsText: "Filtreleri değiştirerek tekrar deneyin.",
-    resetFilters: "Filtreleri Sıfırla",
+    newThisMonth: "Yeni Açılanlar",
+    comingSoon: "Yakında CityMall’de",
+    noResultsTitle: "Aradığın mağaza bulunamadı",
+    noResultsText: "Farklı bir arama deneyebilir veya filtreleri sıfırlayabilirsin.",
+    resetFilters: "Filtreleri Temizle",
     categoryLabels: {
       all: "Tümü",
       fashion: "Moda",
@@ -63,7 +63,7 @@ const content = {
     },
     statusLabels: {
       all: "Tümü",
-      new: "Yeni Açıldı",
+      new: "Yeni Açılanlar",
       comingSoon: "Yakında",
     },
     badges: {
@@ -73,10 +73,10 @@ const content = {
   },
   en: {
     eyebrow: "Stores",
-    title: "Explore CityMall Cyprus stores.",
+    title: "Explore CityMall stores.",
     description:
-      "Search brands, filter by category and easily build your shopping route.",
-    searchPlaceholder: "Search stores...",
+      "Search brands, filter by category and plan your shopping route with ease.",
+    searchPlaceholder: "Search store, brand or category...",
     categoryTitle: "Category",
     floorTitle: "Floor",
     statusTitle: "Status",
@@ -84,10 +84,10 @@ const content = {
     listedStores: "stores listed",
     results: "results",
     newThisMonth: "Newly Opened",
-    comingSoon: "Coming Soon",
-    noResultsTitle: "No stores found",
-    noResultsText: "Try changing your filters.",
-    resetFilters: "Reset Filters",
+    comingSoon: "Coming Soon to CityMall",
+    noResultsTitle: "No matching stores found",
+    noResultsText: "Try another search or clear your filters.",
+    resetFilters: "Clear Filters",
     categoryLabels: {
       all: "All",
       fashion: "Fashion",

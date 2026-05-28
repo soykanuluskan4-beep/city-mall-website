@@ -15,14 +15,18 @@ const weekDays = {
 
 const content = {
   tr: {
-    empty: "Bu filtrelerle takvimde etkinlik görünmüyor.",
+    empty: "Seçili filtrelere uygun takvim etkinliği bulunamadı.",
     time: "Saat",
     location: "Konum",
+    calendar: "Etkinlik Takvimi",
+    eventCount: "etkinlik",
   },
   en: {
-    empty: "No events appear in the calendar with these filters.",
+    empty: "No calendar events match the selected filters.",
     time: "Time",
     location: "Location",
+    calendar: "Event Calendar",
+    eventCount: "events",
   },
 };
 
@@ -152,7 +156,7 @@ export function EventsCalendar({ events, locale }: EventsCalendarProps) {
       <div className="mb-5 flex flex-col gap-3 md:flex-row md:items-end md:justify-between">
         <div>
           <p className="text-sm font-semibold uppercase tracking-[0.24em] text-text-muted">
-            {locale === "tr" ? "Takvim" : "Calendar"}
+            {copy.calendar}
           </p>
 
           <h2 className="mt-2 text-3xl font-semibold tracking-tight text-text-primary md:text-4xl">
@@ -161,7 +165,7 @@ export function EventsCalendar({ events, locale }: EventsCalendarProps) {
         </div>
 
         <p className="text-sm font-semibold text-text-muted">
-          {events.length} {locale === "tr" ? "etkinlik" : "events"}
+          {events.length} {copy.eventCount}
         </p>
       </div>
 

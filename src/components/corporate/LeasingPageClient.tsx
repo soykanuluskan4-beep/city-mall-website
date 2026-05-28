@@ -97,7 +97,7 @@ const content = {
     ],
     formTitle: "Kiralama Başvuru Formu",
     formText:
-      "Bu form demo amaçlıdır. Gerçek projede başvurular e-posta, CRM veya yönetim paneli entegrasyonu ile alınabilir.",
+  "Kiralama başvurunuzu iletin; marka, kategori ve alan ihtiyacınız ilgili ekip tarafından değerlendirilir.",
     fields: {
       brandName: "Marka Adı",
       contactName: "Yetkili Kişi",
@@ -116,13 +116,13 @@ const content = {
       spaceType: "Mağaza, kiosk, food court...",
       message: "Markanız ve talebiniz hakkında kısa bilgi yazın.",
     },
-    submit: "Başvuruyu Gönder",
-    successTitle: "Başvuru alındı",
+    submit: "Başvuruyu İlet",
+successTitle: "Başvurunuz alındı",
     successText:
-      "Bu demo akışta başvuru gerçek bir sisteme gönderilmez. Ticari teslimde form e-posta veya CRM entegrasyonuna bağlanabilir.",
-    noteTitle: "Ticari teslim notu",
+  "Başvurunuz alınmıştır. Kiralama ekibi uygunluk durumuna göre sizinle iletişime geçebilir.",
+    noteTitle: "Kiralama bilgileri",
     noteText:
-      "Gerçek kiralama sürecinde m² bilgisi, kira koşulları, müsait alanlar ve başvuru değerlendirme kriterleri CityMall yönetimi tarafından sağlanmalıdır.",
+  "Alan büyüklüğü, kira koşulları, müsait lokasyonlar ve değerlendirme kriterleri başvuru sürecinde paylaşılır.",
   },
   en: {
     eyebrow: "Leasing",
@@ -181,7 +181,7 @@ const content = {
     ],
     formTitle: "Leasing Application Form",
     formText:
-      "This form is for demo purposes. In a real project, applications can be connected to email, CRM or an admin panel integration.",
+  "Submit your leasing request; your brand, category and space needs will be reviewed by the relevant team.",
     fields: {
       brandName: "Brand Name",
       contactName: "Contact Person",
@@ -200,13 +200,13 @@ const content = {
       spaceType: "Store, kiosk, food court...",
       message: "Write a short note about your brand and request.",
     },
-    submit: "Submit Application",
-    successTitle: "Application received",
+    submit: "Send Application",
+successTitle: "Application received",
     successText:
-      "In this demo flow, the application is not sent to a real system. During commercial handoff, the form can be connected to email or CRM integration.",
-    noteTitle: "Commercial handoff note",
+  "Your application has been received. The leasing team may contact you depending on availability and suitability.",
+    noteTitle: "Leasing information",
     noteText:
-      "In the real leasing process, m² details, rental conditions, available spaces and application criteria should be provided by CityMall management.",
+  "Space size, rental conditions, available locations and evaluation criteria are shared during the application process.",
   },
 };
 

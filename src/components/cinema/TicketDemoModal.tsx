@@ -18,22 +18,22 @@ type TicketDemoModalProps = {
 
 const content = {
   tr: {
-    title: "Demo bilet akışı",
-    description:
-      "Bu seans seçimi gerçek bilet satışına bağlı değildir. Gerçek projede Cinemall bilet sağlayıcısı ile entegre edilebilir.",
-    movie: "Film",
-    session: "Seans",
-    note: "Demo modundayız.",
-    close: "Kapat",
+    title: "Bilet bilgilendirmesi",
+description:
+  "Seçtiğiniz film ve seans bilgisi aşağıdadır. Bilet satın alma ve güncel uygunluk için Cinemall iletişim kanallarından bilgi alabilirsiniz.",
+movie: "Film",
+session: "Seans",
+note: "Seans bilgileri değişiklik gösterebilir.",
+close: "Kapat",
   },
   en: {
-    title: "Demo ticket flow",
-    description:
-      "This showtime is not connected to a real ticketing provider. In production, it can be integrated with a Cinemall ticketing system.",
-    movie: "Movie",
-    session: "Session",
-    note: "Demo mode.",
-    close: "Close",
+    title: "Ticket information",
+description:
+  "Your selected movie and showtime details are listed below. For ticket purchase and current availability, please contact Cinemall through the official channels.",
+movie: "Movie",
+session: "Session",
+note: "Showtime details may change.",
+close: "Close",
   },
 };
 

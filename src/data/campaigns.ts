@@ -9,12 +9,12 @@ export const campaigns: Campaign[] = [
       en: "Summer Sale",
     },
     description: {
-      tr: "Seçili moda mağazalarında yaz sezonuna özel avantajlı alışveriş fırsatları.",
-      en: "Special summer shopping offers at selected fashion stores.",
+      tr: "Seçili moda mağazalarında yaz sezonuna özel fırsatlar.",
+      en: "Summer offers at selected fashion stores.",
     },
     detailDescription: {
-      tr: "CityMall Cyprus’ta yaz sezonu seçili moda mağazalarında özel avantajlarla başlıyor. Kadın, erkek ve çocuk giyiminden ayakkabı ve aksesuara kadar birçok kategoride sezon ürünlerini keşfedebilirsiniz.",
-      en: "The summer season begins at CityMall Cyprus with special offers across selected fashion stores. Discover seasonal products across womenswear, menswear, kidswear, shoes and accessories.",
+      tr: "Yaz sezonu CityMall Cyprus’ta seçili moda mağazalarında avantajlı alışverişle başlıyor. Giyimden ayakkabıya, aksesuardan çocuk koleksiyonlarına kadar sezon parçalarını keşfedebilirsiniz.",
+      en: "The summer season starts at CityMall Cyprus with offers across selected fashion stores. Discover seasonal pieces from clothing and shoes to accessories and kids’ collections.",
     },
     image:
       "https://images.unsplash.com/photo-1483985988355-763728e1935b?auto=format&fit=crop&w=1800&q=85",
@@ -55,12 +55,12 @@ export const campaigns: Campaign[] = [
       en: "Back to School",
     },
     description: {
-      tr: "Kitap, kırtasiye, çocuk giyim ve teknoloji ürünlerinde yeni dönem fırsatları.",
-      en: "New season offers on books, stationery, kidswear and technology products.",
+      tr: "Yeni dönem için kırtasiye, çocuk giyim ve teknoloji fırsatları.",
+      en: "School season offers on stationery, kidswear and tech.",
     },
     detailDescription: {
-      tr: "Okula dönüş döneminde ihtiyaç duyulan kırtasiye, kitap, çocuk giyim ve teknoloji ürünlerinde seçili mağazalarda avantajlı fırsatlar sunulur.",
-      en: "During the back-to-school season, selected stores offer advantages on stationery, books, kidswear and technology products.",
+      tr: "Okula dönüş alışverişi için ihtiyaç listesi CityMall’da tamamlanır. Kırtasiye, kitap, çocuk giyim ve teknoloji ürünlerinde seçili mağazalarda dönem fırsatları sizi bekler.",
+      en: "Complete your back-to-school list at CityMall. Selected stores offer seasonal deals on stationery, books, kidswear and technology products.",
     },
     image:
       "https://images.unsplash.com/photo-1503676260728-1c00da094a0b?auto=format&fit=crop&w=1800&q=85",
@@ -98,12 +98,12 @@ export const campaigns: Campaign[] = [
       en: "Weekend Deals",
     },
     description: {
-      tr: "Hafta sonuna özel seçili mağazalarda kısa süreli alışveriş avantajları.",
-      en: "Limited-time weekend shopping advantages at selected stores.",
+      tr: "Hafta sonuna özel kısa süreli alışveriş avantajları.",
+      en: "Limited-time shopping offers for the weekend.",
     },
     detailDescription: {
-      tr: "Hafta sonunu CityMall Cyprus’ta değerlendirmek isteyen ziyaretçiler için seçili mağazalarda dönemsel fırsatlar ve özel avantajlar sunulur.",
-      en: "For visitors spending the weekend at CityMall Cyprus, selected stores offer seasonal deals and special advantages.",
+      tr: "Hafta sonunu CityMall Cyprus’ta geçirmek isteyenler için seçili mağazalarda dönemsel fırsatlar hazırlanır. Alışveriş, yeme-içme ve kısa molalar için iyi bir neden.",
+      en: "Selected stores prepare seasonal offers for visitors spending the weekend at CityMall Cyprus. A good reason to stop by for shopping, dining and short breaks.",
     },
     image:
       "https://images.unsplash.com/photo-1441986300917-64674bd600d8?auto=format&fit=crop&w=1800&q=85",
@@ -149,12 +149,12 @@ export const campaigns: Campaign[] = [
       en: "For Kids",
     },
     description: {
-      tr: "Çocuk mağazaları ve aile odaklı alanlarda özel alışveriş ve etkinlik fırsatları.",
-      en: "Special shopping and activity offers in kids and family-focused areas.",
+      tr: "Oyuncak, çocuk giyim ve aile alışverişinde seçili fırsatlar.",
+      en: "Selected offers on toys, kidswear and family shopping.",
     },
     detailDescription: {
-      tr: "Çocuklara özel kampanya kapsamında oyuncak, çocuk giyim ve aile alışverişine yönelik seçili mağazalarda avantajlar sunulur.",
-      en: "This campaign includes special advantages in selected toy, kidswear and family shopping stores.",
+      tr: "Çocuklara özel kampanya; oyuncak, çocuk giyim ve aile ihtiyaçlarına odaklanan mağazaları bir araya getirir. CityMall’da çocuklarla yapılan alışveriş daha planlı ve keyifli hale gelir.",
+      en: "The kids campaign brings together stores focused on toys, kidswear and family needs. Shopping with children becomes easier to plan at CityMall.",
     },
     image:
       "https://images.unsplash.com/photo-1516627145497-ae6968895b74?auto=format&fit=crop&w=1800&q=85",
@@ -189,12 +189,12 @@ export const campaigns: Campaign[] = [
       en: "Technology Week",
     },
     description: {
-      tr: "Elektronik, telefon, aksesuar ve bilgisayar ürünlerinde teknoloji odaklı fırsatlar.",
-      en: "Technology-focused offers on electronics, phones, accessories and computers.",
+      tr: "Telefon, bilgisayar, aksesuar ve elektronik ürünlerde fırsatlar.",
+      en: "Offers on phones, computers, accessories and electronics.",
     },
     detailDescription: {
-      tr: "Teknoloji Haftası boyunca seçili elektronik mağazalarında telefon, bilgisayar, aksesuar ve akıllı cihaz kategorilerinde avantajlı seçenekler sunulur.",
-      en: "During Technology Week, selected electronics stores offer advantages across phones, computers, accessories and smart devices.",
+      tr: "Teknoloji Haftası boyunca seçili elektronik mağazalarında telefon, bilgisayar, aksesuar ve akıllı cihaz kategorilerinde avantajlı seçenekler öne çıkar.",
+      en: "During Technology Week, selected electronics stores highlight offers on phones, computers, accessories and smart devices.",
     },
     image:
       "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&w=1800&q=85",
@@ -228,12 +228,12 @@ export const campaigns: Campaign[] = [
       en: "Family Campaign",
     },
     description: {
-      tr: "Aile alışverişi, yeme-içme ve eğlence seçeneklerinde seçili avantajlar.",
-      en: "Selected advantages across family shopping, dining and entertainment options.",
+      tr: "Aile alışverişi, yeme-içme ve eğlence için seçili avantajlar.",
+      en: "Selected offers for family shopping, dining and entertainment.",
     },
     detailDescription: {
-      tr: "Aile Kampanyası, CityMall Cyprus ziyaretini alışveriş, yemek ve eğlenceyle birleştirmek isteyen ziyaretçiler için hazırlanmıştır.",
-      en: "The Family Campaign is designed for visitors who want to combine shopping, dining and entertainment at CityMall Cyprus.",
+      tr: "Aile Kampanyası, CityMall ziyaretini alışveriş, yemek ve eğlenceyle birleştirmek isteyenler için hazırlanır. Çocuk mağazalarından market alışverişine kadar aile odaklı seçenekler öne çıkar.",
+      en: "The Family Campaign is designed for visitors who want to combine shopping, dining and entertainment at CityMall. Family-focused options stand out, from kids’ stores to grocery shopping.",
     },
     image:
       "https://images.unsplash.com/photo-1511632765486-a01980e01a18?auto=format&fit=crop&w=1800&q=85",
@@ -271,12 +271,12 @@ export const campaigns: Campaign[] = [
       en: "Cinema Moments",
     },
     description: {
-      tr: "Sinema ziyaretini yeme-içme ve alışverişle birleştiren özel deneyim kampanyası.",
-      en: "A special experience campaign combining cinema visits with dining and shopping.",
+      tr: "Cinemall ziyaretini alışveriş ve lezzet molasıyla tamamlayın.",
+      en: "Complete your Cinemall visit with shopping and a dining break.",
     },
     detailDescription: {
-      tr: "Sinema Keyfi kampanyası, film deneyimini CityMall Cyprus’taki yeme-içme ve alışveriş seçenekleriyle tamamlamak isteyen ziyaretçiler için hazırlanmıştır.",
-      en: "Cinema Moments is prepared for visitors who want to complete their movie experience with dining and shopping options at CityMall Cyprus.",
+      tr: "Sinema Keyfi kampanyası, film öncesi veya sonrası CityMall’daki mağaza ve yeme-içme noktalarını keşfetmek isteyen ziyaretçiler için hazırlanır.",
+      en: "Cinema Moments is prepared for visitors who want to explore CityMall stores and dining spots before or after a movie.",
     },
     image:
       "https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?auto=format&fit=crop&w=1800&q=85",
@@ -303,12 +303,12 @@ export const campaigns: Campaign[] = [
       en: "Dining Break",
     },
     description: {
-      tr: "Yeme-içme alanlarında seçili restoran ve kafelerde özel menü fırsatları.",
-      en: "Special menu offers at selected restaurants and cafes in the dining area.",
+      tr: "Seçili restoran ve cafelerde menü fırsatları.",
+      en: "Menu offers at selected restaurants and cafes.",
     },
     detailDescription: {
-      tr: "Lezzet Molası kampanyası, alışverişe keyifli bir ara vermek isteyen ziyaretçiler için seçili yeme-içme noktalarında özel menü avantajları sunar.",
-      en: "Dining Break offers special menu advantages at selected dining spots for visitors who want to take a pleasant break from shopping.",
+      tr: "Lezzet Molası, alışveriş arasında kısa bir ara vermek isteyenler için seçili yeme-içme noktalarını öne çıkarır. Kahve, hızlı öğün veya uzun yemek molası için seçenekler sunar.",
+      en: "Dining Break highlights selected food and drink spots for visitors who want a short pause between shopping. Choose from coffee, quick meals or a longer dining break.",
     },
     image:
       "https://images.unsplash.com/photo-1555396273-367ea4eb4db5?auto=format&fit=crop&w=1800&q=85",
@@ -332,8 +332,8 @@ export const campaigns: Campaign[] = [
     endDate: "2026-06-28",
     status: "upcoming",
     badge: {
-      tr: "Yiyecek",
-      en: "Food",
+      tr: "Lezzet",
+      en: "Dining",
     },
     featured: true,
   },

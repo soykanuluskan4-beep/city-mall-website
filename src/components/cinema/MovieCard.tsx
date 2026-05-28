@@ -16,9 +16,9 @@ type MovieCardProps = {
 
 const content = {
   tr: {
-    details: "Detaylar",
-    ticket: "Bilet Al",
-    noShowtimes: "Bu tarih için seans yok",
+    details: "Film Detaylarını Gör",
+    ticket: "Bilet Bilgisi Al",
+    noShowtimes: "Bu tarihte seans görünmüyor",
     minutes: "dk",
     genres: {
       action: "Aksiyon",
@@ -34,9 +34,9 @@ const content = {
     },
   },
   en: {
-    details: "Details",
-    ticket: "Get Tickets",
-    noShowtimes: "No showtimes for this date",
+    details: "View Movie Details",
+    ticket: "Get Ticket Info",
+    noShowtimes: "No showtimes available for this date",
     minutes: "min",
     genres: {
       action: "Action",

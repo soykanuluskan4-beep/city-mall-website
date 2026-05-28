@@ -20,19 +20,19 @@ type AboutPageClientProps = {
 const content = {
   tr: {
     eyebrow: "Hakkımızda",
-    title: "Gazimağusa için modern AVM deneyimi.",
+    title: "Gazimağusa’nın alışveriş ve yaşam noktası.",
     description:
-      "CityMall Cyprus; mağazaları, yeme-içme alanları, Cinemall deneyimi, etkinlikleri ve ziyaretçi hizmetleriyle Gazimağusa’da modern bir yaşam ve buluşma alanı sunar.",
+      "CityMall Cyprus; mağazaları, yeme-içme alanları, Cinemall, etkinlikleri ve ziyaretçi hizmetleriyle Gazimağusa’da günün farklı ihtiyaçlarını tek çatı altında buluşturur.",
     heroBadge: "CityMall Cyprus",
     storyTitle: "CityMall Cyprus’un hikayesi",
     storyText:
-      "CityMall Cyprus, ziyaretçilerin günlük ihtiyaçlarını, alışveriş deneyimini, sosyal buluşmaları ve eğlence seçeneklerini tek çatı altında bir araya getiren modern bir AVM deneyimi sunmak için tasarlanmıştır. Marka karması, yeme-içme noktaları, Cinemall ve etkinlik alanlarıyla hem ailelere hem gençlere hem de günlük ziyaretçilere hitap eden canlı bir merkez olmayı hedefler.",
-    imageTitle: "Gazimağusa için modern bir ziyaret deneyimi",
+      "CityMall Cyprus, alışverişi, sosyal buluşmaları, yeme-içme duraklarını ve sinema deneyimini Gazimağusa’da aynı rotada bir araya getirir. Günlük ihtiyaçlar, aile ziyaretleri ve keyifli molalar için şehirde yaşayanlara ve ziyaretçilere pratik bir buluşma alanı sunar.",
+    imageTitle: "Gazimağusa’da kolay bir ziyaret rotası",
     imageText:
-      "AVM deneyimi sadece alışverişten ibaret değildir; ulaşım, hizmetler, etkinlikler, sinema ve yeme-içme seçenekleriyle bütünsel bir ziyaret planı sunar.",
+      "Mağazalar, restoranlar, sinema, etkinlikler ve ziyaretçi hizmetleri aynı çatı altında planlı bir deneyime dönüşür.",
     statsTitle: "Rakamlarla CityMall",
     statsText:
-      "Aşağıdaki değerler site konseptinde kullanılan genel sunum bilgileridir. Ticari teslim öncesi gerçek AVM verileriyle güncellenmelidir.",
+      "CityMall Cyprus’un mağaza, yeme-içme, Cinemall ve ziyaretçi alanlarını özetleyen başlıca bilgiler.",
     stats: [
       {
         value: "50+",
@@ -53,13 +53,13 @@ const content = {
     ],
     visionTitle: "Vizyonumuz",
     visionText:
-      "CityMall Cyprus’u Gazimağusa’da sadece bir alışveriş noktası değil, ziyaretçilerin zaman geçirmekten keyif aldığı, güvenli, erişilebilir ve canlı bir yaşam merkezi olarak konumlandırmak.",
+      "CityMall Cyprus’u Gazimağusa’da alışveriş, sosyalleşme ve eğlence için güvenilir, erişilebilir ve canlı bir merkez olarak konumlandırmak.",
     missionTitle: "Misyonumuz",
     missionText:
-      "Ziyaretçilere kolay ulaşılabilir, düzenli, aile dostu ve güncel bir AVM deneyimi sunarken markalar için görünür, değerli ve sürdürülebilir bir ticari ortam oluşturmak.",
+      "Ziyaretçilerin kolayca plan yapabildiği, markaların görünür olduğu ve şehir yaşamıyla uyumlu bir AVM deneyimi sunmak.",
     experienceTitle: "CityMall deneyimi",
     experienceText:
-      "Alışverişten yeme-içmeye, Cinemall’dan etkinliklere kadar her ziyaretin daha planlı ve keyifli olması için bölümler tek çatı altında sunulur.",
+      "Alışverişten yeme-içmeye, Cinemall’dan etkinliklere kadar her bölüm ziyaretin daha kolay planlanması için bir arada sunulur.",
     experiences: [
       {
         title: "Alışveriş",
@@ -71,7 +71,7 @@ const content = {
       },
       {
         title: "Cinemall",
-        text: "Film seansları, vizyon filmleri ve sinema deneyimi.",
+        text: "Güncel filmler, seans bilgileri ve sinema deneyimi.",
       },
       {
         title: "Etkinlikler",
@@ -83,8 +83,8 @@ const content = {
       "Ziyaretçi odaklı deneyim",
       "Erişilebilir ve kolay yönlendirme",
       "Aile dostu sosyal alanlar",
-      "Markalar için güçlü ticari görünürlük",
-      "Güncel, şeffaf ve yönetilebilir dijital iletişim",
+      "Markalar için güçlü görünürlük",
+      "Güncel ve şeffaf dijital iletişim",
     ],
     ctaTitle: "CityMall Cyprus ile iletişime geçin.",
     ctaText:
@@ -94,19 +94,19 @@ const content = {
   },
   en: {
     eyebrow: "About Us",
-    title: "A modern mall experience in Famagusta.",
+    title: "Famagusta’s shopping and lifestyle destination.",
     description:
-      "CityMall Cyprus offers a modern lifestyle and meeting destination in Famagusta with stores, dining areas, Cinemall, events and visitor services.",
+      "CityMall Cyprus brings stores, dining areas, Cinemall, events and visitor services together under one roof in Famagusta.",
     heroBadge: "CityMall Cyprus",
     storyTitle: "The CityMall Cyprus story",
     storyText:
-      "CityMall Cyprus is designed to bring daily needs, shopping experiences, social gatherings and entertainment options together under one roof. With its brand mix, dining points, Cinemall and event areas, it aims to be a lively destination for families, young visitors and daily guests.",
-    imageTitle: "A modern visit experience for Famagusta",
+      "CityMall Cyprus brings shopping, social moments, dining stops and cinema together on one easy route in Famagusta. It offers a practical meeting point for daily needs, family visits and relaxed breaks.",
+    imageTitle: "An easier visit route in Famagusta",
     imageText:
-      "A mall experience is not only about shopping; it includes directions, services, events, cinema and dining options in one complete visit plan.",
+      "Stores, restaurants, cinema, events and visitor services come together as one planned experience.",
     statsTitle: "CityMall in Numbers",
     statsText:
-      "The values below are general presentation figures used for the website concept. They should be updated with verified mall data before commercial handoff.",
+      "Key highlights of CityMall Cyprus across stores, dining, Cinemall and visitor areas.",
     stats: [
       {
         value: "50+",
@@ -127,13 +127,13 @@ const content = {
     ],
     visionTitle: "Our Vision",
     visionText:
-      "To position CityMall Cyprus not only as a shopping destination in Famagusta, but as a safe, accessible and lively lifestyle center where visitors enjoy spending time.",
+      "To position CityMall Cyprus as a trusted, accessible and lively destination for shopping, social life and entertainment in Famagusta.",
     missionTitle: "Our Mission",
     missionText:
-      "To offer visitors an accessible, organized, family-friendly and up-to-date mall experience while creating a visible, valuable and sustainable commercial environment for brands.",
+      "To offer a mall experience where visitors can plan easily, brands stay visible and daily city life feels connected.",
     experienceTitle: "CityMall experience",
     experienceText:
-      "From shopping and dining to Cinemall and events, every visit is supported with clear sections in one place.",
+      "From shopping and dining to Cinemall and events, each section helps visitors plan their time with ease.",
     experiences: [
       {
         title: "Shopping",
@@ -145,7 +145,7 @@ const content = {
       },
       {
         title: "Cinemall",
-        text: "Movie showtimes, current releases and cinema experience.",
+        text: "Current movies, showtime details and cinema experience.",
       },
       {
         title: "Events",
@@ -157,8 +157,8 @@ const content = {
       "Visitor-focused experience",
       "Accessible and easy navigation",
       "Family-friendly social spaces",
-      "Strong commercial visibility for brands",
-      "Up-to-date, transparent and manageable digital communication",
+      "Strong visibility for brands",
+      "Clear and up-to-date digital communication",
     ],
     ctaTitle: "Get in touch with CityMall Cyprus.",
     ctaText:

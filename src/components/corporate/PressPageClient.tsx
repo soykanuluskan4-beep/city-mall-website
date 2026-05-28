@@ -33,45 +33,45 @@ const content = {
     secondaryCta: "Kaynakları Gör",
     resourcesTitle: "Medya Kaynakları",
     resourcesText:
-      "Press kit, logo paketi ve görsel kaynaklar ticari teslimde gerçek dosyalarla değiştirilebilir. Şimdilik demo indirme akışı kullanılır.",
+      "Press kit, logo paketi ve görsel kaynaklar için medya iletişim kanalı üzerinden güncel dosya talebi oluşturabilirsiniz.",
     resources: [
       {
         type: "pressKit" as const,
         title: "Press Kit",
         text: "Kurumsal tanıtım metni, temel bilgiler ve medya kullanım notları.",
-        cta: "Press Kit İndir",
+        cta: "Press Kit Talep Et",
       },
       {
         type: "logoPack" as const,
         title: "Logo Paketi",
         text: "CityMall Cyprus logo kullanımı için marka dosyaları ve formatları.",
-        cta: "Logo Paketini İndir",
+        cta: "Logo Paketi Talep Et",
       },
       {
         type: "photoPack" as const,
         title: "Medya Görselleri",
         text: "AVM dış görünüm, etkinlik ve yaşam alanı fotoğrafları için kaynak paketi.",
-        cta: "Görselleri İndir",
+        cta: "Görsel Talep Et",
       },
     ],
     newsTitle: "Basın Duyuruları",
     newsText:
-      "Basın duyuruları ve kurumsal haberler bu alanda listelenebilir.",
+      "CityMall Cyprus haberleri, kurumsal duyurular ve medya bilgilendirmeleri bu alanda paylaşılır.",
     news: [
       {
         date: "2026",
         title: "CityMall Cyprus dijital ziyaret deneyimini yeniliyor",
-        text: "Yeni web deneyimiyle mağazalar, Cinemall, etkinlikler ve ziyaretçi hizmetleri tek platformda sunulur.",
+        text: "Mağazalar, Cinemall, etkinlikler ve ziyaretçi hizmetleri tek platformda daha görünür hale geliyor.",
       },
       {
         date: "2026",
-        title: "Cinemall ve etkinlik programı dijitalde görünür hale geliyor",
+        title: "Cinemall ve etkinlik programı dijitalde daha erişilebilir",
         text: "Ziyaretçiler film seanslarını, yaklaşan etkinlikleri ve ziyaret planlama bilgilerini kolayca inceleyebilir.",
       },
       {
         date: "2026",
-        title: "Markalar için kiralama ve kurumsal iletişim kanalları güçleniyor",
-        text: "Leasing ve kurumsal başvuru süreçleri için dijital iletişim alanları oluşturulur.",
+        title: "Kiralama ve kurumsal iletişim kanalları güçleniyor",
+        text: "Markalar için kiralama başvuruları ve kurumsal talepler daha düzenli bir dijital akışla alınır.",
       },
     ],
     contactTitle: "Medya İletişimi",
@@ -81,20 +81,20 @@ const content = {
     usageTitle: "Kullanım Notları",
     usageItems: [
       "Logo ve görseller yalnızca CityMall Cyprus kurumsal iletişimi için kullanılmalıdır.",
-      "Medya materyalleri ticari teslimde gerçek marka dosyalarıyla değiştirilmelidir.",
+      "Medya materyalleri CityMall Cyprus iletişim kanalı üzerinden paylaşılır.",
       "Basın talepleri ve röportaj istekleri için medya iletişim kanalı kullanılmalıdır.",
-      "Bu sayfadaki indirme butonları demo amaçlıdır.",
+      "Medya dosyaları için güncel talepler iletişim kanalı üzerinden alınır.",
     ],
     modal: {
-      title: "Demo indirme akışı",
+      title: "Medya dosyası talebi",
       close: "Kapat",
       contact: "Medya İletişimi",
       pressKit:
-        "Press Kit dosyası bu demo projede gerçek PDF olarak eklenmemiştir. Ticari teslimde kurumsal PDF dosyası buraya bağlanabilir.",
+        "Güncel press kit dosyası için medya iletişim kanalı üzerinden talep oluşturabilirsiniz.",
       logoPack:
-        "Logo paketi bu demo projede gerçek ZIP olarak eklenmemiştir. Ticari teslimde logo dosyaları ve marka kılavuzu buraya bağlanabilir.",
+        "Logo dosyaları ve marka kullanım bilgileri için medya iletişim kanalından destek alabilirsiniz.",
       photoPack:
-        "Medya görselleri bu demo projede gerçek dosya paketi olarak eklenmemiştir. Ticari teslimde fotoğraf arşivi buraya bağlanabilir.",
+        "Güncel AVM görselleri ve medya fotoğrafları için dosya talebinizi iletişim kanalı üzerinden iletebilirsiniz.",
     },
   },
   en: {
@@ -106,45 +106,45 @@ const content = {
     secondaryCta: "View Resources",
     resourcesTitle: "Media Resources",
     resourcesText:
-      "Press kit, logo package and visual assets can be replaced with real files during commercial handoff. A demo download flow is used for now.",
+      "For press kit, logo package and visual assets, you can request current files through the media contact channel.",
     resources: [
       {
         type: "pressKit" as const,
         title: "Press Kit",
         text: "Corporate introduction copy, key facts and media usage notes.",
-        cta: "Download Press Kit",
+        cta: "Request Press Kit",
       },
       {
         type: "logoPack" as const,
         title: "Logo Package",
         text: "Brand files and formats for CityMall Cyprus logo usage.",
-        cta: "Download Logo Pack",
+        cta: "Request Logo Pack",
       },
       {
         type: "photoPack" as const,
         title: "Media Images",
         text: "Resource package for mall exterior, events and lifestyle area photos.",
-        cta: "Download Images",
+        cta: "Request Images",
       },
     ],
     newsTitle: "Press Releases",
     newsText:
-      "Press releases and corporate news can be listed in this section.",
+      "CityMall Cyprus news, corporate announcements and media updates are shared in this section.",
     news: [
       {
         date: "2026",
         title: "CityMall Cyprus refreshes its digital visitor experience",
-        text: "The new web experience brings stores, Cinemall, events and visitor services into one platform.",
+        text: "Stores, Cinemall, events and visitor services become easier to discover on one platform.",
       },
       {
         date: "2026",
-        title: "Cinemall and event programs become easier to discover online",
+        title: "Cinemall and event programs become easier to access online",
         text: "Visitors can easily review showtimes, upcoming events and visit planning information.",
       },
       {
         date: "2026",
         title: "Leasing and corporate communication channels become stronger",
-        text: "Digital communication areas are created for leasing and corporate application processes.",
+        text: "Leasing applications and corporate requests are handled through a clearer digital flow.",
       },
     ],
     contactTitle: "Media Contact",
@@ -154,20 +154,20 @@ const content = {
     usageTitle: "Usage Notes",
     usageItems: [
       "Logos and images should only be used for CityMall Cyprus corporate communication.",
-      "Media materials should be replaced with real brand files during commercial handoff.",
+      "Media materials are shared through the official CityMall Cyprus contact channel.",
       "Media contact channels should be used for press requests and interview inquiries.",
-      "Download buttons on this page are for demo purposes.",
+      "Current media file requests are handled through the contact channel.",
     ],
     modal: {
-      title: "Demo download flow",
+      title: "Media file request",
       close: "Close",
       contact: "Media Contact",
       pressKit:
-        "The press kit is not added as a real PDF in this demo project. A corporate PDF file can be connected here during commercial handoff.",
+        "You can request the current press kit through the media contact channel.",
       logoPack:
-        "The logo package is not added as a real ZIP in this demo project. Logo files and brand guidelines can be connected here during commercial handoff.",
+        "For logo files and brand usage information, please contact the media team.",
       photoPack:
-        "Media images are not added as a real file package in this demo project. A photo archive can be connected here during commercial handoff.",
+        "For current mall visuals and media photos, please send your file request through the contact channel.",
     },
   },
 };
@@ -185,24 +185,24 @@ export function PressPageClient({ locale }: PressPageClientProps) {
   );
 
   useEffect(() => {
-  if (!activeDownload) {
-    return;
-  }
-
-  function handleKeyDown(event: KeyboardEvent) {
-    if (event.key === "Escape" || event.key === "Esc") {
-      setActiveDownload(null);
+    if (!activeDownload) {
+      return;
     }
-  }
 
-  window.addEventListener("keydown", handleKeyDown);
-  document.body.style.overflow = "hidden";
+    function handleKeyDown(event: KeyboardEvent) {
+      if (event.key === "Escape" || event.key === "Esc") {
+        setActiveDownload(null);
+      }
+    }
 
-  return () => {
-    window.removeEventListener("keydown", handleKeyDown);
-    document.body.style.overflow = "";
-  };
-}, [activeDownload]);
+    window.addEventListener("keydown", handleKeyDown);
+    document.body.style.overflow = "hidden";
+
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown);
+      document.body.style.overflow = "";
+    };
+  }, [activeDownload]);
 
   return (
     <main className="overflow-x-hidden bg-surface-default">
@@ -424,16 +424,16 @@ export function PressPageClient({ locale }: PressPageClientProps) {
 
       {activeDownload ? (
         <div
-  className="fixed inset-0 z-[100] flex items-center justify-center bg-text-primary/70 p-4 backdrop-blur-sm"
-  onClick={() => setActiveDownload(null)}
-  onKeyDown={(event) => {
-    if (event.key === "Escape" || event.key === "Esc") {
-      setActiveDownload(null);
-    }
-  }}
-  role="presentation"
-  tabIndex={-1}
->
+          className="fixed inset-0 z-[100] flex items-center justify-center bg-text-primary/70 p-4 backdrop-blur-sm"
+          onClick={() => setActiveDownload(null)}
+          onKeyDown={(event) => {
+            if (event.key === "Escape" || event.key === "Esc") {
+              setActiveDownload(null);
+            }
+          }}
+          role="presentation"
+          tabIndex={-1}
+        >
           <div
             className="w-full max-w-lg rounded-[2rem] border border-border-default bg-surface-default p-6 shadow-elevated"
             onClick={(event) => event.stopPropagation()}

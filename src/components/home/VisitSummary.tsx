@@ -9,29 +9,29 @@ type VisitSummaryProps = {
 const content = {
   tr: {
     eyebrow: "Ziyaret Bilgileri",
-    title: "Ziyaretini kolayca planla.",
+    title: "CityMall’e gelmeden önce bilmen gerekenler.",
     description:
-      "Konum, çalışma saatleri ve iletişim bilgilerine hızlıca ulaşın.",
+      "Çalışma saatleri, konum ve iletişim bilgilerine tek yerden ulaşın.",
     addressLabel: "Adres",
     address: "Gazimağusa, KKTC",
     hoursLabel: "Çalışma Saatleri",
     weekday: "Hafta içi 10:00–22:00",
     weekend: "Hafta sonu 10:00–23:00",
-    directions: "Yol Tarifi Al",
-    contact: "İletişim",
+    directions: "Yol Tarifini Aç",
+    contact: "İletişim Bilgilerini Gör",
   },
   en: {
     eyebrow: "Visitor Information",
-    title: "Plan your visit with ease.",
+    title: "Everything you need before visiting CityMall.",
     description:
-      "Quickly access location, opening hours and contact information.",
+      "Find opening hours, location and contact details in one place.",
     addressLabel: "Address",
     address: "Famagusta, TRNC",
     hoursLabel: "Opening Hours",
     weekday: "Weekdays 10:00–22:00",
     weekend: "Weekend 10:00–23:00",
-    directions: "Get Directions",
-    contact: "Contact",
+    directions: "Open Directions",
+    contact: "View Contact Details",
   },
 };
 

@@ -110,8 +110,8 @@ const content = {
       accessibility: {
         title: "Erişilebilirlik",
         text: "Engelli erişimi ve ziyaret kolaylığı sağlayan alanlar için bilgi alın.",
-        cta: "Detayları Gör",
-      },
+        cta: "Erişilebilirlik Bilgilerini Gör",
+       },
     },
     days: {
       monday: "Pazartesi",
@@ -231,8 +231,8 @@ const content = {
       },
       accessibility: {
         title: "Accessibility",
-        text: "Learn more about accessible access and visitor convenience areas.",
-        cta: "View Details",
+        text: "Find information about accessible access and visitor support areas.",
+        cta: "View Accessibility Info",
       },
     },
     days: {

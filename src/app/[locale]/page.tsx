@@ -41,8 +41,8 @@ export function generateMetadata({
         : "CityMall Cyprus | Famagusta's meeting point",
     description:
       locale === "tr"
-        ? "CityMall Cyprus konsept sitesinde mağazalar, yeme-içme seçenekleri, kampanyalar, etkinlikler, sinema ve ziyaret bilgilerini keşfedin."
-        : "Discover stores, dining options, campaigns, events, cinema and visitor information on the CityMall Cyprus concept website.",
+        ? "CityMall Cyprus sitesinde mağazalar, yeme-içme seçenekleri, kampanyalar, etkinlikler, sinema ve ziyaret bilgilerini keşfedin."
+        : "Discover stores, dining options, campaigns, events, cinema and visitor information on the CityMall Cyprus website.",
   });
 }
 

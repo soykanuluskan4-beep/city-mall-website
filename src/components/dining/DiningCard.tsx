@@ -12,9 +12,9 @@ type DiningCardProps = {
 
 const content = {
   tr: {
-    details: "Detaylar",
+    details: "Mekan Detaylarını Gör",
     cuisineLabels: {
-      turkish: "Türk",
+      turkish: "Türk Mutfağı",
       italian: "İtalyan",
       "fast-food": "Fast Food",
       cafe: "Cafe",
@@ -23,10 +23,9 @@ const content = {
       healthy: "Sağlıklı",
       world: "Dünya Mutfağı",
       snack: "Atıştırmalık",
-
     },
     floorLabels: {
-      basement: "Basement Floor",
+      basement: "-1. Kat",
       ground: "Zemin Kat",
       first: "1. Kat",
       second: "2. Kat",
@@ -35,9 +34,9 @@ const content = {
     },
   },
   en: {
-    details: "Details",
+    details: "View Dining Details",
     cuisineLabels: {
-      turkish: "Turkish",
+      turkish: "Turkish Cuisine",
       italian: "Italian",
       "fast-food": "Fast Food",
       cafe: "Cafe",
@@ -46,7 +45,6 @@ const content = {
       healthy: "Healthy",
       world: "World Cuisine",
       snack: "Snacks",
-
     },
     floorLabels: {
       basement: "Basement Floor",

@@ -25,60 +25,62 @@ type Stat = NumericStat | TextStat;
 const content = {
   tr: {
     eyebrow: "CityMall Cyprus",
-    title: "Gazimağusa’da alışveriş, lezzet ve eğlenceyi bir araya getiren yaşam noktası.",
+    title:
+      "Gazimağusa’da alışverişi, lezzeti ve eğlenceyi aynı rotada buluşturan yaşam noktası.",
     stats: [
       {
-  type: "number",
-  value: 60,
-  suffix: "+",
-  label: "Mağaza",
-},
-{
-  type: "number",
-  value: 20,
-  suffix: "+",
-  label: "Restoran",
-},
-{
-  type: "number",
-  value: 5,
-  suffix: "",
-  label: "Sinema Salonu",
-},
-{
-  type: "text",
-  value: "7 Gün",
-  label: "Açık",
-},
+        type: "number",
+        value: 60,
+        suffix: "+",
+        label: "Mağaza ve marka",
+      },
+      {
+        type: "number",
+        value: 20,
+        suffix: "+",
+        label: "Yeme-içme noktası",
+      },
+      {
+        type: "number",
+        value: 5,
+        suffix: "",
+        label: "Sinema salonu",
+      },
+      {
+        type: "text",
+        value: "7 Gün",
+        label: "Ziyarete açık",
+      },
     ] satisfies Stat[],
   },
   en: {
     eyebrow: "CityMall Cyprus",
-    title: "A lifestyle destination bringing shopping, dining and entertainment together in Famagusta.",
+    title:
+      "A Famagusta destination where shopping, dining and entertainment meet on one route.",
     stats: [
       {
-  type: "number",
-  value: 60,
-  suffix: "+",
-  label: "Stores",
-},
-{
-  type: "number",
-  value: 20,
-  suffix: "+",
-  label: "Restaurants",
-},
-{
-  type: "number",
-  value: 5,
-  suffix: "",
-  label: "Cinema Halls",
-},
-{
-  type: "text",
-  value: "7 Days",
-  label: "Open",
-},
+        type: "number",
+        value: 60,
+        suffix: "+",
+        label: "Stores and brands",
+      },
+      {
+        type: "number",
+        value: 20,
+        suffix: "+",
+        label: "Dining spots",
+      },
+      {
+        type: "number",
+        value: 5,
+        suffix: "",
+        label: "Cinema halls",
+      },
+      {
+        type: "text",
+        value: "7 Days",
+        label: "Open for visits",
+      },
     ] satisfies Stat[],
   },
 };

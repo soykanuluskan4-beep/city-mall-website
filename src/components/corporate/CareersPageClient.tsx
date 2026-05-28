@@ -70,7 +70,7 @@ const content = {
     ],
     positionsTitle: "Açık Pozisyonlar",
     positionsText:
-      "Şu an gerçek açık pozisyon bilgisi bulunmadığı için örnek pozisyon kartları kullanılır.",
+  "Açık pozisyonları takip edebilir veya genel başvuru bırakarak uygun fırsatlar için değerlendirmeye alınabilirsiniz.",
     positions: [
       {
         title: "Genel Başvuru",
@@ -80,20 +80,20 @@ const content = {
       },
       {
         title: "Müşteri Hizmetleri Yetkilisi",
-        type: "Örnek Pozisyon",
+        type: "Pozisyon",
         location: "Danışma / Ortak Alanlar",
         text: "Ziyaretçi yönlendirme ve hizmet süreçlerine destek olacak ekip üyesi.",
       },
       {
         title: "Operasyon Destek Personeli",
-        type: "Örnek Pozisyon",
+        type: "Pozisyon",
         location: "AVM Operasyon",
         text: "Günlük operasyon ve alan koordinasyon süreçlerine destek olacak ekip üyesi.",
       },
     ],
     formTitle: "CV / Genel Başvuru Formu",
     formText:
-      "Bu form demo amaçlıdır. Gerçek projede CV yükleme, e-posta veya insan kaynakları sistemi entegrasyonu yapılabilir.",
+  "Genel başvurunuzu iletin; uygun pozisyonlar oluştuğunda değerlendirme sürecine alınabilirsiniz.",
     fields: {
       fullName: "Ad Soyad",
       email: "E-posta",
@@ -108,13 +108,13 @@ const content = {
       position: "Genel başvuru, müşteri hizmetleri...",
       message: "Kendiniz ve başvurunuz hakkında kısa bilgi yazın.",
     },
-    submit: "Başvuruyu Gönder",
-    successTitle: "Başvuru alındı",
+    submit: "Başvuruyu İlet",
+successTitle: "Başvurunuz alındı",
     successText:
-      "Bu demo akışta başvuru gerçek bir sisteme gönderilmez. Ticari teslimde CV yükleme veya e-posta entegrasyonu eklenebilir.",
+  "Başvurunuz alınmıştır. Uygun pozisyonlar için değerlendirme süreci başlatılabilir.",
     cvNoteTitle: "CV yükleme notu",
     cvNote:
-      "Gerçek projede bu alana PDF/DOC CV yükleme alanı eklenebilir. Şimdilik başvuru formu demo mesajı üretir.",
+  "CV paylaşımı ve ek belge talepleri için insan kaynakları iletişim süreci üzerinden bilgi alınabilir.",
   },
   en: {
     eyebrow: "Careers",
@@ -149,7 +149,7 @@ const content = {
     ],
     positionsTitle: "Open Positions",
     positionsText:
-      "Since real open position data is not available yet, sample position cards are used.",
+  "Follow open positions or submit a general application to be considered for suitable opportunities.",
     positions: [
       {
         title: "General Application",
@@ -159,20 +159,20 @@ const content = {
       },
       {
         title: "Guest Services Representative",
-        type: "Sample Position",
+        type: "Position",
         location: "Information Desk / Common Areas",
         text: "A team member supporting visitor guidance and guest service processes.",
       },
       {
         title: "Operations Support Staff",
-        type: "Sample Position",
+        type: "Position",
         location: "Mall Operations",
         text: "A team member supporting daily operations and area coordination processes.",
       },
     ],
     formTitle: "CV / General Application Form",
     formText:
-      "This form is for demo purposes. In a real project, CV upload, email or HR system integration can be added.",
+  "Submit your general application to be considered when suitable positions become available.",
     fields: {
       fullName: "Full Name",
       email: "Email",
@@ -187,13 +187,13 @@ const content = {
       position: "General application, guest services...",
       message: "Write a short note about yourself and your application.",
     },
-    submit: "Submit Application",
-    successTitle: "Application received",
+    submit: "Send Application",
+successTitle: "Application received",
     successText:
-      "In this demo flow, the application is not sent to a real system. CV upload or email integration can be added during commercial handoff.",
+  "Your application has been received and may be reviewed for suitable positions.",
     cvNoteTitle: "CV upload note",
     cvNote:
-      "In a real project, a PDF/DOC CV upload field can be added here. For now, the application form produces a demo message.",
+  "For CV sharing and additional document requests, please follow the human resources contact process.",
   },
 };
 

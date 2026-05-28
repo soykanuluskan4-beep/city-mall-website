@@ -18,13 +18,13 @@ type DailyShowtimesProps = {
 
 const content = {
   tr: {
-    eyebrow: "Günlük Program",
-    title: "Cinemall seans saatleri",
+    eyebrow: "Günlük Seanslar",
+    title: "Bugünün Cinemall programı",
     description:
-      "Tarih seçin, o güne ait filmleri ve seans saatlerini görüntüleyin.",
-    details: "Detaylar",
-    ticket: "Bilet Al",
-    noShowtimes: "Bu gün için seans bulunmuyor.",
+      "Tarihi seçin, uygun filmleri ve seans saatlerini hızlıca görüntüleyin.",
+    details: "Film Detaylarını Gör",
+    ticket: "Bilet Bilgisi Al",
+    noShowtimes: "Seçili gün için seans görünmüyor.",
     minutes: "dk",
     genres: {
       action: "Aksiyon",
@@ -40,12 +40,13 @@ const content = {
     },
   },
   en: {
-    eyebrow: "Daily Program",
-    title: "Cinemall showtimes",
-    description: "Choose a date to view movies and showtimes for that day.",
-    details: "Details",
-    ticket: "Get Tickets",
-    noShowtimes: "No showtimes found for this day.",
+    eyebrow: "Daily Showtimes",
+    title: "Today’s Cinemall program",
+    description:
+      "Choose a date and quickly view available movies and showtimes.",
+    details: "View Movie Details",
+    ticket: "Get Ticket Info",
+    noShowtimes: "No showtimes available for the selected day.",
     minutes: "min",
     genres: {
       action: "Action",

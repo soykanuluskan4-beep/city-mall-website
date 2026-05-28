@@ -42,12 +42,12 @@ const pageContent = {
     eyebrow: "İletişim",
     title: "CityMall Cyprus ile iletişim ve ziyaret bilgileri.",
     description:
-      "Telefon, e-posta, adres ve iletişim formu alanlarıyla ziyaretçi iletişimini tek sayfada toplayan kurumsal konsept yapı.",
+      "Telefon, e-posta, adres ve iletişim formu alanlarıyla ziyaretçi iletişimini tek sayfada toplayan kurumsal yapı.",
     phone: "Telefon",
     email: "E-posta",
     address: "Adres",
     addressText:
-      "Gazimağusa, Kuzey Kıbrıs Türk Cumhuriyeti — CityMall Cyprus konsept lokasyonu",
+      "Gazimağusa, Kuzey Kıbrıs Türk Cumhuriyeti — CityMall Cyprus lokasyonu",
     formTitle: "İletişim Formu",
     formDescription:
       "Gerçek projede bu form e-posta, CRM veya yönetim paneli entegrasyonu ile aktif hale getirilebilir.",
@@ -61,7 +61,7 @@ const pageContent = {
     map: "Haritayı Gör",
     backHome: "Ana sayfaya dön",
     demoNotice:
-      "Bu form demo amaçlıdır; şu anda gönderim yapmaz.",
+  "Mesajınız ilgili ekibe iletilmek üzere alınır. Güncel iletişim talepleri için formu doldurabilirsiniz.",
     responseNote:
       "Canlı projede form gönderimleri ilgili departmana otomatik iletilebilir.",
     quickInfo: "Hızlı Bilgi",
@@ -70,12 +70,12 @@ const pageContent = {
     eyebrow: "Contact",
     title: "Contact and visitor information for CityMall Cyprus.",
     description:
-      "A corporate concept structure bringing phone, email, address and contact form areas together on one visitor-focused page.",
+      "A corporate structure bringing phone, email, address and contact form areas together on one visitor-focused page.",
     phone: "Phone",
     email: "Email",
     address: "Address",
     addressText:
-      "Famagusta, Turkish Republic of Northern Cyprus — CityMall Cyprus concept location",
+      "Famagusta, Turkish Republic of Northern Cyprus — CityMall Cyprus location",
     formTitle: "Contact Form",
     formDescription:
       "In a real project, this form can be activated with email, CRM or admin panel integration.",
@@ -89,7 +89,7 @@ const pageContent = {
     map: "View Map",
     backHome: "Back to home",
     demoNotice:
-      "This form is for demo purposes and does not submit right now.",
+  "Your message is received for review by the relevant team. You can use the form for current contact requests.",
     responseNote:
       "In the live project, form submissions can be automatically forwarded to the relevant department.",
     quickInfo: "Quick Info",

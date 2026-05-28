@@ -24,35 +24,35 @@ const slides = {
     {
       title: "Sezon Fırsatları",
       description:
-        "CityMall Cyprus mağazalarında sezonun öne çıkan kampanyalarını keşfedin.",
-      cta: "Kampanyaları Gör",
+        "Seçili mağazalarda bu haftanın alışveriş avantajlarını yakalayın.",
+      cta: "Kampanyaları İncele",
       image:
         "https://images.unsplash.com/photo-1483985988355-763728e1935b?auto=format&fit=crop&w=1600&q=85",
       alt: "Alışveriş kampanyası atmosferi",
     },
     {
-      title: "Yeme-İçme Keyfi",
+      title: "Lezzet Molası",
       description:
-        "Kafe, restoran ve lezzet duraklarıyla ziyaretinize keyifli bir mola ekleyin.",
-      cta: "Lezzetleri Keşfet",
+        "Kahve, yemek veya kısa bir mola için CityMall’deki yeme-içme noktalarına göz atın.",
+      cta: "Lezzet Fırsatlarını Gör",
       image:
         "https://images.unsplash.com/photo-1555396273-367ea4eb4db5?auto=format&fit=crop&w=1600&q=85",
       alt: "Restoran ve yeme içme alanı",
     },
     {
-      title: "Aile Etkinlikleri",
+      title: "Aileyle Güzel Bir Gün",
       description:
-        "Çocuklar ve aileler için hazırlanan etkinlik alanlarını ve programları inceleyin.",
-      cta: "Etkinlikleri Gör",
+        "Çocuklara ve ailelere özel programlarla ziyaretinizi daha keyifli hale getirin.",
+      cta: "Etkinlik Takvimine Bak",
       image:
         "https://images.unsplash.com/photo-1511632765486-a01980e01a18?auto=format&fit=crop&w=1600&q=85",
       alt: "Aile etkinliği atmosferi",
     },
     {
-      title: "Sinema Haftası",
+      title: "Cinemall’da Bu Hafta",
       description:
-        "Güncel filmler, seanslar ve sinema deneyimiyle ziyaretinizi tamamlayın.",
-      cta: "Sinema Programı",
+        "Vizyondaki filmleri, seansları ve sinema öncesi molaları planlayın.",
+      cta: "Sinema Programını Gör",
       image:
         "https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?auto=format&fit=crop&w=1600&q=85",
       alt: "Sinema salonu atmosferi",
@@ -62,35 +62,35 @@ const slides = {
     {
       title: "Seasonal Offers",
       description:
-        "Discover highlighted seasonal campaigns across CityMall Cyprus stores.",
+        "Catch this week’s shopping offers at selected CityMall stores.",
       cta: "View Campaigns",
       image:
         "https://images.unsplash.com/photo-1483985988355-763728e1935b?auto=format&fit=crop&w=1600&q=85",
       alt: "Shopping campaign atmosphere",
     },
     {
-      title: "Dining Moments",
+      title: "Dining Break",
       description:
-        "Add a tasteful break to your visit with cafes, restaurants and dining spots.",
-      cta: "Explore Dining",
+        "Plan a coffee, a meal or a quick pause at CityMall dining spots.",
+      cta: "View Dining Offers",
       image:
         "https://images.unsplash.com/photo-1555396273-367ea4eb4db5?auto=format&fit=crop&w=1600&q=85",
       alt: "Restaurant and dining area",
     },
     {
-      title: "Family Events",
+      title: "A Good Day with Family",
       description:
-        "Explore event areas and programs created for children and families.",
-      cta: "View Events",
+        "Make your visit more enjoyable with programs for children and families.",
+      cta: "Check Event Calendar",
       image:
         "https://images.unsplash.com/photo-1511632765486-a01980e01a18?auto=format&fit=crop&w=1600&q=85",
       alt: "Family event atmosphere",
     },
     {
-      title: "Cinema Week",
+      title: "This Week at Cinemall",
       description:
-        "Complete your visit with current movies, showtimes and a cinema experience.",
-      cta: "Cinema Program",
+        "Plan current movies, showtimes and your pre-cinema break.",
+      cta: "View Cinema Program",
       image:
         "https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?auto=format&fit=crop&w=1600&q=85",
       alt: "Cinema hall atmosphere",
@@ -101,11 +101,11 @@ const slides = {
 const sectionCopy = {
   tr: {
     eyebrow: "Kampanyalar",
-    title: "CityMall’de öne çıkanlar",
+    title: "CityMall’de bu hafta öne çıkanlar",
   },
   en: {
     eyebrow: "Campaigns",
-    title: "Featured at CityMall",
+    title: "This week’s highlights at CityMall",
   },
 };
 
@@ -119,30 +119,30 @@ export function CampaignSlider({ locale }: CampaignSliderProps) {
   const activeSlide = currentSlides[activeIndex];
 
   useEffect(() => {
-  const interval = window.setInterval(() => {
-    setActiveIndex((current) => (current + 1) % currentSlides.length);
-  }, 4000);
+    const interval = window.setInterval(() => {
+      setActiveIndex((current) => (current + 1) % currentSlides.length);
+    }, 4000);
 
-  return () => {
-    window.clearInterval(interval);
-  };
-}, [currentSlides.length, rotationKey]);
+    return () => {
+      window.clearInterval(interval);
+    };
+  }, [currentSlides.length, rotationKey]);
 
   function resetRotationTimer() {
-  setRotationKey((current) => current + 1);
-}
+    setRotationKey((current) => current + 1);
+  }
 
-function goToPrevious() {
-  setActiveIndex((current) =>
-    current === 0 ? currentSlides.length - 1 : current - 1
-  );
-  resetRotationTimer();
-}
+  function goToPrevious() {
+    setActiveIndex((current) =>
+      current === 0 ? currentSlides.length - 1 : current - 1
+    );
+    resetRotationTimer();
+  }
 
-function goToNext() {
-  setActiveIndex((current) => (current + 1) % currentSlides.length);
-  resetRotationTimer();
-}
+  function goToNext() {
+    setActiveIndex((current) => (current + 1) % currentSlides.length);
+    resetRotationTimer();
+  }
 
   function handleTouchEnd(event: React.TouchEvent<HTMLDivElement>) {
     if (touchStart === null) {
@@ -165,29 +165,30 @@ function goToNext() {
 
   return (
     <section className="bg-surface-default py-16 md:py-20">
-          <style>{`
-      @keyframes fadeZoom {
-        0% {
-          opacity: 0.55;
-          transform: scale(1.035);
+      <style>{`
+        @keyframes fadeZoom {
+          0% {
+            opacity: 0.55;
+            transform: scale(1.035);
+          }
+          100% {
+            opacity: 1;
+            transform: scale(1);
+          }
         }
-        100% {
-          opacity: 1;
-          transform: scale(1);
-        }
-      }
 
-      @keyframes fadeSlideUp {
-        0% {
-          opacity: 0;
-          transform: translateY(14px);
+        @keyframes fadeSlideUp {
+          0% {
+            opacity: 0;
+            transform: translateY(14px);
+          }
+          100% {
+            opacity: 1;
+            transform: translateY(0);
+          }
         }
-        100% {
-          opacity: 1;
-          transform: translateY(0);
-        }
-      }
-    `}</style>
+      `}</style>
+
       <div className="container">
         <div className="mb-8 flex flex-col gap-3 md:flex-row md:items-end md:justify-between">
           <div>
@@ -211,14 +212,16 @@ function goToNext() {
 
         <div
           className="overflow-hidden rounded-[2rem] border border-border-default bg-surface-muted shadow-elevated"
-          onTouchStart={(event) => setTouchStart(event.touches[0]?.clientX ?? null)}
+          onTouchStart={(event) =>
+            setTouchStart(event.touches[0]?.clientX ?? null)
+          }
           onTouchEnd={handleTouchEnd}
         >
           <div className="grid min-h-[460px] lg:grid-cols-[1fr_1fr]">
             <div
-  key={`content-${activeIndex}`}
-  className="order-2 flex animate-[fadeSlideUp_650ms_ease-out] flex-col justify-center p-6 md:p-10 lg:order-1"
->
+              key={`content-${activeIndex}`}
+              className="order-2 flex animate-[fadeSlideUp_650ms_ease-out] flex-col justify-center p-6 md:p-10 lg:order-1"
+            >
               <p className="text-sm font-semibold uppercase tracking-[0.25em] text-text-muted">
                 0{activeIndex + 1} / 0{currentSlides.length}
               </p>
@@ -242,32 +245,32 @@ function goToNext() {
 
                 <div className="flex items-center gap-2">
                   {currentSlides.map((slide: Slide, index) => (
-  <button
-    key={slide.title}
-    type="button"
-    onClick={() => {
-  setActiveIndex(index);
-  setRotationKey((current) => current + 1);
-}}
-    className={`h-1.5 rounded-full transition-all duration-300 ${
-      activeIndex === index
-        ? "w-10 bg-brand-primary"
-        : "w-5 bg-text-muted/25 hover:bg-text-muted/50"
-    }`}
-    aria-label={`${index + 1}. slide`}
-  />
-))}
+                    <button
+                      key={slide.title}
+                      type="button"
+                      onClick={() => {
+                        setActiveIndex(index);
+                        setRotationKey((current) => current + 1);
+                      }}
+                      className={`h-1.5 rounded-full transition-all duration-300 ${
+                        activeIndex === index
+                          ? "w-10 bg-brand-primary"
+                          : "w-5 bg-text-muted/25 hover:bg-text-muted/50"
+                      }`}
+                      aria-label={`${index + 1}. slide`}
+                    />
+                  ))}
                 </div>
               </div>
             </div>
 
             <div className="order-1 min-h-[280px] overflow-hidden lg:order-2 lg:min-h-full">
               <img
-  key={activeSlide.image}
-  src={activeSlide.image}
-  alt={activeSlide.alt}
-  className="h-full w-full animate-[fadeZoom_800ms_ease-out] object-cover"
-/>
+                key={activeSlide.image}
+                src={activeSlide.image}
+                alt={activeSlide.alt}
+                className="h-full w-full animate-[fadeZoom_800ms_ease-out] object-cover"
+              />
             </div>
           </div>
         </div>

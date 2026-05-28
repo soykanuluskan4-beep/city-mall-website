@@ -26,17 +26,17 @@ type DiningDetailClientProps = {
 
 const content = {
   tr: {
-    back: "Yeme-İçme’ye Dön",
+    back: "Yeme-İçme’ye Geri Dön",
     overview: "Mekan Hakkında",
     cuisine: "Mutfak",
-    placeType: "Mekan Türü",
-    location: "Konum",
-    workingHours: "Çalışma Saati",
-    menu: "Menüyü Gör",
-    contact: "Bilgi Al",
+    placeType: "Mekan Tipi",
+    location: "Kat Bilgisi",
+    workingHours: "Çalışma Saatleri",
+    menu: "Menü Bilgisi Al",
+    contact: "Mekan Hakkında Bilgi Al",
     contactText:
-      "Rezervasyon, çalışma saatleri veya güncel menü bilgileri için iletişim sayfasına geçebilirsiniz.",
-    similar: "Benzer Mekanlar",
+      "Güncel menü, çalışma saatleri veya iletişim bilgileri için CityMall Cyprus iletişim sayfasından bilgi alabilirsiniz.",
+    similar: "Benzer Lezzet Noktaları",
     citymall: "CityMall Cyprus",
     floorLabels: {
       basement: "-1. Kat",
@@ -60,13 +60,13 @@ const content = {
     overview: "About This Place",
     cuisine: "Cuisine",
     placeType: "Place Type",
-    location: "Location",
-    workingHours: "Working Hours",
-    menu: "View Menu",
-    contact: "Get Information",
+    location: "Floor Information",
+    workingHours: "Opening Hours",
+    menu: "Get Menu Info",
+    contact: "Ask About This Place",
     contactText:
-      "For reservation, working hours or current menu details, you can visit the contact page.",
-    similar: "Similar Places",
+      "For current menu, opening hours or contact details, please visit the CityMall Cyprus contact page.",
+    similar: "Similar Dining Spots",
     citymall: "CityMall Cyprus",
     floorLabels: {
       basement: "Basement Floor",

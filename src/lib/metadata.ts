@@ -37,9 +37,9 @@ export function createPageMetadata({
     title: finalTitle,
     description: finalDescription,
     applicationName: siteConfig.name,
-    authors: [{ name: "CityMall Cyprus Concept" }],
-    creator: "CityMall Cyprus Concept",
-    publisher: "CityMall Cyprus Concept",
+    authors: [{ name: "CityMall Cyprus" }],
+creator: "CityMall Cyprus",
+publisher: "CityMall Cyprus",
     alternates: {
       canonical: canonicalUrl,
       languages: getAlternateLanguages(path),

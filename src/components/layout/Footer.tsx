@@ -28,7 +28,7 @@ const footerContent = {
     newsletterPlaceholder: "E-posta adresiniz",
     newsletterButton: "Abone Ol",
     newsletterSuccess:
-      "Teşekkürler. Bu demo akışta e-posta gerçek bir sisteme kaydedilmez.",
+  "Teşekkürler. E-posta adresiniz bilgilendirme listesi için alınmıştır.",
     copyright: "© 2026 CityMall Cyprus. Tüm hakları saklıdır.",
     contactInfo: {
       addressLabel: "Adres",
@@ -77,7 +77,7 @@ const footerContent = {
     newsletterPlaceholder: "Your email address",
     newsletterButton: "Subscribe",
     newsletterSuccess:
-      "Thank you. In this demo flow, the email is not saved to a real system.",
+  "Thank you. Your email address has been received for updates.",
     copyright: "© 2026 CityMall Cyprus. All rights reserved.",
     contactInfo: {
       addressLabel: "Address",

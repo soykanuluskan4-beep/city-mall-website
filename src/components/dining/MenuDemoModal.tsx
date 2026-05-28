@@ -14,21 +14,21 @@ type MenuDemoModalProps = {
 const content = {
   tr: {
     eyebrow: "Menü",
-    title: "Demo menü alanı",
-    description:
-      "Bu alanda gerçek restoran menüsü gösterilmez. Gerçek projede menü PDF, görsel menü veya admin panelden yönetilen dijital menü olarak eklenebilir.",
-    place: "Mekan",
-    note: "Demo modundayız.",
-    close: "Kapat",
+title: "Menü bilgisi",
+description:
+  "Güncel menü, fiyat ve ürün bilgileri için ilgili mekanın iletişim kanallarından veya CityMall Cyprus danışma noktasından bilgi alabilirsiniz.",
+place: "Mekan",
+note: "Menü ve fiyat bilgileri değişiklik gösterebilir.",
+close: "Kapat",
   },
   en: {
     eyebrow: "Menu",
-    title: "Demo menu area",
-    description:
-      "This area does not display a real restaurant menu. In production, the menu can be added as a PDF, image menu or managed digital menu.",
-    place: "Place",
-    note: "Demo mode.",
-    close: "Close",
+title: "Menu information",
+description:
+  "For current menu, pricing and product details, please contact the venue directly or ask the CityMall Cyprus information desk.",
+place: "Place",
+note: "Menu and pricing details may change.",
+close: "Close",
   },
 };
 

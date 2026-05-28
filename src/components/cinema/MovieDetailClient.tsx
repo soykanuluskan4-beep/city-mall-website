@@ -30,27 +30,27 @@ type MovieDetailClientProps = {
 
 const content = {
   tr: {
-    back: "Cinemall’a Dön",
-    overview: "Film Özeti",
+    back: "Cinemall’a Geri Dön",
+    overview: "Film Hakkında",
     director: "Yönetmen",
     cast: "Oyuncular",
     genre: "Tür",
     duration: "Süre",
     ageRating: "Yaş Sınırı",
     language: "Dil",
-    showtimeTitle: "Seans Seçimi",
-    showtimeText: "Tarih seçin, uygun seans saatlerinden birini belirleyin.",
-    noShowtimes: "Bu film için seanslar yakında açıklanacak.",
-    selectDate: "Tarih",
+    showtimeTitle: "Seansını Seç",
+    showtimeText: "Tarihi seçin, uygun seans saatlerinden birini belirleyin.",
+    noShowtimes: "Bu film için seans bilgisi henüz görünmüyor.",
+    selectDate: "Tarih Seç",
     selectTime: "Seans Saati",
-    getTickets: "Bilet Al",
-    chooseShowtime: "Lütfen bir seans saati seçin.",
+    getTickets: "Bilet Bilgisi Al",
+    chooseShowtime: "Devam etmek için bir seans saati seçin.",
     trailer: "Fragman",
-    trailerText: "Demo fragman alanı.",
-    related: "Diğer Filmler",
+    trailerText: "Fragman yayına alındığında burada görüntülenir.",
+    related: "Benzer Filmler",
     minutes: "dk",
     comingSoon: "Yakında Vizyonda",
-    estimatedRelease: "Tahmini vizyon",
+    estimatedRelease: "Vizyon Tarihi",
     genres: {
       action: "Aksiyon",
       animation: "Animasyon",
@@ -66,26 +66,26 @@ const content = {
   },
   en: {
     back: "Back to Cinemall",
-    overview: "Movie Overview",
+    overview: "About the Movie",
     director: "Director",
     cast: "Cast",
     genre: "Genre",
     duration: "Duration",
     ageRating: "Age Rating",
     language: "Language",
-    showtimeTitle: "Select Showtime",
-    showtimeText: "Choose a date and select an available showtime.",
-    noShowtimes: "Showtimes for this movie will be announced soon.",
-    selectDate: "Date",
+    showtimeTitle: "Choose Your Showtime",
+    showtimeText: "Select a date and choose one of the available showtimes.",
+    noShowtimes: "Showtime information for this movie is not available yet.",
+    selectDate: "Select Date",
     selectTime: "Showtime",
-    getTickets: "Get Tickets",
-    chooseShowtime: "Please select a showtime.",
+    getTickets: "Get Ticket Info",
+    chooseShowtime: "Please select a showtime to continue.",
     trailer: "Trailer",
-    trailerText: "Demo trailer area.",
-    related: "Other Movies",
+    trailerText: "The trailer will appear here when available.",
+    related: "Similar Movies",
     minutes: "min",
     comingSoon: "Coming Soon",
-    estimatedRelease: "Estimated release",
+    estimatedRelease: "Release Date",
     genres: {
       action: "Action",
       animation: "Animation",
@@ -148,17 +148,17 @@ export function MovieDetailClient({
   const [showTimeWarning, setShowTimeWarning] = useState(false);
 
   const selectedTimes = useMemo(() => {
-  if (!selectedDate) {
-    return [];
-  }
+    if (!selectedDate) {
+      return [];
+    }
 
-  return getTimesForDate(movie, selectedDate);
-}, [movie, selectedDate]);
+    return getTimesForDate(movie, selectedDate);
+  }, [movie, selectedDate]);
 
-useEffect(() => {
-  setSelectedTime(selectedTimes[0] ?? "");
-  setShowTimeWarning(false);
-}, [selectedTimes]);
+  useEffect(() => {
+    setSelectedTime(selectedTimes[0] ?? "");
+    setShowTimeWarning(false);
+  }, [selectedTimes]);
 
   function openTicketModal(targetMovie: Movie, date: string, time: string) {
     setTicketSelection({
@@ -230,7 +230,7 @@ useEffect(() => {
               </h1>
 
               <p className="mt-6 max-w-3xl break-words text-base leading-8 text-white/82 md:text-xl">
-                 {description}
+                {description}
               </p>
 
               <div className="mt-8 grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
@@ -341,108 +341,108 @@ useEffect(() => {
             </aside>
 
             <div className="min-w-0 space-y-8">
-  <article className="w-full max-w-full overflow-hidden rounded-[2rem] border border-border-default bg-surface-default p-6 shadow-card md:p-8">
-    <h2 className="text-3xl font-semibold tracking-tight text-text-primary">
-      {copy.overview}
-    </h2>
+              <article className="w-full max-w-full overflow-hidden rounded-[2rem] border border-border-default bg-surface-default p-6 shadow-card md:p-8">
+                <h2 className="text-3xl font-semibold tracking-tight text-text-primary">
+                  {copy.overview}
+                </h2>
 
-    <p className="mt-5 max-w-full break-words text-base leading-8 text-text-secondary md:text-lg">
-      {description}
-    </p>
-  </article>
+                <p className="mt-5 max-w-full break-words text-base leading-8 text-text-secondary md:text-lg">
+                  {description}
+                </p>
+              </article>
 
-  <section className="w-full max-w-full overflow-hidden rounded-[2rem] border border-border-default bg-surface-default p-6 shadow-card md:p-8">
-    <div className="flex flex-col gap-3 md:flex-row md:items-end md:justify-between">
-      <div className="min-w-0">
-        <h2 className="text-3xl font-semibold tracking-tight text-text-primary">
-          {copy.showtimeTitle}
-        </h2>
+              <section className="w-full max-w-full overflow-hidden rounded-[2rem] border border-border-default bg-surface-default p-6 shadow-card md:p-8">
+                <div className="flex flex-col gap-3 md:flex-row md:items-end md:justify-between">
+                  <div className="min-w-0">
+                    <h2 className="text-3xl font-semibold tracking-tight text-text-primary">
+                      {copy.showtimeTitle}
+                    </h2>
 
-        <p className="mt-3 max-w-full break-words text-sm leading-6 text-text-secondary">
-          {copy.showtimeText}
-        </p>
-      </div>
+                    <p className="mt-3 max-w-full break-words text-sm leading-6 text-text-secondary">
+                      {copy.showtimeText}
+                    </p>
+                  </div>
 
-      <button
-        type="button"
-        onClick={handleMainTicketClick}
-        disabled={!dateOptions.length}
-        className="inline-flex w-fit items-center gap-2 rounded-full bg-brand-primary px-5 py-3 text-sm font-semibold text-brand-foreground shadow-card transition hover:-translate-y-0.5 hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-50"
-      >
-        <Ticket className="h-4 w-4" aria-hidden="true" />
-        {copy.getTickets}
-      </button>
-    </div>
+                  <button
+                    type="button"
+                    onClick={handleMainTicketClick}
+                    disabled={!dateOptions.length}
+                    className="inline-flex w-fit items-center gap-2 rounded-full bg-brand-primary px-5 py-3 text-sm font-semibold text-brand-foreground shadow-card transition hover:-translate-y-0.5 hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-50"
+                  >
+                    <Ticket className="h-4 w-4" aria-hidden="true" />
+                    {copy.getTickets}
+                  </button>
+                </div>
 
-    {dateOptions.length ? (
-      <div className="mt-6 grid gap-6">
-        <div className="min-w-0">
-          <p className="mb-2 text-xs font-semibold uppercase tracking-[0.2em] text-text-muted">
-            {copy.selectDate}
-          </p>
+                {dateOptions.length ? (
+                  <div className="mt-6 grid gap-6">
+                    <div className="min-w-0">
+                      <p className="mb-2 text-xs font-semibold uppercase tracking-[0.2em] text-text-muted">
+                        {copy.selectDate}
+                      </p>
 
-          <div className="w-full max-w-full overflow-x-auto pb-2 [-webkit-overflow-scrolling:touch]">
-            <div className="flex w-max gap-2 px-1">
-              {dateOptions.map((date) => (
-                <button
-                  key={date}
-                  type="button"
-                  onClick={() => setSelectedDate(date)}
-                  className={`whitespace-nowrap rounded-full border px-4 py-2.5 text-sm font-semibold transition ${
-                    selectedDate === date
-                      ? "border-brand-primary bg-brand-primary text-brand-foreground"
-                      : "border-border-default bg-surface-muted text-text-secondary hover:bg-surface-subtle hover:text-text-primary"
-                  }`}
-                >
-                  {formatDate(date, locale)}
-                </button>
-              ))}
+                      <div className="w-full max-w-full overflow-x-auto pb-2 [-webkit-overflow-scrolling:touch]">
+                        <div className="flex w-max gap-2 px-1">
+                          {dateOptions.map((date) => (
+                            <button
+                              key={date}
+                              type="button"
+                              onClick={() => setSelectedDate(date)}
+                              className={`whitespace-nowrap rounded-full border px-4 py-2.5 text-sm font-semibold transition ${
+                                selectedDate === date
+                                  ? "border-brand-primary bg-brand-primary text-brand-foreground"
+                                  : "border-border-default bg-surface-muted text-text-secondary hover:bg-surface-subtle hover:text-text-primary"
+                              }`}
+                            >
+                              {formatDate(date, locale)}
+                            </button>
+                          ))}
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="min-w-0">
+                      <p className="mb-2 text-xs font-semibold uppercase tracking-[0.2em] text-text-muted">
+                        {copy.selectTime}
+                      </p>
+
+                      <div className="flex max-w-full flex-wrap gap-2">
+                        {selectedTimes.map((time) => (
+                          <button
+                            key={time}
+                            type="button"
+                            onClick={() => {
+                              setSelectedTime(time);
+                              setShowTimeWarning(false);
+                            }}
+                            className={`rounded-full border px-4 py-2.5 text-sm font-semibold transition ${
+                              selectedTime === time
+                                ? "border-brand-primary bg-brand-primary text-brand-foreground"
+                                : "border-border-default bg-surface-muted text-text-secondary hover:bg-surface-subtle hover:text-text-primary"
+                            }`}
+                          >
+                            {time}
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+
+                    {showTimeWarning ? (
+                      <p className="text-sm font-semibold text-amber-700">
+                        {copy.chooseShowtime}
+                      </p>
+                    ) : null}
+                  </div>
+                ) : (
+                  <div className="mt-6 rounded-3xl border border-dashed border-border-default bg-surface-muted p-6 text-center">
+                    <CalendarDays className="mx-auto h-6 w-6 text-text-muted" />
+                    <p className="mt-3 text-sm font-semibold text-text-muted">
+                      {copy.noShowtimes}
+                    </p>
+                  </div>
+                )}
+              </section>
             </div>
-          </div>
-        </div>
-
-        <div className="min-w-0">
-          <p className="mb-2 text-xs font-semibold uppercase tracking-[0.2em] text-text-muted">
-            {copy.selectTime}
-          </p>
-
-          <div className="flex max-w-full flex-wrap gap-2">
-            {selectedTimes.map((time) => (
-              <button
-                key={time}
-                type="button"
-                onClick={() => {
-                  setSelectedTime(time);
-                  setShowTimeWarning(false);
-                }}
-                className={`rounded-full border px-4 py-2.5 text-sm font-semibold transition ${
-                  selectedTime === time
-                    ? "border-brand-primary bg-brand-primary text-brand-foreground"
-                    : "border-border-default bg-surface-muted text-text-secondary hover:bg-surface-subtle hover:text-text-primary"
-                }`}
-              >
-                {time}
-              </button>
-            ))}
-          </div>
-        </div>
-
-        {showTimeWarning ? (
-          <p className="text-sm font-semibold text-amber-700">
-            {copy.chooseShowtime}
-          </p>
-        ) : null}
-      </div>
-    ) : (
-      <div className="mt-6 rounded-3xl border border-dashed border-border-default bg-surface-muted p-6 text-center">
-        <CalendarDays className="mx-auto h-6 w-6 text-text-muted" />
-        <p className="mt-3 text-sm font-semibold text-text-muted">
-          {copy.noShowtimes}
-        </p>
-      </div>
-    )}
-  </section>
-</div>
           </div>
         </div>
       </section>

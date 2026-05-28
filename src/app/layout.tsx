@@ -10,9 +10,9 @@ const inter = Inter({
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteConfig.url),
-  title: "CityMall Cyprus | Gazimağusa'nın buluşma noktası",
+  title: "CityMall Cyprus | Gazimağusa’nın buluşma noktası",
   description:
-    "CityMall Cyprus; mağazalar, yeme-içme, sinema, etkinlikler ve ziyaret bilgilerini bir araya getiren Gazimağusa odaklı AVM konsept sitesidir.",
+    "CityMall Cyprus mağazaları, yeme-içme alanları, Cinemall, etkinlikler ve ziyaretçi hizmetlerini keşfedin.",
   manifest: "/site.webmanifest",
   icons: {
     icon: "/citymall-logo.png",
@@ -20,17 +20,17 @@ export const metadata: Metadata = {
     apple: "/citymall-logo.png",
   },
   openGraph: {
-    title: "CityMall Cyprus | Gazimağusa'nın buluşma noktası",
+    title: "CityMall Cyprus | Gazimağusa’nın alışveriş ve yaşam noktası",
     description:
-      "CityMall Cyprus; mağazalar, yeme-içme, sinema, etkinlikler ve ziyaret bilgilerini bir araya getiren Gazimağusa odaklı AVM konsept sitesidir.",
+      "CityMall Cyprus; mağazalar, yeme-içme, sinema, etkinlikler ve ziyaret bilgilerini Gazimağusa’da tek noktada buluşturur.",
     siteName: "CityMall Cyprus",
     type: "website",
   },
   twitter: {
     card: "summary_large_image",
-    title: "CityMall Cyprus | Gazimağusa'nın buluşma noktası",
+    title: "CityMall Cyprus | Gazimağusa’nın buluşma noktası",
     description:
-      "CityMall Cyprus; mağazalar, yeme-içme, sinema, etkinlikler ve ziyaret bilgilerini bir araya getiren Gazimağusa odaklı AVM konsept sitesidir.",
+      "CityMall Cyprus; mağazalar, yeme-içme, sinema, etkinlikler ve ziyaret bilgilerini Gazimağusa’da tek noktada buluşturur.",
   },
 };
 

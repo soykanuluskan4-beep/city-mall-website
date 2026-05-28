@@ -10,20 +10,20 @@ type HeroSectionProps = {
 
 const content = {
   tr: {
-    title: "Gazimağusa'nın buluşma noktası.",
-    subtitle: "Alışveriş, yeme-içme ve eğlenceyi tek noktada keşfedin.",
+    title: "Gazimağusa’nın buluşma noktası.",
+    subtitle: "Alışveriş, lezzet ve eğlenceyi CityMall Cyprus’ta planlayın.",
     primaryCta: "Mağazaları Keşfet",
-    secondaryCta: "Ziyaret Planla",
-    scroll: "Aşağı kaydır",
-    imageAlt: "Modern alışveriş merkezi iç mekan atmosferi",
+    secondaryCta: "Ziyaretini Planla",
+    scroll: "Keşfetmeye devam et",
+    imageAlt: "CityMall Cyprus alışveriş ve yaşam alanı atmosferi",
   },
   en: {
-    title: "Famagusta's meeting point.",
-    subtitle: "Discover shopping, dining and entertainment in one place.",
+    title: "Famagusta’s meeting point.",
+    subtitle: "Plan shopping, dining and entertainment at CityMall Cyprus.",
     primaryCta: "Explore Stores",
     secondaryCta: "Plan Your Visit",
-    scroll: "Scroll down",
-    imageAlt: "Modern shopping mall interior atmosphere",
+    scroll: "Keep exploring",
+    imageAlt: "CityMall Cyprus shopping and lifestyle atmosphere",
   },
 };
 

@@ -16,7 +16,7 @@ const content = {
         "CityMall Cyprus web sitesinde ziyaretçi deneyimi, iletişim formları ve çerez kullanımı hakkında bilgilendirme.",
       updated: "Son güncelleme: 2026",
       note:
-        "Bu metin taslak bilgilendirme niteliğindedir. Ticari yayına geçmeden önce KVKK ve yerel mevzuata uygun şekilde hukuk danışmanı tarafından kontrol edilmelidir.",
+  "Bu sayfa, CityMall Cyprus web sitesi gizlilik ve çerez kullanımı hakkında genel bilgilendirme sunar.",
       sections: [
         {
           title: "Kapsam",
@@ -55,7 +55,7 @@ const content = {
         "CityMall Cyprus web sitesini kullanırken geçerli temel kurallar, içerik bilgilendirmeleri ve sorumluluk sınırları.",
       updated: "Son güncelleme: 2026",
       note:
-        "Bu metin taslak kullanım koşullarıdır. Ticari yayına geçmeden önce hukuk danışmanı tarafından gerçek şirket bilgileri ve yerel mevzuata göre düzenlenmelidir.",
+  "Bu sayfa, CityMall Cyprus web sitesi kullanımına ilişkin temel bilgilendirmeleri içerir.",
       sections: [
         {
           title: "Site Kullanımı",
@@ -66,8 +66,8 @@ const content = {
           text: "Çalışma saatleri, kampanyalar, etkinlikler, film seansları, hizmetler ve mağaza bilgileri dönemsel olarak değişebilir. Güncel bilgiler ilgili işletme veya CityMall yönetimi tarafından doğrulanmalıdır.",
         },
         {
-          title: "Demo ve Konsept Alanlar",
-          text: "Bu proje kapsamında bazı formlar, satın alma akışları, indirme butonları ve hizmet bilgileri demo veya konsept amaçlı olabilir. Gerçek yayında ilgili sistemlerle entegrasyon yapılmalıdır.",
+          title: "Dijital Hizmet Alanları",
+          text: "Formlar, satın alma talepleri, medya dosyaları ve hizmet bilgileri ilgili CityMall Cyprus iletişim kanalları üzerinden yönetilebilir.",
         },
         {
           title: "Fikri Mülkiyet",
@@ -98,7 +98,7 @@ const content = {
         "Information about visitor experience, contact forms and cookie usage on the CityMall Cyprus website.",
       updated: "Last updated: 2026",
       note:
-        "This text is a draft information notice. Before commercial launch, it should be reviewed by legal counsel for data protection and local regulatory compliance.",
+  "This page provides general information about privacy and cookie usage on the CityMall Cyprus website.",
       sections: [
         {
           title: "Scope",
@@ -137,7 +137,7 @@ const content = {
         "Basic rules, content information and liability boundaries for using the CityMall Cyprus website.",
       updated: "Last updated: 2026",
       note:
-        "This text is a draft terms of use document. Before commercial launch, it should be updated by legal counsel with real company details and local regulations.",
+  "This page includes the basic information related to the use of the CityMall Cyprus website.",
       sections: [
         {
           title: "Website Use",
@@ -148,8 +148,8 @@ const content = {
           text: "Opening hours, campaigns, events, movie showtimes, services and store information may change periodically. Current information should be verified by the relevant business or CityMall management.",
         },
         {
-          title: "Demo and Concept Areas",
-          text: "Some forms, purchase flows, download buttons and service information in this project may be for demo or concept purposes. Real integrations should be completed for commercial launch.",
+          title: "Digital Service Areas",
+          text: "Forms, purchase requests, media files and service information may be managed through the relevant CityMall Cyprus contact channels.",
         },
         {
           title: "Intellectual Property",

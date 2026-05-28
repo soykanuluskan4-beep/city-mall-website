@@ -34,8 +34,7 @@ export default function NotFound() {
         </div>
 
         <p className="mt-8 text-xs leading-5 text-text-muted">
-          Bu çalışma CityMall Cyprus&apos;un resmi sitesi değildir. Portföy ve
-          konsept demonstrasyonu amacıyla hazırlanmıştır.
+          Aradığınız sayfa taşınmış veya artık mevcut olmayabilir. CityMall Cyprus sayfalarına ana sayfadan devam edebilirsiniz.
         </p>
       </section>
     </main>

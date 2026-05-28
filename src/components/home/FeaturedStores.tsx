@@ -11,18 +11,18 @@ type FeaturedStoresProps = {
 const content = {
   tr: {
     eyebrow: "Öne Çıkan Mağazalar",
-    title: "Alışveriş rotanı oluştur.",
+    title: "CityMall alışveriş rotanı oluştur.",
     description:
-      "Moda, teknoloji, güzellik, spor ve yaşam kategorilerinden seçili mağazaları keşfedin.",
-    viewAll: "Tümünü Gör",
+      "Moda, teknoloji, güzellik, spor ve yaşam kategorilerinde öne çıkan mağazalara göz atın.",
+    viewAll: "Tüm Mağazaları Keşfet",
     floorLabel: "Kat",
   },
   en: {
     eyebrow: "Featured Stores",
-    title: "Build your shopping route.",
+    title: "Plan your CityMall shopping route.",
     description:
-      "Discover selected stores across fashion, technology, beauty, sports and lifestyle categories.",
-    viewAll: "View All",
+      "Browse featured stores across fashion, technology, beauty, sports and lifestyle.",
+    viewAll: "Explore All Stores",
     floorLabel: "Floor",
   },
 };
