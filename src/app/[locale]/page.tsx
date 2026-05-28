@@ -5,6 +5,8 @@ import { StatsSection } from "@/components/home/StatsSection";
 import { VisitSummary } from "@/components/home/VisitSummary";
 import { FeaturedStores } from "@/components/home/FeaturedStores";
 import { CampaignSlider } from "@/components/home/CampaignSlider";
+import { DiningShowcase } from "@/components/home/DiningShowcase";
+import { EventsShowcase } from "@/components/home/EventsShowcase";
 import { HeroSection } from "@/components/home/HeroSection";
 import { QuickAccess } from "@/components/home/QuickAccess";
 import { createPageMetadata } from "@/lib/metadata";
@@ -62,11 +64,13 @@ export default function HomePage({ params }: HomePageProps) {
       <JsonLd data={shoppingMallSchema} />
 
       <HeroSection locale={locale} />
-<QuickAccess locale={locale} />
-<CampaignSlider locale={locale} />
-<FeaturedStores locale={locale} />
-<StatsSection locale={locale} />
-<VisitSummary locale={locale} />
+      <QuickAccess locale={locale} />
+      <CampaignSlider locale={locale} />
+      <FeaturedStores locale={locale} />
+      <DiningShowcase locale={locale} />
+      <EventsShowcase locale={locale} />
+      <StatsSection locale={locale} />
+      <VisitSummary locale={locale} />
     </main>
   );
 }
