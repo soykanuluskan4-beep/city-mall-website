@@ -15,7 +15,7 @@ import {
 const footerContent = {
   tr: {
     description:
-      "CityMall Cyprus’ta alışveriş, yeme-içme, Cinemall, etkinlikler ve ziyaretçi hizmetlerini tek noktada keşfedin.",
+      "CityMall Cyprus’da alışveriş, yeme-içme, Cinemall, etkinlikler ve ziyaretçi hizmetlerini tek noktada keşfedin.",
     quickLinks: "Hızlı Linkler",
     visit: "Ziyaret",
     corporate: "Kurumsal",
