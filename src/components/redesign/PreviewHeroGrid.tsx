@@ -11,6 +11,7 @@ import {
   ShoppingBag,
   Utensils,
 } from "lucide-react";
+import { useState } from "react";
 import type { Locale } from "@/types/content";
 
 type PreviewHeroGridProps = {
@@ -23,6 +24,7 @@ type HeroCard = {
   description: string;
   href: string;
   image: string;
+  video?: string;
   alt: string;
   icon: typeof ShoppingBag;
   className: string;
@@ -133,14 +135,15 @@ export function PreviewHeroGrid({ locale }: PreviewHeroGridProps) {
 
   const cards: HeroCard[] = [
     {
-      href: `/${locale}/stores`,
-      image: images.fashion,
-      icon: ShoppingBag,
-      className: "min-h-[420px] lg:min-h-[560px]",
-      titleClassName: "text-5xl md:text-6xl",
-      overlay: "from-black/10 via-black/38 to-black/88",
-      ...copy.cards.fashion,
-    },
+  href: `/${locale}/stores`,
+  image: images.fashion,
+  video: "/videos/fashion-hero.mp4",
+  icon: ShoppingBag,
+  className: "min-h-[420px] lg:min-h-[560px]",
+  titleClassName: "text-5xl md:text-6xl",
+  overlay: "from-black/10 via-black/38 to-black/88",
+  ...copy.cards.fashion,
+     },
     {
       href: `/${locale}/dining`,
       image: images.dining,
@@ -207,14 +210,23 @@ export function PreviewHeroGrid({ locale }: PreviewHeroGridProps) {
         }
 
         @media (prefers-reduced-motion: reduce) {
-          .hero-grid-reveal,
-          .preview-hero-card,
-          .preview-hero-card img,
-          .map-pulse {
-            animation: none !important;
-            transition: none !important;
-          }
-        }
+  .hero-grid-reveal,
+  .preview-hero-card,
+  .preview-hero-card img,
+  .preview-hero-card video,
+  .map-pulse {
+    animation: none !important;
+    transition: none !important;
+  }
+
+  .hero-background-video {
+    display: none !important;
+           }
+    
+    .preview-hero-card img {
+  opacity: 1 !important;
+}
+         }
       `}</style>
 
       <div className="pointer-events-none absolute inset-0 -z-10 bg-[radial-gradient(circle_at_12%_8%,rgba(180,126,47,0.16),transparent_28%),radial-gradient(circle_at_82%_18%,rgba(17,24,39,0.08),transparent_30%)]" />
@@ -279,6 +291,10 @@ function PreviewHeroCard({
   isExplore?: boolean;
 }) {
   const Icon = card.icon;
+  const [isVideoReady, setIsVideoReady] = useState(false);
+  const [hasVideoError, setHasVideoError] = useState(false);
+
+  const shouldShowImage = !card.video || hasVideoError;
 
   return (
     <Link
@@ -286,10 +302,31 @@ function PreviewHeroCard({
       className={`preview-hero-card group relative isolate flex overflow-hidden rounded-[1.65rem] border border-white/15 bg-text-primary p-5 text-white shadow-[0_20px_60px_rgba(17,24,39,0.16)] transition duration-500 hover:-translate-y-1 hover:shadow-[0_28px_80px_rgba(17,24,39,0.22)] md:p-6 ${card.className}`}
     >
       <img
-        src={card.image}
-        alt={card.alt}
-        className="absolute inset-0 -z-20 h-full w-full scale-[1.01] object-cover transition duration-700 ease-out group-hover:scale-[1.055]"
-      />
+  src={card.image}
+  alt={card.alt}
+  className={`absolute inset-0 -z-30 h-full w-full scale-[1.01] object-cover transition duration-700 ease-out group-hover:scale-[1.055] ${
+    shouldShowImage ? "opacity-100" : "opacity-0"
+  }`}
+/>
+
+{card.video && !hasVideoError ? (
+  <video
+    className={`hero-background-video absolute inset-0 -z-20 h-full w-full scale-[1.01] object-cover transition duration-700 ease-out group-hover:scale-[1.055] ${
+      isVideoReady ? "opacity-100" : "opacity-0"
+    }`}
+    autoPlay
+    muted
+    loop
+    playsInline
+    preload="auto"
+    aria-label={card.alt}
+    onLoadedData={() => setIsVideoReady(true)}
+    onCanPlay={() => setIsVideoReady(true)}
+    onError={() => setHasVideoError(true)}
+  >
+    <source src={card.video} type="video/mp4" />
+  </video>
+) : null}
 
       <div
         className={`absolute inset-0 -z-10 bg-gradient-to-b ${card.overlay} transition duration-500 group-hover:opacity-90`}
