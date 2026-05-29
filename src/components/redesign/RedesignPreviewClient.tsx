@@ -1,4 +1,8 @@
+import { StoresBrandCarousel } from "@/components/redesign/StoresBrandCarousel";
+import { LiveEventsCarousel } from "@/components/redesign/LiveEventsCarousel";
+import { PlanVisitBento } from "@/components/redesign/PlanVisitBento";
 import { PreviewHeroGrid } from "@/components/redesign/PreviewHeroGrid";
+import { PreviewVideoHero } from "@/components/redesign/PreviewVideoHero";
 import type { Locale } from "@/types/content";
 
 type RedesignPreviewClientProps = {
@@ -8,15 +12,15 @@ type RedesignPreviewClientProps = {
 const content = {
   tr: {
     roadmapEyebrow: "Preview Roadmap",
-    roadmapTitle: "Hero grid tamamlandı. Sonraki bölüm Experience Bento.",
+    roadmapTitle: "Video hero ve mosaic grid hazır.",
     roadmapText:
-      "Sıradaki aşamalarda What’s Happening, Gift Card, FunLab/Kids ve Next Experience kartlarından oluşan ikinci premium bento bölümü eklenecek.",
+      "Sıradaki aşamada What’s Happening, Gift Card, FunLab/Kids ve Next Experience kartlarından oluşan ikinci premium experience bölümü eklenecek.",
   },
   en: {
     roadmapEyebrow: "Preview Roadmap",
-    roadmapTitle: "Hero grid is ready. Next section is Experience Bento.",
+    roadmapTitle: "Video hero and mosaic grid are ready.",
     roadmapText:
-      "In the next steps, a second premium bento section will be added with What’s Happening, Gift Card, FunLab/Kids and Next Experience cards.",
+      "In the next step, a second premium experience section will be added with What’s Happening, Gift Card, FunLab/Kids and Next Experience cards.",
   },
 };
 
@@ -27,9 +31,19 @@ export function RedesignPreviewClient({
 
   return (
     <main className="min-h-screen overflow-x-hidden bg-[#f5f5f3] text-text-primary">
-      <PreviewHeroGrid locale={locale} />
+      <PreviewVideoHero locale={locale} />
 
-      <section className="py-12 md:py-16">
+      <div id="preview-mosaic">
+          <PreviewHeroGrid locale={locale} />
+      </div>
+
+      <PlanVisitBento locale={locale} />
+
+<LiveEventsCarousel locale={locale} />
+
+<StoresBrandCarousel locale={locale} />
+
+<section className="py-12 md:py-16">
         <div className="container">
           <div className="rounded-[2rem] border border-dashed border-border-default bg-white/60 p-8 text-center shadow-card backdrop-blur">
             <p className="text-sm font-semibold uppercase tracking-[0.25em] text-text-muted">
