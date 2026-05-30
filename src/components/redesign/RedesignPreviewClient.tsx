@@ -1,3 +1,4 @@
+import { ExploreCityMall } from "@/components/redesign/ExploreCityMall";
 import { StoresBrandCarousel } from "@/components/redesign/StoresBrandCarousel";
 import { LiveEventsCarousel } from "@/components/redesign/LiveEventsCarousel";
 import { PlanVisitBento } from "@/components/redesign/PlanVisitBento";
@@ -39,11 +40,13 @@ export function RedesignPreviewClient({
 
       <PlanVisitBento locale={locale} />
 
-<LiveEventsCarousel locale={locale} />
+      <LiveEventsCarousel locale={locale} />
 
-<StoresBrandCarousel locale={locale} />
+      <StoresBrandCarousel locale={locale} />
 
-<section className="py-12 md:py-16">
+      <ExploreCityMall locale={locale} />
+
+       <section className="py-12 md:py-16">
         <div className="container">
           <div className="rounded-[2rem] border border-dashed border-border-default bg-white/60 p-8 text-center shadow-card backdrop-blur">
             <p className="text-sm font-semibold uppercase tracking-[0.25em] text-text-muted">
