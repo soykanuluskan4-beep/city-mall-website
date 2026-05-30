@@ -30,6 +30,7 @@ type HeroCard = {
   className: string;
   titleClassName: string;
   overlay: string;
+  variant?: "fashion" | "explore" | "default";
 };
 
 const content = {
@@ -45,7 +46,7 @@ const content = {
         eyebrow: "Fashion / Luxury",
         title: "Fashion",
         description:
-          "Sezon stilleri, vitrinler ve alışveriş rotaları için güçlü ilk odak.",
+          "Slow motion vitrin hissi, sezon stilleri ve premium alışveriş rotaları.",
         alt: "Premium fashion shopping atmosphere",
       },
       dining: {
@@ -86,7 +87,7 @@ const content = {
         eyebrow: "Fashion / Luxury",
         title: "Fashion",
         description:
-          "A strong first focus for seasonal styles, windows and shopping routes.",
+          "Slow-motion window feeling, seasonal styles and premium shopping routes.",
         alt: "Premium fashion shopping atmosphere",
       },
       dining: {
@@ -135,29 +136,33 @@ export function PreviewHeroGrid({ locale }: PreviewHeroGridProps) {
 
   const cards: HeroCard[] = [
     {
-  href: `/${locale}/stores`,
-  image: images.fashion,
-  video: "/videos/fashion-hero.mp4",
-  icon: ShoppingBag,
-  className: "min-h-[420px] lg:min-h-[560px]",
-  titleClassName: "text-5xl md:text-6xl",
-  overlay: "from-black/10 via-black/38 to-black/88",
-  ...copy.cards.fashion,
-     },
+      href: `/${locale}/stores`,
+      image: images.fashion,
+      video: "/videos/fashion-hero.mp4",
+      icon: ShoppingBag,
+      className:
+        "order-1 min-h-[440px] lg:col-start-1 lg:col-end-4 lg:row-start-2 lg:row-end-4 lg:min-h-0",
+      titleClassName: "text-5xl md:text-6xl lg:text-7xl",
+      overlay: "from-black/8 via-black/32 to-black/90",
+      variant: "fashion",
+      ...copy.cards.fashion,
+    },
     {
       href: `/${locale}/dining`,
       image: images.dining,
       icon: Utensils,
-      className: "min-h-[180px]",
+      className:
+        "order-2 min-h-[190px] lg:col-start-1 lg:col-end-2 lg:row-start-1 lg:row-end-2 lg:min-h-0",
       titleClassName: "text-3xl",
-      overlay: "from-amber-950/10 via-black/34 to-black/82",
+      overlay: "from-amber-950/10 via-black/30 to-black/82",
       ...copy.cards.dining,
     },
     {
       href: `/${locale}/cinema`,
       image: images.cinema,
       icon: Clapperboard,
-      className: "min-h-[180px]",
+      className:
+        "order-3 min-h-[190px] lg:col-start-2 lg:col-end-3 lg:row-start-1 lg:row-end-2 lg:min-h-0",
       titleClassName: "text-3xl",
       overlay: "from-indigo-950/10 via-black/42 to-black/86",
       ...copy.cards.cinema,
@@ -166,7 +171,8 @@ export function PreviewHeroGrid({ locale }: PreviewHeroGridProps) {
       href: `/${locale}/events`,
       image: images.events,
       icon: CalendarDays,
-      className: "min-h-[180px]",
+      className:
+        "order-4 min-h-[190px] lg:col-start-3 lg:col-end-4 lg:row-start-1 lg:row-end-2 lg:min-h-0",
       titleClassName: "text-3xl",
       overlay: "from-rose-950/10 via-black/34 to-black/84",
       ...copy.cards.events,
@@ -175,9 +181,11 @@ export function PreviewHeroGrid({ locale }: PreviewHeroGridProps) {
       href: `/${locale}/map`,
       image: images.explore,
       icon: MapPinned,
-      className: "min-h-[300px] lg:min-h-[560px]",
+      className:
+        "order-5 min-h-[360px] lg:col-start-4 lg:col-end-5 lg:row-start-1 lg:row-end-4 lg:min-h-0",
       titleClassName: "text-4xl md:text-5xl",
-      overlay: "from-slate-950/5 via-black/34 to-black/84",
+      overlay: "from-slate-950/5 via-black/30 to-black/86",
+      variant: "explore",
       ...copy.cards.explore,
     },
   ];
@@ -201,32 +209,44 @@ export function PreviewHeroGrid({ locale }: PreviewHeroGridProps) {
         @keyframes mapPulse {
           0%, 100% {
             transform: scale(1);
-            opacity: 0.35;
+            opacity: 0.36;
           }
           50% {
-            transform: scale(1.7);
+            transform: scale(1.75);
             opacity: 0.08;
           }
         }
 
-        @media (prefers-reduced-motion: reduce) {
-  .hero-grid-reveal,
-  .preview-hero-card,
-  .preview-hero-card img,
-  .preview-hero-card video,
-  .map-pulse {
-    animation: none !important;
-    transition: none !important;
-  }
+        @keyframes mapLineDrift {
+          0%, 100% {
+            opacity: 0.34;
+            transform: translateY(0);
+          }
+          50% {
+            opacity: 0.62;
+            transform: translateY(-4px);
+          }
+        }
 
-  .hero-background-video {
-    display: none !important;
-           }
-    
-    .preview-hero-card img {
-  opacity: 1 !important;
-}
-         }
+        @media (prefers-reduced-motion: reduce) {
+          .hero-grid-reveal,
+          .preview-hero-card,
+          .preview-hero-card img,
+          .preview-hero-card video,
+          .map-pulse,
+          .map-line-drift {
+            animation: none !important;
+            transition: none !important;
+          }
+
+          .hero-background-video {
+            display: none !important;
+          }
+
+          .preview-hero-card img {
+            opacity: 1 !important;
+          }
+        }
       `}</style>
 
       <div className="pointer-events-none absolute inset-0 -z-10 bg-[radial-gradient(circle_at_12%_8%,rgba(180,126,47,0.16),transparent_28%),radial-gradient(circle_at_82%_18%,rgba(17,24,39,0.08),transparent_30%)]" />
@@ -265,31 +285,17 @@ export function PreviewHeroGrid({ locale }: PreviewHeroGridProps) {
           </div>
         </div>
 
-        <div className="hero-grid-reveal grid gap-3 [animation:heroGridReveal_750ms_cubic-bezier(0.22,1,0.36,1)_both] md:gap-4 lg:grid-cols-[1.18fr_0.82fr_0.52fr]">
-          <PreviewHeroCard card={cards[0]} />
-
-          <div className="grid gap-3 md:grid-cols-3 lg:grid-cols-1">
-            <PreviewHeroCard card={cards[1]} compact />
-            <PreviewHeroCard card={cards[2]} compact />
-            <PreviewHeroCard card={cards[3]} compact />
-          </div>
-
-          <PreviewHeroCard card={cards[4]} isExplore />
+        <div className="hero-grid-reveal grid gap-3 [animation:heroGridReveal_760ms_cubic-bezier(0.22,1,0.36,1)_both] md:gap-4 lg:grid-cols-[1fr_1fr_1fr_1.08fr] lg:grid-rows-[170px_210px_210px]">
+          {cards.map((card) => (
+            <PreviewHeroCard key={card.title} card={card} />
+          ))}
         </div>
       </div>
     </section>
   );
 }
 
-function PreviewHeroCard({
-  card,
-  compact = false,
-  isExplore = false,
-}: {
-  card: HeroCard;
-  compact?: boolean;
-  isExplore?: boolean;
-}) {
+function PreviewHeroCard({ card }: { card: HeroCard }) {
   const Icon = card.icon;
   const [isVideoReady, setIsVideoReady] = useState(false);
   const [hasVideoError, setHasVideoError] = useState(false);
@@ -299,37 +305,37 @@ function PreviewHeroCard({
   return (
     <Link
       href={card.href}
-      className={`preview-hero-card group relative isolate flex overflow-hidden rounded-[1.65rem] border border-white/15 bg-text-primary p-5 text-white shadow-[0_20px_60px_rgba(17,24,39,0.16)] transition duration-500 hover:-translate-y-1 hover:shadow-[0_28px_80px_rgba(17,24,39,0.22)] md:p-6 ${card.className}`}
+      className={`preview-hero-card group relative isolate flex overflow-hidden rounded-[1.65rem] border border-white/15 bg-text-primary p-5 text-white shadow-[0_20px_60px_rgba(17,24,39,0.16)] transition duration-500 hover:-translate-y-1 hover:scale-[1.01] hover:border-white/28 hover:shadow-[0_28px_80px_rgba(17,24,39,0.24)] md:p-6 ${card.className}`}
     >
       <img
-  src={card.image}
-  alt={card.alt}
-  className={`absolute inset-0 -z-30 h-full w-full scale-[1.01] object-cover transition duration-700 ease-out group-hover:scale-[1.055] ${
-    shouldShowImage ? "opacity-100" : "opacity-0"
-  }`}
-/>
+        src={card.image}
+        alt={card.alt}
+        className={`absolute inset-0 -z-30 h-full w-full scale-[1.01] object-cover transition duration-700 ease-out group-hover:scale-[1.055] ${
+          shouldShowImage ? "opacity-100" : "opacity-0"
+        }`}
+      />
 
-{card.video && !hasVideoError ? (
-  <video
-    className={`hero-background-video absolute inset-0 -z-20 h-full w-full scale-[1.01] object-cover transition duration-700 ease-out group-hover:scale-[1.055] ${
-      isVideoReady ? "opacity-100" : "opacity-0"
-    }`}
-    autoPlay
-    muted
-    loop
-    playsInline
-    preload="auto"
-    aria-label={card.alt}
-    onLoadedData={() => setIsVideoReady(true)}
-    onCanPlay={() => setIsVideoReady(true)}
-    onError={() => setHasVideoError(true)}
-  >
-    <source src={card.video} type="video/mp4" />
-  </video>
-) : null}
+      {card.video && !hasVideoError ? (
+        <video
+          className={`hero-background-video absolute inset-0 -z-20 h-full w-full scale-[1.01] object-cover transition duration-700 ease-out group-hover:scale-[1.055] ${
+            isVideoReady ? "opacity-100" : "opacity-0"
+          }`}
+          autoPlay
+          muted
+          loop
+          playsInline
+          preload="auto"
+          aria-label={card.alt}
+          onLoadedData={() => setIsVideoReady(true)}
+          onCanPlay={() => setIsVideoReady(true)}
+          onError={() => setHasVideoError(true)}
+        >
+          <source src={card.video} type="video/mp4" />
+        </video>
+      ) : null}
 
       <div
-        className={`absolute inset-0 -z-10 bg-gradient-to-b ${card.overlay} transition duration-500 group-hover:opacity-90`}
+        className={`absolute inset-0 -z-10 bg-gradient-to-b ${card.overlay} transition duration-500 group-hover:opacity-88`}
       />
 
       <div className="absolute inset-0 -z-10 opacity-0 transition duration-500 group-hover:opacity-100">
@@ -337,12 +343,7 @@ function PreviewHeroCard({
         <div className="absolute inset-y-6 right-6 w-px bg-gradient-to-b from-transparent via-white/20 to-transparent" />
       </div>
 
-      {isExplore ? (
-        <div className="pointer-events-none absolute right-5 top-5 flex h-13 w-13 items-center justify-center rounded-full border border-white/20 bg-white/10 backdrop-blur">
-          <span className="map-pulse absolute h-8 w-8 rounded-full bg-white/25 [animation:mapPulse_2.4s_ease-in-out_infinite]" />
-          <MapPinned className="relative h-5 w-5 text-white" aria-hidden="true" />
-        </div>
-      ) : null}
+      {card.variant === "explore" ? <ExploreMapPreview /> : null}
 
       <div className="mt-auto max-w-lg transition duration-500 group-hover:-translate-y-1.5">
         <div className="mb-3 flex items-center gap-2">
@@ -356,9 +357,7 @@ function PreviewHeroCard({
         </div>
 
         <h2
-          className={`font-semibold leading-[0.95] tracking-tight ${
-            compact ? "text-3xl" : card.titleClassName
-          }`}
+          className={`font-semibold leading-[0.95] tracking-tight ${card.titleClassName}`}
         >
           {card.title}
         </h2>
@@ -373,5 +372,37 @@ function PreviewHeroCard({
         </div>
       </div>
     </Link>
+  );
+}
+
+function ExploreMapPreview() {
+  return (
+    <div className="pointer-events-none absolute inset-x-5 top-5 z-0 rounded-[1.35rem] border border-white/14 bg-white/[0.08] p-4 opacity-80 backdrop-blur-md transition duration-500 group-hover:border-white/26 group-hover:bg-white/[0.12]">
+      <div className="mb-3 flex items-center justify-between gap-3">
+        <div>
+          <p className="text-[0.62rem] font-semibold uppercase tracking-[0.22em] text-white/46">
+            Floor Guide
+          </p>
+          <p className="mt-1 text-sm font-semibold text-white/82">
+            Ground Level
+          </p>
+        </div>
+
+        <div className="relative flex h-10 w-10 items-center justify-center rounded-full border border-white/20 bg-white/10">
+          <span className="map-pulse absolute h-6 w-6 rounded-full bg-white/25 [animation:mapPulse_2.4s_ease-in-out_infinite]" />
+          <MapPinned className="relative h-4 w-4 text-white" aria-hidden="true" />
+        </div>
+      </div>
+
+      <div className="grid grid-cols-4 gap-2">
+        <span className="map-line-drift h-9 rounded-xl bg-white/18 [animation:mapLineDrift_3s_ease-in-out_infinite]" />
+        <span className="h-9 rounded-xl bg-white/10" />
+        <span className="h-9 rounded-xl bg-white/16" />
+        <span className="h-9 rounded-xl bg-white/8" />
+        <span className="col-span-2 h-12 rounded-xl bg-white/12" />
+        <span className="h-12 rounded-xl bg-white/22" />
+        <span className="h-12 rounded-xl bg-white/10" />
+      </div>
+    </div>
   );
 }
