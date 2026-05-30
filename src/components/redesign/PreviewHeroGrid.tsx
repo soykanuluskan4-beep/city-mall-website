@@ -254,9 +254,6 @@ export function PreviewHeroGrid({ locale }: PreviewHeroGridProps) {
       <div className="container">
         <div className="mb-7 grid gap-5 lg:grid-cols-[1fr_auto] lg:items-end">
           <div>
-            <p className="inline-flex rounded-full border border-border-default bg-white/70 px-4 py-2 text-xs font-semibold uppercase tracking-[0.25em] text-text-muted shadow-card backdrop-blur">
-              {copy.eyebrow}
-            </p>
 
             <h1 className="mt-5 max-w-5xl text-4xl font-semibold tracking-tight text-text-primary md:text-6xl lg:text-7xl">
               {copy.title}

@@ -1,3 +1,4 @@
+import { Outfit } from "next/font/google";
 import { ExploreCityMall } from "@/components/redesign/ExploreCityMall";
 import { LiveEventsCarousel } from "@/components/redesign/LiveEventsCarousel";
 import { PlanVisitBento } from "@/components/redesign/PlanVisitBento";
@@ -8,6 +9,12 @@ import { PreviewVideoHero } from "@/components/redesign/PreviewVideoHero";
 import { StoresBrandCarousel } from "@/components/redesign/StoresBrandCarousel";
 import type { Locale } from "@/types/content";
 
+
+const outfit = Outfit({
+  subsets: ["latin"],
+  weight: ["400", "500", "600", "700", "800"],
+  display: "swap",
+});
 type RedesignPreviewClientProps = {
   locale: Locale;
 };
@@ -16,7 +23,7 @@ export function RedesignPreviewClient({
   locale,
 }: RedesignPreviewClientProps) {
   return (
-    <div className="redesign-preview-root [&~footer]:hidden">
+    <div className={`redesign-preview-root [&~footer]:hidden ${outfit.className}`}>
       <style>{`
   body:has(.redesign-preview-root) header:not(.preview-navbar) {
     display: none !important;

@@ -199,7 +199,7 @@ export function PreviewFooter({ locale }: PreviewFooterProps) {
                     key={item.label}
                     href={`/${locale}/contact`}
                     aria-label={item.label}
-                    className="preview-footer-social flex h-11 w-11 items-center justify-center rounded-full border border-white/10 bg-white/[0.06] text-white/74 transition hover:-translate-y-1 hover:border-white/22 hover:bg-white/[0.12] hover:text-white hover:shadow-[0_0_28px_rgba(255,255,255,0.12)]"
+                    className="preview-footer-social flex h-11 w-11 items-center justify-center rounded-full border border-white/10 bg-white/[0.06] text-white/74 transition hover:-translate-y-1 hover:border-white/22 hover:bg-white/[0.12] hover:text-white hover:shadow-[0_0_28px_rgba(232,49,42,0.22)]"
                   >
                     <Icon className="h-5 w-5" />
                   </Link>
@@ -259,8 +259,7 @@ export function PreviewFooter({ locale }: PreviewFooterProps) {
 
                 <button
                   type="submit"
-                  className="inline-flex shrink-0 items-center justify-center rounded-full bg-white px-5 py-3 text-sm font-semibold text-text-primary transition hover:bg-surface-muted"
-                >
+                  className="inline-flex shrink-0 items-center justify-center rounded-full bg-[#FFD100] px-5 py-3 text-sm font-semibold text-black transition hover:bg-[#F7941D]"                >
                   <span className="hidden sm:inline">{copy.newsletterButton}</span>
                   <ArrowRight className="h-4 w-4 sm:ml-2" aria-hidden="true" />
                 </button>

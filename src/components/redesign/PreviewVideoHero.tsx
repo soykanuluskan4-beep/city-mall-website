@@ -13,7 +13,6 @@ type PreviewVideoHeroProps = {
 
 const content = {
   tr: {
-    eyebrow: "Cinematic Mall Experience",
     title: "Gazimağusa'nın buluşma noktası.",
     description:
       "Alışveriş, lezzet, sinema ve deneyimi tek noktada keşfet.",
@@ -22,7 +21,6 @@ const content = {
     scroll: "Keşfet",
   },
   en: {
-    eyebrow: "Cinematic Mall Experience",
     title: "Famagusta's meeting point.",
     description:
       "Discover shopping, dining, cinema and experiences in one destination.",
@@ -151,22 +149,17 @@ export function PreviewVideoHero({ locale }: PreviewVideoHeroProps) {
       <div className="container relative flex min-h-[100svh] flex-col">
         <div className="flex flex-1 items-end pb-16 pt-32 md:pb-20 lg:pb-24">
           <div className="max-w-6xl">
-            <p className="preview-video-hero-copy inline-flex rounded-full border border-white/18 bg-white/10 px-4 py-2 text-xs font-semibold uppercase tracking-[0.26em] text-white/76 backdrop-blur-md [animation:heroCopyReveal_850ms_cubic-bezier(0.22,1,0.36,1)_120ms_both]">
-              {copy.eyebrow}
-            </p>
+            
 
-            <h1 className="preview-video-hero-copy mt-6 max-w-[12ch] text-[clamp(3rem,7.6vw,7.4rem)] font-semibold leading-[0.9] tracking-[-0.055em] text-white [animation:heroCopyReveal_950ms_cubic-bezier(0.22,1,0.36,1)_220ms_both]">
+            <h1 className="preview-video-hero-copy mt-0 max-w-[12ch] text-[clamp(3rem,7.6vw,7.4rem)] font-semibold leading-[0.9] tracking-[-0.055em] text-white [animation:heroCopyReveal_950ms_cubic-bezier(0.22,1,0.36,1)_220ms_both]">
               {copy.title}
             </h1>
 
-            <p className="preview-video-hero-copy mt-7 max-w-2xl text-base leading-8 text-white/82 md:text-xl [animation:heroCopyReveal_950ms_cubic-bezier(0.22,1,0.36,1)_320ms_both]">
-              {copy.description}
-            </p>
 
             <div className="preview-video-hero-cta mt-9 flex flex-col gap-3 sm:flex-row [animation:heroCopyReveal_950ms_cubic-bezier(0.22,1,0.36,1)_420ms_both]">
               <Link
                 href={`/${locale}/stores`}
-                className="inline-flex items-center justify-center gap-2 rounded-full bg-white px-7 py-4 text-sm font-semibold text-text-primary shadow-overlay transition hover:-translate-y-0.5 hover:bg-surface-muted"
+                className="inline-flex items-center justify-center gap-2 rounded-full bg-[#FFD100] px-7 py-4 text-sm font-semibold text-black shadow-overlay transition hover:-translate-y-0.5 hover:bg-[#F7941D]"
               >
                 {copy.primaryCta}
                 <ArrowRight className="h-4 w-4" aria-hidden="true" />

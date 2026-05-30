@@ -160,13 +160,24 @@ const floorBlocks: Record<FloorKey, FloorBlock[]> = {
 };
 
 const typeStyles: Record<FloorBlock["type"], string> = {
-  fashion: "border-slate-900/10 bg-slate-900 text-white",
-  dining: "border-amber-500/20 bg-amber-200 text-amber-950",
-  cinema: "border-indigo-500/20 bg-indigo-950 text-white",
-  kids: "border-sky-500/20 bg-sky-200 text-sky-950",
-  service: "border-white/70 bg-white text-text-primary",
-  parking: "border-emerald-500/20 bg-emerald-200 text-emerald-950",
+  fashion: "border-[#EC008C]/25 bg-[#EC008C] text-white",
+  dining: "border-[#F7941D]/25 bg-[#F7941D] text-black",
+  cinema: "border-[#0072BC]/25 bg-[#0072BC] text-white",
+  kids: "border-[#FFD100]/30 bg-[#FFD100] text-black",
+  service: "border-[#39B54A]/25 bg-[#39B54A] text-white",
+  parking: "border-[#0072BC]/25 bg-[#0072BC] text-white",
 };
+
+const serviceColorClasses = [
+  "bg-[#E8312A] text-white",
+  "bg-[#0072BC] text-white",
+  "bg-[#EC008C] text-white",
+  "bg-[#39B54A] text-white",
+  "bg-[#F7941D] text-black",
+  "bg-[#FFD100] text-black",
+  "bg-[#0072BC] text-white",
+  "bg-[#EC008C] text-white",
+];
 
 const typeIcons: Record<FloorBlock["type"], LucideIcon> = {
   fashion: ShoppingBag,
@@ -604,15 +615,19 @@ function ServicesCard({
       </div>
 
       <div className="grid grid-cols-2 gap-3 sm:grid-cols-4 lg:grid-cols-2">
-        {services.map((service) => {
+        {services.map((service, index) => {
           const Icon = service.icon;
+          const colorClass =
+            serviceColorClasses[index % serviceColorClasses.length];
 
           return (
             <div
               key={service.label}
               className="service-item group rounded-2xl border border-border-default bg-white p-4 shadow-card transition duration-300 hover:-translate-y-0.5 hover:bg-surface-muted hover:shadow-[0_18px_44px_rgba(15,23,42,0.12)]"
             >
-              <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-text-primary text-white transition duration-300 group-hover:scale-105">
+              <div
+                className={`flex h-11 w-11 items-center justify-center rounded-2xl transition duration-300 group-hover:scale-105 group-hover:shadow-[0_0_28px_rgba(0,0,0,0.16)] ${colorClass}`}
+              >
                 <Icon className="h-5 w-5" aria-hidden="true" />
               </div>
 

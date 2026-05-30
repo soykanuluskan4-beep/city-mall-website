@@ -146,8 +146,7 @@ export function PreviewNavbar({ locale }: PreviewNavbarProps) {
       <header
         className={`preview-navbar fixed inset-x-0 top-0 z-[100] transition-all duration-300 ${
           isScrolled || isMenuOpen
-            ? "border-b border-white/10 bg-[#0f0f10]/85 shadow-[0_20px_70px_rgba(0,0,0,0.22)] backdrop-blur-xl"
-            : "border-b border-transparent bg-transparent"
+        ? "border-b border-[#E8312A]/35 bg-[#0f0f10]/88 shadow-[0_20px_70px_rgba(232,49,42,0.18)] backdrop-blur-xl"            : "border-b border-transparent bg-transparent"
         }`}
       >
         <style>{`
@@ -210,7 +209,7 @@ export function PreviewNavbar({ locale }: PreviewNavbarProps) {
                 >
                   {copy.links[item.key]}
                   <span
-                    className={`absolute -bottom-2 left-0 h-px bg-white/80 transition-all duration-300 ${
+                    className={`absolute -bottom-2 left-0 h-px bg-[#E8312A] transition-all duration-300 ${
                       isActive ? "w-full" : "w-0 group-hover:w-full"
                     }`}
                   />
@@ -257,7 +256,7 @@ export function PreviewNavbar({ locale }: PreviewNavbarProps) {
 
             <Link
               href={`/${locale}/map`}
-              className="hidden rounded-full border border-white/24 bg-white/8 px-5 py-3 text-sm font-semibold text-white backdrop-blur-md transition hover:-translate-y-0.5 hover:bg-white hover:text-text-primary xl:inline-flex"
+              className="hidden whitespace-nowrap rounded-full border border-[#FFD100]/55 bg-white/10 px-5 py-3 text-sm font-semibold text-white backdrop-blur-md transition hover:-translate-y-0.5 hover:bg-[#FFD100] hover:text-black xl:inline-flex"
             >
               {copy.cta}
             </Link>

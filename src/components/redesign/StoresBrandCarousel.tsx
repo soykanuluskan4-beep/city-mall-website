@@ -6,8 +6,6 @@ import Link from "next/link";
 import {
   ArrowRight,
   ArrowUpRight,
-  BadgePercent,
-  ShoppingBag,
   Sparkles,
 } from "lucide-react";
 import { useRef } from "react";
@@ -273,10 +271,6 @@ export function StoresBrandCarousel({ locale }: StoresBrandCarouselProps) {
 
         <div className="mb-12 mt-20 grid gap-7 lg:grid-cols-[1fr_auto] lg:items-end">
           <div>
-            <p className="mb-4 inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.28em] text-text-muted">
-              <ShoppingBag className="h-4 w-4" aria-hidden="true" />
-              {copy.eyebrow}
-            </p>
 
             <h2 className="max-w-3xl text-4xl font-semibold leading-[0.98] tracking-tight text-text-primary md:text-6xl">
               {copy.title}
@@ -328,10 +322,6 @@ function OffersPromotionBlock({
   return (
     <div className="grid gap-10 lg:grid-cols-[0.92fr_1.08fr] lg:items-center">
       <div>
-        <p className="mb-4 inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.28em] text-text-muted">
-          <BadgePercent className="h-4 w-4" aria-hidden="true" />
-          {copy.offers.eyebrow}
-        </p>
 
         <h2 className="max-w-3xl text-4xl font-semibold leading-[1.02] tracking-tight text-text-primary md:text-6xl">
           {copy.offers.title}
@@ -364,8 +354,7 @@ function OffersPromotionBlock({
         <div className="mt-8 flex flex-wrap gap-3">
           <Link
             href={`/${locale}/campaigns`}
-            className="inline-flex items-center justify-center rounded-full bg-text-primary px-6 py-3 text-sm font-semibold text-white shadow-card transition hover:-translate-y-0.5 hover:opacity-90"
-          >
+className="inline-flex items-center justify-center rounded-full bg-[#FFD100] px-6 py-3 text-sm font-semibold text-black shadow-card transition hover:-translate-y-0.5 hover:bg-[#F7941D]"          >
             {copy.offers.primaryCta}
           </Link>
 
