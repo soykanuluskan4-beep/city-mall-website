@@ -5,6 +5,7 @@
 import Link from "next/link";
 import { ArrowRight, Search, X } from "lucide-react";
 import { useEffect, useMemo, useRef, useState } from "react";
+import type { MutableRefObject } from "react";
 import type { Locale } from "@/types/content";
 
 declare global {
@@ -17,7 +18,13 @@ type FloorMap3DProps = {
   locale: Locale;
 };
 
+type FloorKey = "basement" | "ground" | "first" | "second";
+type EscalatorFloorKey = FloorKey;
+
 type Category =
+  | "fashion"
+  | "sport"
+  | "home"
   | "market"
   | "entertainment"
   | "food"
@@ -26,10 +33,12 @@ type Category =
   | "service"
   | "parking"
   | "closed"
-  | "home";
+  | "entrance"
+  | "cashier";
 
-type BasementBlock = {
+type FloorBlock = {
   id: string;
+  floor: FloorKey;
   name: string;
   category: Category;
   x: number;
@@ -50,6 +59,7 @@ type BasementBlock = {
 type SceneApi = {
   applySearch: (query: string, matchIds: Set<string>) => void;
   focusBlock: (id: string | null) => void;
+  setActiveFloor: (floor: FloorKey) => void;
 };
 
 const THREE_CDN_URL =
@@ -57,20 +67,60 @@ const THREE_CDN_URL =
 
 const PLAN_WIDTH = 46;
 const PLAN_DEPTH = 62;
+const TH = 0.45;
+
+const FLOOR_Y: Record<FloorKey, number> = {
+  basement: 0,
+  ground: 5.6,
+  first: 11.2,
+  second: 16.8,
+};
+
+// Zemin kattaki siyah çizgili atrium çerçevesi.
+// Boşluk artık vezneye kaymayacak: siyah dikdörtgenin SADECE içi kesiliyor.
+const GROUND_ATRIUM = {
+  left: 33.45,
+  top: 24.3,
+  width: 33.55,
+  depth: 35.1,
+};
+
+const FIRST_ATRIUMS = [
+  { left: 33.2, top: 28.8, width: 34.0, depth: 13.0 },
+  { left: 33.2, top: 48.0, width: 34.0, depth: 12.2 },
+  { left: 33.2, top: 67.0, width: 34.0, depth: 16.0 },
+];
+
+const FIRST_ATRIUM_INSET = 0.65;
+
+const SECOND_ATRIUMS = [
+  { left: 33.2, top: 30.0, width: 34.0, depth: 24.0 },
+  { left: 33.2, top: 59.4, width: 34.0, depth: 24.0 },
+];
+
+const SECOND_ATRIUM_INSET = 0.65;
+
+// Siyah çerçevenin kalınlığı. Bu değer sayesinde çerçeve zeminde kalır,
+// sadece çerçevenin içindeki alan boşluk olur.
+const ATRIUM_INSET = 0.55;
 
 const COLORS: Record<Category, string> = {
+  fashion: "#E8312A",
   market: "#39B54A",
   entertainment: "#FFD100",
+  sport: "#39B54A",
+  home: "#F7941D",
   food: "#F7941D",
   technology: "#0072BC",
   beauty: "#EC008C",
   service: "#6B6256",
   parking: "#2a2a2a",
   closed: "#444444",
-  home: "#F7941D",
+  entrance: "#2a2a2a",
+  cashier: "#888888",
 };
 
-const BLOCK_VISUAL_COLORS = [
+const BASEMENT_VISUAL_COLORS = [
   "#E8312A",
   "#F7941D",
   "#FFD100",
@@ -91,18 +141,13 @@ const BLOCK_VISUAL_COLORS = [
   "#92400E",
   "#BE185D",
   "#6B6256",
-  "#2A2A2A",
-  "#444444",
 ];
 
-const CATEGORY_LABELS: Record<
-  Category,
-  {
-    tr: string;
-    en: string;
-  }
-> = {
+const CATEGORY_LABELS: Record<Category, { tr: string; en: string }> = {
+  fashion: { tr: "Moda", en: "Fashion" },
   market: { tr: "Market", en: "Market" },
+  sport: { tr: "Spor", en: "Sport" },
+  home: { tr: "Ev & Yaşam", en: "Home & Living" },
   entertainment: { tr: "Eğlence", en: "Entertainment" },
   food: { tr: "Yeme-İçme", en: "Food & Dining" },
   technology: { tr: "Teknoloji", en: "Technology" },
@@ -110,13 +155,20 @@ const CATEGORY_LABELS: Record<
   service: { tr: "Hizmet", en: "Service" },
   parking: { tr: "Otopark", en: "Parking" },
   closed: { tr: "Kapalı", en: "Closed" },
-  home: { tr: "Ev & Yaşam", en: "Home & Living" },
+  entrance: { tr: "Giriş", en: "Entrance" },
+  cashier: { tr: "Vezne", en: "Cashier" },
+};
+
+const FLOOR_LABELS: Record<FloorKey, { tr: string; en: string }> = {
+  basement: { tr: "-1. Kat", en: "Basement" },
+  ground: { tr: "Zemin Kat", en: "Ground Floor" },
+  first: { tr: "1. Kat", en: "First Floor" },
+  second: { tr: "2. Kat", en: "Second Floor" },
 };
 
 const copy = {
   tr: {
     title: "CityMall · Kat Rehberi",
-    subtitle: "-1. Kat",
     searchPlaceholder: "Mağaza ara...",
     noResult: "Bulunamadı",
     result: "sonuç",
@@ -125,10 +177,15 @@ const copy = {
     viewStores: "Mağazaları Gör",
     close: "Kapat",
     loading: "3B kat planı hazırlanıyor...",
+    floors: {
+  basement: "-1",
+  ground: "Zemin",
+  first: "1. Kat",
+  second: "2. Kat",
+},
   },
   en: {
     title: "CityMall · Floor Guide",
-    subtitle: "Basement Floor",
     searchPlaceholder: "Search stores...",
     noResult: "No results",
     result: "result",
@@ -137,10 +194,17 @@ const copy = {
     viewStores: "View Stores",
     close: "Close",
     loading: "Preparing 3D floor guide...",
+    floors: {
+  basement: "B1",
+  ground: "Ground",
+  first: "1st",
+  second: "2nd",
+},
   },
 };
 
 function makeBlock(
+  floor: FloorKey,
   id: string,
   name: string,
   category: Category,
@@ -149,14 +213,23 @@ function makeBlock(
   width: number,
   depth: number,
   options?: Partial<
-    Pick<BasementBlock, "clickable" | "opacity" | "height" | "description" | "route">
+    Pick<
+      FloorBlock,
+      | "clickable"
+      | "opacity"
+      | "height"
+      | "description"
+      | "route"
+      | "visualColor"
+    >
   >
-): BasementBlock {
+): FloorBlock {
   const x = ((left + width / 2) / 100 - 0.5) * PLAN_WIDTH;
   const z = ((top + depth / 2) / 100 - 0.5) * PLAN_DEPTH;
 
   return {
     id,
+    floor,
     name,
     category,
     x,
@@ -167,104 +240,174 @@ function makeBlock(
     clickable: options?.clickable ?? true,
     opacity: options?.opacity,
     route: options?.route,
+    visualColor: options?.visualColor,
     description:
       options?.description ??
       {
-        tr: `${name}, CityMall -1. katta yer alıyor.`,
-        en: `${name} is located on CityMall basement floor.`,
+        tr: `${name}, CityMall ${FLOOR_LABELS[floor].tr} içinde yer alıyor.`,
+        en: `${name} is located on CityMall ${FLOOR_LABELS[floor].en}.`,
       },
   };
 }
 
-const BASEMENT_BLOCKS: BasementBlock[] = [
-  makeBlock("unimar-top", "Ünimar", "service", 0, 0, 28.5, 6.3, {
-    route: "/stores",
-  }),
-  makeBlock("sconto", "Sconto Super Store", "service", 28.5, 0, 71.5, 12.5, {
-    route: "/stores",
-  }),
+function rectEdges(left: number, top: number, width: number, depth: number) {
+  return {
+    x1: (left / 100 - 0.5) * PLAN_WIDTH,
+    x2: ((left + width) / 100 - 0.5) * PLAN_WIDTH,
+    z1: (top / 100 - 0.5) * PLAN_DEPTH,
+    z2: ((top + depth) / 100 - 0.5) * PLAN_DEPTH,
+  };
+}
 
-  makeBlock("unimar-left", "Ünimar", "service", 0, 6.3, 8.1, 15.6, {
-    route: "/stores",
-  }),
-  makeBlock("jupiter", "Jupiter", "technology", 0, 21.9, 8.1, 9.3, {
-    route: "/stores",
-  }),
-  makeBlock("toyzz-shop", "Toyzz Shop", "entertainment", 0, 31.2, 8.1, 13.7, {
+function percentToWorld(left: number, top: number) {
+  return {
+    x: (left / 100 - 0.5) * PLAN_WIDTH,
+    z: (top / 100 - 0.5) * PLAN_DEPTH,
+  };
+}
+
+function getGroundAtriumOuter() {
+  return rectEdges(
+    GROUND_ATRIUM.left,
+    GROUND_ATRIUM.top,
+    GROUND_ATRIUM.width,
+    GROUND_ATRIUM.depth
+  );
+}
+
+function getGroundVoid() {
+  const outer = getGroundAtriumOuter();
+
+  return {
+    x1: outer.x1 + ATRIUM_INSET,
+    x2: outer.x2 - ATRIUM_INSET,
+    z1: outer.z1 + ATRIUM_INSET,
+    z2: outer.z2 - ATRIUM_INSET,
+  };
+}
+
+function getGroundEscalatorAnchors() {
+  return {
+    // Sol çift daha sola alındı; -1 kattaki Oyun Alanı'nın içine girmesin.
+    leftTop: percentToWorld(33.7, 30.5),
+    leftBottom: percentToWorld(33.7, 54.5),
+
+    // Sağ çift siyah atrium dikdörtgeninin sağ iç tarafında kalır.
+    rightTop: percentToWorld(63.0, 30.5),
+    rightBottom: percentToWorld(63.0, 54.5),
+  };
+}
+
+function getFirstFloorEscalatorAnchors() {
+  return {
+    leftBottom: percentToWorld(14.8, 75.0),
+    rightBottom: percentToWorld(91.4, 75.8),
+  };
+}
+
+const RAW_BASEMENT_BLOCKS: FloorBlock[] = [
+  makeBlock("basement", "b-unimar-top", "Ünimar", "service", 0, 0, 28.5, 6.3),
+  makeBlock(
+    "basement",
+    "b-sconto",
+    "Sconto Super Store",
+    "service",
+    28.5,
+    0,
+    71.5,
+    12.5
+  ),
+  makeBlock("basement", "b-unimar-left", "Ünimar", "service", 0, 6.3, 8.1, 15.6),
+  makeBlock("basement", "b-jupiter", "Jupiter", "technology", 0, 21.9, 8.1, 9.3),
+  makeBlock("basement", "b-toyzz-shop", "Toyzz Shop", "entertainment", 0, 31.2, 8.1, 13.7, {
     route: "/kids",
   }),
-  makeBlock("chicco", "Chicco", "market", 0, 52.0, 8.1, 9.5, {
-    route: "/stores",
-  }),
-  makeBlock("techno-life", "Techno Life", "technology", 0, 61.5, 8.1, 26.3, {
-    route: "/stores",
-  }),
-  makeBlock("closed-left", "Closed", "closed", 0, 87.8, 18.2, 12.2, {
+  makeBlock("basement", "b-chicco", "Chicco", "market", 0, 52.0, 8.1, 9.5),
+  makeBlock("basement", "b-techno-life", "Techno Life", "technology", 0, 61.5, 8.1, 26.3),
+  makeBlock("basement", "b-closed-left", "Closed", "closed", 0, 87.8, 18.2, 12.2, {
     clickable: false,
     opacity: 0.4,
     height: 1.2,
-    description: {
-      tr: "Kapalı alan.",
-      en: "Closed area.",
-    },
   }),
-
-  makeBlock("toilet-stairs", "Tuvalet ve Merdiven", "service", 90.6, 14.4, 9.4, 5.0, {
-    clickable: false,
-    opacity: 0.55,
-    height: 1.4,
-    description: {
-      tr: "Tuvalet ve merdiven alanı.",
-      en: "Toilet and stairs area.",
-    },
-  }),
-  makeBlock("ates-kuruyemis", "Ateş Kuruyemiş", "food", 90.6, 19.4, 9.4, 7.1, {
+  makeBlock(
+    "basement",
+    "b-toilet-stairs",
+    "Tuvalet ve Merdiven",
+    "service",
+    90.6,
+    14.4,
+    9.4,
+    5.0,
+    {
+      clickable: false,
+      opacity: 0.55,
+      height: 1.4,
+    }
+  ),
+  makeBlock("basement", "b-ates-kuruyemis", "Ateş Kuruyemiş", "food", 90.6, 19.4, 9.4, 7.1, {
     route: "/dining",
   }),
-  makeBlock("lokmazade", "Lokmazade", "food", 90.6, 26.5, 9.4, 7.3, {
+  makeBlock("basement", "b-lokmazade", "Lokmazade", "food", 90.6, 26.5, 9.4, 7.3, {
     route: "/dining",
   }),
-  makeBlock("tatliaci-cigkofte", "Tatlıacı Çiğköfte", "food", 90.6, 33.8, 9.4, 7.4, {
-    route: "/dining",
-  }),
-  makeBlock("en-zirve", "En Zirve Beauty Center", "beauty", 90.6, 41.2, 9.4, 10.6, {
-    route: "/stores",
-  }),
-  makeBlock("atom-master-cafe", "Atom Master Cafe", "food", 84.9, 51.8, 15.1, 15.0, {
-    route: "/dining",
-  }),
-  makeBlock("nxg-computer", "NXG Computer", "technology", 84.9, 66.8, 15.1, 7.5, {
-    route: "/stores",
-  }),
-  makeBlock("closed-right", "Closed", "closed", 84.9, 74.3, 15.1, 7.3, {
+  makeBlock(
+    "basement",
+    "b-tatliaci-cigkofte",
+    "Tatlıacı Çiğköfte",
+    "food",
+    90.6,
+    33.8,
+    9.4,
+    7.4,
+    {
+      route: "/dining",
+    }
+  ),
+  makeBlock("basement", "b-en-zirve", "En Zirve Beauty Center", "beauty", 90.6, 41.2, 9.4, 10.6),
+  makeBlock(
+    "basement",
+    "b-atom-master-cafe",
+    "Atom Master Cafe",
+    "food",
+    84.9,
+    51.8,
+    15.1,
+    15.0,
+    {
+      route: "/dining",
+    }
+  ),
+  makeBlock("basement", "b-nxg-computer", "NXG Computer", "technology", 84.9, 66.8, 15.1, 7.5),
+  makeBlock("basement", "b-closed-right", "Closed", "closed", 84.9, 74.3, 15.1, 7.3, {
     clickable: false,
     opacity: 0.4,
     height: 1.2,
-    description: {
-      tr: "Kapalı alan.",
-      en: "Closed area.",
-    },
   }),
-  makeBlock("city-barber", "City Barber Shop", "service", 84.9, 81.6, 15.1, 7.2, {
-    route: "/stores",
-  }),
-  makeBlock("edera", "Edera Accessories", "beauty", 79.2, 88.8, 20.8, 11.2, {
-    route: "/stores",
-  }),
-
-  makeBlock("playground", "Oyun Alanı", "entertainment", 39.0, 28.8, 22.0, 22.8, {
-    route: "/kids",
-    height: 2.1,
-    description: {
-      tr: "Çocuklar ve aileler için eğlence alanı.",
-      en: "Entertainment area for children and families.",
-    },
-  }),
-  makeBlock("candy-shop", "Candy Shop", "food", 39.1, 53.2, 5.2, 4.2, {
+  makeBlock("basement", "b-city-barber", "City Barber Shop", "service", 84.9, 81.6, 15.1, 7.2),
+  makeBlock("basement", "b-edera", "Edera Accessories", "beauty", 79.2, 88.8, 20.8, 11.2),
+  makeBlock(
+    "basement",
+    "b-playground",
+    "Oyun Alanı",
+    "entertainment",
+    39.0,
+    28.8,
+    22.0,
+    22.8,
+    {
+      route: "/kids",
+      height: 2.1,
+      description: {
+        tr: "Çocuklar ve aileler için eğlence alanı.",
+        en: "Entertainment area for children and families.",
+      },
+    }
+  ),
+  makeBlock("basement", "b-candy-shop", "Candy Shop", "food", 39.1, 53.2, 5.2, 4.2, {
     route: "/dining",
     height: 2.0,
   }),
-  makeBlock("mini-golf", "Mini Golf", "entertainment", 39.2, 63.3, 22.2, 18.8, {
+  makeBlock("basement", "b-mini-golf", "Mini Golf", "entertainment", 39.2, 63.3, 22.2, 18.8, {
     route: "/kids",
     height: 2.1,
     description: {
@@ -272,19 +415,256 @@ const BASEMENT_BLOCKS: BasementBlock[] = [
       en: "Mini golf and entertainment experience.",
     },
   }),
-  makeBlock("parking", "Kapalı Otopark", "parking", 19.2, 94.4, 58.0, 5.6, {
+  makeBlock("basement", "b-parking", "Kapalı Otopark", "parking", 19.2, 94.4, 58.0, 5.6, {
     clickable: false,
     opacity: 0.9,
     height: 0.75,
-    description: {
-      tr: "Kapalı otopark alanı.",
-      en: "Indoor parking area.",
-    },
   }),
-].map((block, index) => ({
-  ...block,
-  visualColor: BLOCK_VISUAL_COLORS[index % BLOCK_VISUAL_COLORS.length],
-}));
+];
+
+const BASEMENT_BLOCKS = RAW_BASEMENT_BLOCKS.map((block, index) => {
+  if (block.category === "closed" || block.category === "parking") {
+    return block;
+  }
+
+  return {
+    ...block,
+    visualColor: BASEMENT_VISUAL_COLORS[index % BASEMENT_VISUAL_COLORS.length],
+  };
+});
+
+const GROUND_BLOCKS: FloorBlock[] = [
+  makeBlock("ground", "g-lc-waikiki", "LC Waikiki", "fashion", 0, 0, 33.0, 13.6),
+  makeBlock("ground", "g-defacto", "Defacto", "fashion", 33.0, 0, 34.0, 4.5, {
+    visualColor: "#9bbac2",
+  }),
+  makeBlock("ground", "g-flo", "FLO", "fashion", 67.0, 0, 33.0, 13.6, {
+    visualColor: "#ff8a45",
+  }),
+  makeBlock("ground", "g-jakamen", "Jakamen", "fashion", 0, 13.6, 5.8, 9.8),
+  makeBlock("ground", "g-pierre-cardin", "Pierre Cardin", "fashion", 0, 23.4, 5.8, 8.4),
+  makeBlock("ground", "g-avva", "Avva", "fashion", 0, 31.8, 5.8, 8.0, {
+    visualColor: "#8dbdf2",
+  }),
+  makeBlock("ground", "g-dogo", "Dogo", "fashion", 0, 39.8, 5.8, 5.6, {
+    visualColor: "#ffe45c",
+  }),
+  makeBlock("ground", "g-left-stairs", "Merdiven", "service", 0, 45.4, 5.8, 4.6, {
+    clickable: false,
+    opacity: 0.55,
+    height: 1.15,
+    visualColor: "#5b18e8",
+  }),
+  makeBlock("ground", "g-us-polo", "U.S Polo Assn.", "fashion", 0, 50.0, 5.8, 11.3, {
+    visualColor: "#928c00",
+  }),
+  makeBlock("ground", "g-desa", "Desa", "fashion", 0, 61.3, 11.7, 9.1, {
+    visualColor: "#8b3500",
+  }),
+  makeBlock("ground", "g-ipekyol", "İpekyol", "fashion", 0, 70.4, 11.7, 10.9, {
+    visualColor: "#5a5a5a",
+  }),
+  makeBlock("ground", "g-tavuk-dunyasi", "Tavuk Dünyası", "food", 0, 81.3, 11.7, 18.7, {
+    route: "/dining",
+    visualColor: "#ffc35a",
+  }),
+  makeBlock("ground", "g-mert-optik", "Mert Optik", "service", 90.6, 13.6, 9.4, 13.5, {
+    visualColor: "#d1d1d1",
+  }),
+  makeBlock("ground", "g-stairs-wc", "Merdiven ve WC", "service", 91.7, 27.2, 8.3, 4.6, {
+    clickable: false,
+    opacity: 0.55,
+    height: 1.2,
+    visualColor: "#5b18e8",
+  }),
+  makeBlock("ground", "g-altinbas", "Altınbaş", "service", 90.6, 31.8, 9.4, 8.7, {
+    visualColor: "#5aa0f0",
+  }),
+  makeBlock("ground", "g-old-plane", "Old Plane Bistro", "food", 90.6, 40.5, 9.4, 11.4, {
+    route: "/dining",
+    visualColor: "#d7d7d7",
+  }),
+  makeBlock("ground", "g-basman-plus", "Başman Plus", "service", 89.4, 51.9, 10.6, 14.2, {
+    visualColor: "#b9ff64",
+  }),
+  makeBlock("ground", "g-twist", "Twist", "beauty", 89.4, 66.1, 10.6, 11.6, {
+    visualColor: "#f08acb",
+  }),
+  makeBlock("ground", "g-espresso-lab", "Espresso Lab", "food", 89.4, 77.7, 10.6, 22.3, {
+    route: "/dining",
+    visualColor: "#8f6f38",
+  }),
+  makeBlock("ground", "g-telsim", "Telsim", "service", 27.4, 91.2, 11.4, 8.8, {
+    visualColor: "#ff1111",
+  }),
+  makeBlock("ground", "g-entrance", "Giriş", "entrance", 38.9, 94.2, 22.2, 5.8, {
+    clickable: false,
+    opacity: 0.6,
+    height: 0.9,
+  }),
+  makeBlock("ground", "g-dp-parfumes", "D&P Parfumes", "beauty", 61.2, 91.2, 11.4, 8.8, {
+    visualColor: "#f45ec3",
+  }),
+  makeBlock("ground", "g-cashier", "Vezne", "cashier", 46.5, 60.3, 7.0, 3.0, {
+    clickable: false,
+    opacity: 0.5,
+    height: 0.9,
+  }),
+];
+
+const FIRST_BLOCKS: FloorBlock[] = [
+  makeBlock("first", "f-discounterra", "Discountterra", "fashion", 0, 0, 33.0, 13.6, {
+    visualColor: "#5b18e8",
+    route: "/stores",
+  }),
+  makeBlock("first", "f-index", "Index", "fashion", 33.0, 0, 34.0, 4.5, {
+  visualColor: "#6f9aa4",
+  route: "/stores",
+}),
+  makeBlock("first", "f-mudo", "Mudo Collection", "fashion", 67.0, 0, 33.0, 13.6, {
+    visualColor: "#ff8a45",
+    route: "/stores",
+  }),
+
+  makeBlock("first", "f-english-home", "English Home", "home", 0, 13.6, 5.8, 10.8, {
+    visualColor: "#222222",
+  }),
+  makeBlock("first", "f-under-armour", "Under Armour", "sport", 0, 24.4, 5.8, 10.4, {
+    visualColor: "#6B6256",
+  }),
+  makeBlock("first", "f-adidas", "Adidas", "sport", 0, 34.8, 5.8, 10.6, {
+    visualColor: "#8dbdf2",
+  }),
+  makeBlock("first", "f-left-stairs", "Merdiven", "service", 0, 45.4, 5.8, 5.0, {
+    clickable: false,
+    opacity: 0.55,
+    height: 1.15,
+    visualColor: "#5b18e8",
+  }),
+  makeBlock("first", "f-efor", "Efor", "fashion", 0, 50.4, 6.2, 10.1, {
+    visualColor: "#202020",
+  }),
+  makeBlock("first", "f-sport-soul", "Sport Soul", "sport", 0, 60.5, 6.2, 13.2, {
+    visualColor: "#FFD100",
+  }),
+
+  // PUMA görselde L formunda. İki blok tek mağaza gibi davranır.
+ makeBlock("first", "f-puma-main", "PUMA", "sport", 0, 74.0, 18.6, 14.8, {
+  visualColor: "#4b4b4b",
+}),
+  makeBlock("first", "f-section", "Section", "beauty", 90.6, 13.6, 9.4, 13.5, {
+  visualColor: "#9d9d9d",
+}),
+  makeBlock("first", "f-stairs-wc", "Merdiven ve WC", "service", 91.7, 27.2, 8.3, 4.6, {
+    clickable: false,
+    opacity: 0.55,
+    height: 1.15,
+    visualColor: "#5b18e8",
+  }),
+  makeBlock("first", "f-passion", "Passion", "fashion", 90.6, 31.8, 9.4, 11.2, {
+    visualColor: "#f21ca0",
+  }),
+  makeBlock("first", "f-sketchers", "Sketchers", "sport", 90.6, 43.0, 9.4, 11.8, {
+  visualColor: "#9a9a9a",
+}),
+  makeBlock("first", "f-saydam", "Saydam", "fashion", 90.6, 54.8, 9.4, 8.0, {
+  visualColor: "#d4b200",
+}),
+  makeBlock("first", "f-buff-bloom", "Buff & Bloom", "fashion", 94.0, 62.8, 6.0, 10.2, {
+  visualColor: "#2f2f2f",
+}),
+makeBlock("first", "f-colins", "COLIN'S", "service", 84.2, 75.2, 13.8, 18.8, {
+  visualColor: "#4E8F97",
+}),
+  makeBlock("first", "f-uso-parfume", "U.S.O Parfume", "beauty", 37.0, 44.8, 16.5, 2.4, {
+  height: 0.28,
+  visualColor: "#c90076",
+}),
+  makeBlock("first", "f-golden-rose", "Golden Rose", "beauty", 37.2, 63.2, 16.2, 2.4, {
+  height: 0.28,
+  visualColor: "#c90076",
+}),
+];
+
+const SECOND_BLOCKS: FloorBlock[] = [
+  // Üst kenar
+  makeBlock("second", "s-funlab-top", "FunLab", "entertainment", 0, 0, 46.5, 13.6, {
+    visualColor: "#5b18e8",
+    route: "/kids",
+  }),
+  makeBlock("second", "s-cinemall", "Cinemall", "entertainment", 46.5, 0, 53.5, 13.6, {
+    visualColor: "#ff8a45",
+    route: "/cinema",
+  }),
+
+  // Sol kenar
+  makeBlock("second", "s-funlab-side", "FunLab", "entertainment", 0, 13.6, 8.4, 30.8, {
+    visualColor: "#5b18e8",
+    route: "/kids",
+  }),
+  makeBlock("second", "s-left-stairs", "Merdiven", "service", 0, 44.4, 9.8, 5.2, {
+    clickable: false,
+    opacity: 0.45,
+    height: 1.1,
+    visualColor: "#5b18e8",
+  }),
+  makeBlock("second", "s-no33", "No 33 Limon Tantuni", "food", 0, 49.6, 9.8, 7.0, {
+    visualColor: "#3f3f3f",
+  }),
+  makeBlock("second", "s-orkide", "Orkide", "food", 0, 56.6, 9.8, 7.6, {
+    visualColor: "#d4b200",
+  }),
+  makeBlock("second", "s-sampi-pide", "Samp Pide", "food", 0, 64.2, 9.8, 7.8, {
+    visualColor: "#7fbf4d",
+  }),
+  makeBlock("second", "s-sultanahmet", "Sultanahmet Köftecisi", "food", 0, 72.0, 9.8, 10.8, {
+    visualColor: "#1f5d10",
+  }),
+
+  // Sağ kenar
+  makeBlock("second", "s-stairs-wc", "Merdiven ve WC", "service", 88.5, 22.6, 11.5, 5.8, {
+    clickable: false,
+    opacity: 0.45,
+    height: 1.1,
+    visualColor: "#888888",
+  }),
+  makeBlock("second", "s-pizza-ferro", "Pizza Ferro", "food", 87.8, 34.0, 12.2, 11.8, {
+    visualColor: "#efe9a4",
+  }),
+  makeBlock("second", "s-popeyes", "Popeyes", "food", 87.8, 45.8, 12.2, 11.8, {
+    visualColor: "#e9772f",
+  }),
+  makeBlock("second", "s-katsu", "Katsu Express", "food", 87.8, 57.6, 12.2, 11.8, {
+    visualColor: "#e91616",
+  }),
+  makeBlock("second", "s-burger-king", "Burger King", "food", 87.8, 69.4, 12.2, 12.0, {
+    visualColor: "#8b6435",
+  }),
+
+  // Alt kenar / dekoratif alanlar
+  makeBlock("second", "s-terrace-left", "Teras", "service", 0, 84.2, 3.8, 10.8, {
+    clickable: false,
+    opacity: 0.5,
+    height: 0.9,
+    visualColor: "#b3d9e8",
+  }),
+  makeBlock("second", "s-perks-up", "Perks Up", "food", 13.0, 89.0, 14.6, 11.0, {
+    visualColor: "#17201e",
+  }),
+  makeBlock("second", "s-terrace-right", "Teras", "service", 96.2, 84.2, 3.8, 10.8, {
+    clickable: false,
+    opacity: 0.5,
+    height: 0.9,
+    visualColor: "#b3d9e8",
+  }),
+];
+
+const FLOOR_BLOCKS: FloorBlock[] = [
+  ...BASEMENT_BLOCKS,
+  ...GROUND_BLOCKS,
+  ...FIRST_BLOCKS,
+  ...SECOND_BLOCKS,
+];
 
 function normalizeText(value: string) {
   return value
@@ -292,18 +672,23 @@ function normalizeText(value: string) {
     .replaceAll("ı", "i")
     .replaceAll("İ", "i")
     .normalize("NFD")
-    .replace(/[\u0300-\u036f]/g, "");
+    .replace(/[\u0300-\u036f]/g, "")
+    .trim();
 }
 
-function getContrastText(category: Category) {
-  return category === "entertainment" || category === "food" ? "text-black" : "text-white";
-}
-
-function getBlockColor(block: BasementBlock) {
+function getBlockColor(block: FloorBlock) {
   return block.visualColor ?? COLORS[block.category];
 }
 
-function getBlockHref(locale: Locale, block: BasementBlock) {
+function getContrastText(category: Category) {
+  return category === "entertainment" ||
+    category === "food" ||
+    category === "home"
+    ? "text-black"
+    : "text-white";
+}
+
+function getBlockHref(locale: Locale, block: FloorBlock) {
   return `/${locale}${block.route ?? "/stores"}`;
 }
 
@@ -347,15 +732,20 @@ export function FloorMap3D({ locale }: FloorMap3DProps) {
   const sceneApiRef = useRef<SceneApi | null>(null);
   const [isReady, setIsReady] = useState(false);
   const [loadError, setLoadError] = useState(false);
+  const [activeFloor, setActiveFloor] = useState<FloorKey>("basement");
   const [query, setQuery] = useState("");
   const [resultCount, setResultCount] = useState<number | null>(null);
-  const [hoveredBlock, setHoveredBlock] = useState<BasementBlock | null>(null);
-  const [selectedBlock, setSelectedBlock] = useState<BasementBlock | null>(null);
+  const [hoveredBlock, setHoveredBlock] = useState<FloorBlock | null>(null);
+  const [selectedBlock, setSelectedBlock] = useState<FloorBlock | null>(null);
 
   const clickableBlocks = useMemo(
-    () => BASEMENT_BLOCKS.filter((block) => block.clickable !== false),
+    () => FLOOR_BLOCKS.filter((block) => block.clickable !== false),
     []
   );
+
+  useEffect(() => {
+    sceneApiRef.current?.setActiveFloor(activeFloor);
+  }, [activeFloor]);
 
   useEffect(() => {
     const normalizedQuery = normalizeText(query.trim());
@@ -378,6 +768,8 @@ export function FloorMap3D({ locale }: FloorMap3DProps) {
     sceneApiRef.current?.applySearch(normalizedQuery, matchIds);
 
     if (matches[0]) {
+      setActiveFloor(matches[0].floor);
+      sceneApiRef.current?.setActiveFloor(matches[0].floor);
       sceneApiRef.current?.focusBlock(matches[0].id);
     }
   }, [query, clickableBlocks]);
@@ -427,7 +819,7 @@ export function FloorMap3D({ locale }: FloorMap3DProps) {
         <div className="flex items-start justify-between gap-4">
           <div>
             <p className="text-xs font-semibold uppercase tracking-[0.24em] text-white/52">
-              {text.subtitle}
+              {FLOOR_LABELS[activeFloor][locale]}
             </p>
             <h3 className="mt-1 text-lg font-semibold tracking-tight">
               {text.title}
@@ -435,8 +827,29 @@ export function FloorMap3D({ locale }: FloorMap3DProps) {
           </div>
 
           <span className="rounded-full bg-[#E8312A] px-3 py-1 text-xs font-semibold text-white">
-            -1
+            {text.floors[activeFloor]}
           </span>
+        </div>
+
+        <div className="mt-4 grid grid-cols-4 gap-2">
+          {(["basement", "ground", "first", "second"] as FloorKey[]).map((floor) => (
+            <button
+              key={floor}
+              type="button"
+              onClick={() => {
+                setActiveFloor(floor);
+                sceneApiRef.current?.setActiveFloor(floor);
+                sceneApiRef.current?.focusBlock(null);
+              }}
+              className={`rounded-full px-4 py-2 text-xs font-semibold transition ${
+                activeFloor === floor
+                  ? "bg-[#E8312A] text-white"
+                  : "border border-white/14 bg-white/10 text-white/68 hover:bg-white/16 hover:text-white"
+              }`}
+            >
+              {text.floors[floor]}
+            </button>
+          ))}
         </div>
 
         <label className="mt-4 flex items-center gap-2 rounded-full border border-white/14 bg-white/10 px-4 py-3 text-sm text-white/80">
@@ -472,7 +885,8 @@ export function FloorMap3D({ locale }: FloorMap3DProps) {
         <div className="pointer-events-none absolute bottom-4 left-4 z-20 hidden rounded-2xl border border-white/14 bg-black/50 px-4 py-3 text-white shadow-[0_18px_54px_rgba(0,0,0,0.26)] backdrop-blur-xl md:block">
           <p className="text-sm font-semibold">{hoveredBlock.name}</p>
           <p className="mt-1 text-xs text-white/52">
-            {CATEGORY_LABELS[hoveredBlock.category][locale]}
+            {CATEGORY_LABELS[hoveredBlock.category][locale]} ·{" "}
+            {FLOOR_LABELS[hoveredBlock.floor][locale]}
           </p>
         </div>
       ) : null}
@@ -492,7 +906,7 @@ export function FloorMap3D({ locale }: FloorMap3DProps) {
                   className={`inline-flex rounded-full px-3 py-1 text-xs font-semibold ${getContrastText(
                     selectedBlock.category
                   )}`}
-                  style={{ backgroundColor: COLORS[selectedBlock.category] }}
+                  style={{ backgroundColor: getBlockColor(selectedBlock) }}
                 >
                   {CATEGORY_LABELS[selectedBlock.category][locale]}
                 </span>
@@ -516,7 +930,9 @@ export function FloorMap3D({ locale }: FloorMap3DProps) {
               <p className="text-xs font-semibold uppercase tracking-[0.22em] text-white/42">
                 {text.floor}
               </p>
-              <p className="mt-1 text-base font-semibold">-1. Kat</p>
+              <p className="mt-1 text-base font-semibold">
+                {FLOOR_LABELS[selectedBlock.floor][locale]}
+              </p>
             </div>
 
             <p className="mt-5 text-sm leading-7 text-white/68">
@@ -563,17 +979,17 @@ function initScene({
 }: {
   THREE: any;
   container: HTMLDivElement;
-  sceneApiRef: React.MutableRefObject<SceneApi | null>;
-  setHoveredBlock: (block: BasementBlock | null) => void;
-  setSelectedBlock: (block: BasementBlock | null) => void;
+  sceneApiRef: MutableRefObject<SceneApi | null>;
+  setHoveredBlock: (block: FloorBlock | null) => void;
+  setSelectedBlock: (block: FloorBlock | null) => void;
   setIsReady: (value: boolean) => void;
 }) {
   const scene = new THREE.Scene();
 
   scene.background = new THREE.Color("#0f0f10");
-  scene.fog = new THREE.Fog("#0f0f10", 54, 110);
+  scene.fog = new THREE.Fog("#0f0f10", 54, 125);
 
-  const camera = new THREE.PerspectiveCamera(45, 1, 0.1, 220);
+  const camera = new THREE.PerspectiveCamera(45, 1, 0.1, 240);
   const renderer = new THREE.WebGLRenderer({
     antialias: true,
     alpha: false,
@@ -593,43 +1009,207 @@ function initScene({
 
   scene.add(root);
 
-  const ambient = new THREE.AmbientLight("#ffffff", 0.78);
-  const key = new THREE.DirectionalLight("#ffffff", 1.08);
-  const fill = new THREE.PointLight("#FFD100", 0.62, 80);
-  const rim = new THREE.PointLight("#0072BC", 0.38, 90);
+  const ambient = new THREE.AmbientLight("#ffffff", 0.92);
+  const key = new THREE.DirectionalLight("#ffffff", 1.18);
+  const fill = new THREE.PointLight("#FFD100", 0.68, 92);
+  const rim = new THREE.PointLight("#0072BC", 0.42, 100);
 
-  key.position.set(20, 34, 18);
+  key.position.set(20, 36, 18);
   key.castShadow = true;
   key.shadow.mapSize.width = 1024;
   key.shadow.mapSize.height = 1024;
 
-  fill.position.set(-18, 14, -20);
-  rim.position.set(18, 12, 22);
+  fill.position.set(-18, 16, -20);
+  rim.position.set(18, 14, 22);
 
   scene.add(ambient, key, fill, rim);
 
-  const floorGroup = new THREE.Group();
-
-  root.add(floorGroup);
-  floorGroup.add(makeBasementFloor(THREE));
-  floorGroup.add(makeParkingRampHint(THREE));
-
+  const floorGroups = new Map<FloorKey, any>();
   const blockMeshes = new Map<string, any>();
   const clickableMeshes: any[] = [];
+  const escalatorObjects: any[] = [];
 
-  BASEMENT_BLOCKS.forEach((block) => {
-    const mesh = makeStoreBlock(THREE, block);
+  (["basement", "ground", "first", "second"] as FloorKey[]).forEach((floor) => {
+    const floorGroup = new THREE.Group();
 
-    floorGroup.add(mesh);
-    blockMeshes.set(block.id, mesh);
+    floorGroup.position.y = FLOOR_Y[floor];
+    floorGroup.add(makeFloorOutline(THREE, floor));
 
-    if (block.clickable !== false) {
-      clickableMeshes.push(mesh);
+    if (floor === "ground") {
+      floorGroup.add(makeGroundAtriumFrame(THREE));
     }
+
+    if (floor === "first") {
+  floorGroup.add(makeFirstFloorAtriumFrames(THREE));
+    }
+
+    if (floor === "second") {
+  floorGroup.add(makeSecondFloorAtriumFrames(THREE));
+}
+
+    FLOOR_BLOCKS.filter((block) => block.floor === floor).forEach((block) => {
+      const mesh = makeStoreBlock(THREE, block);
+
+      floorGroup.add(mesh);
+      blockMeshes.set(block.id, mesh);
+
+      if (block.clickable !== false) {
+        clickableMeshes.push(mesh);
+      }
+    });
+
+    root.add(floorGroup);
+    floorGroups.set(floor, floorGroup);
   });
 
-  floorGroup.add(makeEscalator(THREE, -8.5, -13.2, -1));
-  floorGroup.add(makeEscalator(THREE, -8.5, 8.8, 1));
+const escalatorAnchors = getGroundEscalatorAnchors();
+
+const yBasementTop = FLOOR_Y.basement + TH / 2;
+const yGroundTop = FLOOR_Y.ground + TH / 2;
+const yFirstTop = FLOOR_Y.ground + (FLOOR_Y.ground - FLOOR_Y.basement) + TH / 2;
+
+const leftEscalatorRotationY = -Math.PI / 2;
+const rightEscalatorRotationY = Math.PI / 2;
+const escalatorGroup = new THREE.Group();
+
+const escalatorFloorGroups = new Map<EscalatorFloorKey, any>();
+
+function getEscalatorFloorGroup(floor: EscalatorFloorKey) {
+  const existingGroup = escalatorFloorGroups.get(floor);
+
+  if (existingGroup) {
+    return existingGroup;
+  }
+
+  const group = new THREE.Group();
+
+  group.userData.floor = floor;
+  escalatorFloorGroups.set(floor, group);
+  escalatorGroup.add(group);
+
+  return group;
+}
+
+function rememberBaseOpacity(object: any) {
+  object.traverse((child: any) => {
+    if (!child.material) {
+      return;
+    }
+
+    const materials = Array.isArray(child.material)
+      ? child.material
+      : [child.material];
+
+    materials.forEach((material: any) => {
+      if (material.userData.baseOpacity === undefined) {
+        material.userData.baseOpacity = material.opacity ?? 1;
+      }
+    });
+  });
+}
+
+function addEscalatorForFloor(
+  floor: EscalatorFloorKey,
+  escalator: any
+) {
+  escalator.userData.floor = floor;
+
+  rememberBaseOpacity(escalator);
+
+  const floorGroup = getEscalatorFloorGroup(floor);
+
+  floorGroup.add(escalator);
+  escalatorObjects.push(escalator);
+}
+
+// Sol üst = -1'den zemine çıkan
+addEscalatorForFloor(
+  "basement",
+  makeEscalator(
+    THREE,
+    escalatorAnchors.leftTop.x,
+    escalatorAnchors.leftTop.z,
+    yBasementTop,
+    yGroundTop,
+    -1,
+    leftEscalatorRotationY
+  )
+);
+
+// Sol alt = zeminden -1'e inen
+addEscalatorForFloor(
+  "basement",
+  makeEscalator(
+    THREE,
+    escalatorAnchors.leftBottom.x,
+    escalatorAnchors.leftBottom.z,
+    yGroundTop,
+    yBasementTop,
+    1,
+    leftEscalatorRotationY + Math.PI
+  )
+);
+
+// Sağ üst = zeminden 1. kata çıkan
+addEscalatorForFloor(
+  "ground",
+  makeEscalator(
+    THREE,
+    escalatorAnchors.rightTop.x,
+    escalatorAnchors.rightTop.z,
+    yGroundTop,
+    yFirstTop,
+    -1,
+    rightEscalatorRotationY
+  )
+);
+
+// Sağ alt = 1. kattan zemine inen
+addEscalatorForFloor(
+  "ground",
+  makeEscalator(
+    THREE,
+    escalatorAnchors.rightBottom.x,
+    escalatorAnchors.rightBottom.z,
+    yFirstTop,
+    yGroundTop,
+    1,
+    rightEscalatorRotationY + Math.PI
+  )
+);
+
+const firstEscalatorAnchors = getFirstFloorEscalatorAnchors();
+const ySecondTop = FLOOR_Y.second + TH / 2;
+
+// Sol alt PUMA yanı = 1. kattan 2. kata çıkan
+addEscalatorForFloor(
+  "first",
+  makeEscalator(
+    THREE,
+    firstEscalatorAnchors.leftBottom.x,
+    firstEscalatorAnchors.leftBottom.z,
+    yFirstTop,
+    ySecondTop,
+    -1,
+    Math.PI / 2
+  )
+);
+
+// Sağ alt COLIN'S yanı = 2. kattan 1. kata inen
+addEscalatorForFloor(
+  "first",
+  makeEscalator(
+    THREE,
+    firstEscalatorAnchors.rightBottom.x,
+    firstEscalatorAnchors.rightBottom.z,
+    ySecondTop,
+    yFirstTop,
+    1,
+    Math.PI / 2
+  )
+);
+
+root.add(escalatorGroup);
 
   const raycaster = new THREE.Raycaster();
   const pointer = new THREE.Vector2();
@@ -639,10 +1219,10 @@ function initScene({
     thetaTarget: -0.58,
     phi: 0.98,
     phiTarget: 0.98,
-    radius: 68,
-    radiusTarget: 68,
-    target: new THREE.Vector3(0, 0, 0),
-    targetTarget: new THREE.Vector3(0, 0, 0),
+    radius: 74,
+    radiusTarget: 74,
+    target: new THREE.Vector3(0, FLOOR_Y.basement, 0),
+    targetTarget: new THREE.Vector3(0, FLOOR_Y.basement, 0),
   };
 
   const pointerState = {
@@ -652,6 +1232,70 @@ function initScene({
     lastY: 0,
     hoverMesh: null as any,
   };
+
+  let selectedMesh: any = null;
+  let activeFloor: FloorKey = "basement";
+
+  function setMaterialOpacity(material: any, opacity: number) {
+    const baseOpacity = material.userData.baseOpacity ?? material.opacity ?? 1;
+    const finalOpacity = baseOpacity * opacity;
+
+    material.transparent = finalOpacity < 1;
+    material.opacity = finalOpacity;
+    material.depthWrite = finalOpacity >= 0.98;
+  }
+
+  function setObjectOpacity(object: any, opacity: number) {
+    object.traverse((child: any) => {
+      if (!child.material) {
+        return;
+      }
+
+      if (Array.isArray(child.material)) {
+        child.material.forEach((material: any) => setMaterialOpacity(material, opacity));
+        return;
+      }
+
+      setMaterialOpacity(child.material, opacity);
+    });
+  }
+
+  function getFloorOpacity(floor: FloorKey) {
+  if (floor === activeFloor) {
+    return 1;
+  }
+
+  const order: FloorKey[] = ["basement", "ground", "first", "second"];
+  const activeIndex = order.indexOf(activeFloor);
+  const floorIndex = order.indexOf(floor);
+
+  if (Math.abs(activeIndex - floorIndex) === 1) {
+    return 0.16;
+  }
+
+  return 0.04;
+}
+
+  function updateFloorVisibility() {
+  floorGroups.forEach((group, floor) => {
+    setObjectOpacity(group, getFloorOpacity(floor));
+  });
+
+  escalatorFloorGroups.forEach((group, floor) => {
+  const isActive = floor === activeFloor;
+
+  setObjectOpacity(group, isActive ? 1 : 0);
+  group.visible = isActive;
+});
+
+escalatorObjects.forEach((escalator) => {
+  const escalatorFloor = escalator.userData.floor as EscalatorFloorKey;
+  const isActive = escalatorFloor === activeFloor;
+
+  setObjectOpacity(escalator, isActive ? 1 : 0);
+  escalator.visible = isActive;
+});
+}
 
   function updateSize() {
     const width = Math.max(1, container.clientWidth);
@@ -673,7 +1317,11 @@ function initScene({
     const x = Math.sin(rig.theta) * flat;
     const z = Math.cos(rig.theta) * flat;
 
-    camera.position.set(rig.target.x + x, rig.target.y + y + 10, rig.target.z + z);
+    camera.position.set(
+      rig.target.x + x,
+      rig.target.y + y + 10,
+      rig.target.z + z
+    );
     camera.lookAt(rig.target.x, rig.target.y, rig.target.z);
   }
 
@@ -690,18 +1338,27 @@ function initScene({
 
     const hits = raycaster.intersectObjects(clickableMeshes, false);
 
-    return hits[0]?.object ?? null;
+    const activeHit = hits.find((hit: any) => {
+      const block = hit.object.userData.block as FloorBlock;
+
+      return block.floor === activeFloor;
+    });
+
+    return activeHit?.object ?? null;
   }
 
   function paintMesh(mesh: any, mode: "default" | "dim" | "match" | "hover" | "selected") {
-    const block = mesh.userData.block as BasementBlock;
+    const block = mesh.userData.block as FloorBlock;
     const material = mesh.material;
-
     const baseOpacity = block.opacity ?? 1;
+    const floorOpacity = getFloorOpacity(block.floor);
+    const targetOpacity = mode === "dim" ? 0.2 : baseOpacity;
+    const finalOpacity = targetOpacity * floorOpacity;
 
     material.color.set(getBlockColor(block));
-    material.transparent = baseOpacity < 1 || mode === "dim";
-    material.opacity = mode === "dim" ? 0.25 : baseOpacity;
+    material.transparent = finalOpacity < 1;
+    material.opacity = finalOpacity;
+    material.depthWrite = finalOpacity >= 0.98;
     material.roughness = 0.62;
     material.metalness = 0.05;
 
@@ -713,15 +1370,17 @@ function initScene({
     mesh.scale.set(1, 1, 1);
 
     if (mode === "match") {
-      material.opacity = 1;
-      material.transparent = false;
+      material.opacity = floorOpacity;
+      material.transparent = floorOpacity < 1;
+      material.depthWrite = floorOpacity >= 0.98;
       material.emissive?.set(getBlockColor(block));
-      material.emissiveIntensity = 0.18;
+      material.emissiveIntensity = 0.2;
     }
 
     if (mode === "hover") {
       material.opacity = 1;
       material.transparent = false;
+      material.depthWrite = true;
       material.emissive?.set("#ffffff");
       material.emissiveIntensity = 0.16;
       mesh.scale.set(1.025, 1.025, 1.025);
@@ -730,18 +1389,19 @@ function initScene({
     if (mode === "selected") {
       material.opacity = 1;
       material.transparent = false;
+      material.depthWrite = true;
       material.emissive?.set("#FFD100");
-      material.emissiveIntensity = 0.24;
+      material.emissiveIntensity = 0.26;
       mesh.scale.set(1.035, 1.035, 1.035);
     }
   }
 
   function clearHover() {
-    if (pointerState.hoverMesh) {
+    if (pointerState.hoverMesh && pointerState.hoverMesh !== selectedMesh) {
       paintMesh(pointerState.hoverMesh, "default");
-      pointerState.hoverMesh = null;
     }
 
+    pointerState.hoverMesh = null;
     setHoveredBlock(null);
     renderer.domElement.style.cursor = "grab";
   }
@@ -750,7 +1410,7 @@ function initScene({
     const hasQuery = Boolean(query);
 
     blockMeshes.forEach((mesh, id) => {
-      const block = mesh.userData.block as BasementBlock;
+      const block = mesh.userData.block as FloorBlock;
 
       if (block.clickable === false) {
         paintMesh(mesh, "default");
@@ -758,7 +1418,7 @@ function initScene({
       }
 
       if (!hasQuery) {
-        paintMesh(mesh, "default");
+        paintMesh(mesh, mesh === selectedMesh ? "selected" : "default");
         return;
       }
 
@@ -768,8 +1428,8 @@ function initScene({
 
   function focusBlock(id: string | null) {
     if (!id) {
-      rig.targetTarget.set(0, 0, 0);
-      rig.radiusTarget = 68;
+      rig.targetTarget.set(0, FLOOR_Y[activeFloor], 0);
+      rig.radiusTarget = 74;
       rig.phiTarget = 0.98;
       return;
     }
@@ -780,16 +1440,25 @@ function initScene({
       return;
     }
 
-    const block = mesh.userData.block as BasementBlock;
+    const block = mesh.userData.block as FloorBlock;
 
-    rig.targetTarget.set(block.x, 0, block.z);
-    rig.radiusTarget = 36;
+    rig.targetTarget.set(block.x, FLOOR_Y[block.floor], block.z);
+    rig.radiusTarget = 38;
     rig.phiTarget = 0.84;
+  }
+
+  function setActiveFloor(floor: FloorKey) {
+    activeFloor = floor;
+    rig.targetTarget.set(0, FLOOR_Y[floor], 0);
+    rig.radiusTarget = 74;
+    rig.phiTarget = 0.98;
+    updateFloorVisibility();
   }
 
   sceneApiRef.current = {
     applySearch,
     focusBlock,
+    setActiveFloor,
   };
 
   function onPointerDown(event: PointerEvent) {
@@ -826,14 +1495,14 @@ function initScene({
       return;
     }
 
-    if (pointerState.hoverMesh) {
+    if (pointerState.hoverMesh && pointerState.hoverMesh !== selectedMesh) {
       paintMesh(pointerState.hoverMesh, "default");
     }
 
     pointerState.hoverMesh = mesh;
 
     if (mesh) {
-      const block = mesh.userData.block as BasementBlock;
+      const block = mesh.userData.block as FloorBlock;
 
       paintMesh(mesh, "hover");
       setHoveredBlock(block);
@@ -856,10 +1525,16 @@ function initScene({
       const mesh = getIntersection(event);
 
       if (mesh) {
-        const block = mesh.userData.block as BasementBlock;
+        const block = mesh.userData.block as FloorBlock;
 
+        if (selectedMesh && selectedMesh !== mesh) {
+          paintMesh(selectedMesh, "default");
+        }
+
+        selectedMesh = mesh;
         setSelectedBlock(block);
         paintMesh(mesh, "selected");
+        setActiveFloor(block.floor);
         focusBlock(block.id);
       }
     }
@@ -868,7 +1543,7 @@ function initScene({
   function onWheel(event: WheelEvent) {
     event.preventDefault();
     rig.radiusTarget += event.deltaY * 0.035;
-    rig.radiusTarget = Math.max(30, Math.min(88, rig.radiusTarget));
+    rig.radiusTarget = Math.max(30, Math.min(94, rig.radiusTarget));
   }
 
   const resizeObserver = new ResizeObserver(updateSize);
@@ -886,7 +1561,7 @@ function initScene({
     frame = window.requestAnimationFrame(animate);
 
     if (!pointerState.isDown) {
-      rig.thetaTarget += 0.00045;
+      rig.thetaTarget += 0.00042;
     }
 
     updateCamera();
@@ -894,6 +1569,7 @@ function initScene({
   }
 
   updateSize();
+  setActiveFloor("basement");
   updateCamera();
   animate();
   setIsReady(true);
@@ -914,8 +1590,12 @@ function initScene({
 
       if (object.material) {
         if (Array.isArray(object.material)) {
-          object.material.forEach((material: any) => material.dispose?.());
+          object.material.forEach((material: any) => {
+            material.map?.dispose?.();
+            material.dispose?.();
+          });
         } else {
+          object.material.map?.dispose?.();
           object.material.dispose?.();
         }
       }
@@ -929,7 +1609,61 @@ function initScene({
   };
 }
 
-function makeBasementFloor(THREE: any) {
+
+function makeStoreBlock(THREE: any, block: FloorBlock) {
+  const height =
+    block.height ??
+    (block.category === "parking" ? 0.7 : block.clickable === false ? 1.15 : 2.8);
+
+  const geometry = new THREE.BoxGeometry(block.w, height, block.d);
+  const material = new THREE.MeshStandardMaterial({
+    color: getBlockColor(block),
+    roughness: 0.58,
+    metalness: 0.04,
+    transparent: (block.opacity ?? 1) < 1,
+    opacity: block.opacity ?? 1,
+  });
+
+  material.userData.baseOpacity = block.opacity ?? 1;
+
+  const mesh = new THREE.Mesh(geometry, material);
+
+  mesh.position.set(block.x, height / 2, block.z);
+  mesh.castShadow = block.category !== "parking";
+  mesh.receiveShadow = true;
+  mesh.userData.block = block;
+
+  const edgeMaterial = new THREE.LineBasicMaterial({
+    color: "#ffffff",
+    transparent: true,
+    opacity: block.clickable === false ? 0.16 : 0.34,
+  });
+
+  edgeMaterial.userData.baseOpacity = block.clickable === false ? 0.16 : 0.34;
+
+  const edges = new THREE.LineSegments(
+    new THREE.EdgesGeometry(geometry),
+    edgeMaterial
+  );
+
+  mesh.add(edges);
+
+  return mesh;
+}
+
+function makeFloorOutline(THREE: any, floor: FloorKey) {
+  if (floor === "ground") {
+    return makeGroundFloorPlate(THREE);
+  }
+
+  if (floor === "first") {
+    return makeFirstFloorPlate(THREE);
+  }
+
+  if (floor === "second") {
+    return makeSecondFloorPlate(THREE);
+  }
+
   const shape = new THREE.Shape();
 
   const left = -PLAN_WIDTH / 2;
@@ -952,19 +1686,25 @@ function makeBasementFloor(THREE: any) {
     metalness: 0.02,
   });
 
+  material.userData.baseOpacity = 1;
+
   const mesh = new THREE.Mesh(geometry, material);
 
   mesh.rotation.x = -Math.PI / 2;
   mesh.position.y = -0.02;
   mesh.receiveShadow = true;
 
+  const borderMaterial = new THREE.LineBasicMaterial({
+    color: "#ffffff",
+    transparent: true,
+    opacity: 0.28,
+  });
+
+  borderMaterial.userData.baseOpacity = 0.28;
+
   const border = new THREE.LineSegments(
     new THREE.EdgesGeometry(geometry),
-    new THREE.LineBasicMaterial({
-      color: "#ffffff",
-      transparent: true,
-      opacity: 0.28,
-    })
+    borderMaterial
   );
 
   border.rotation.x = -Math.PI / 2;
@@ -977,113 +1717,535 @@ function makeBasementFloor(THREE: any) {
   return group;
 }
 
-function makeStoreBlock(THREE: any, block: BasementBlock) {
-  const height =
-    block.height ??
-    (block.category === "parking" ? 0.7 : block.clickable === false ? 1.15 : 2.8);
-
-  const geometry = new THREE.BoxGeometry(block.w, height, block.d);
-  const material = new THREE.MeshStandardMaterial({
-    color: getBlockColor(block),
-    roughness: 0.58,
-    metalness: 0.04,
-    transparent: (block.opacity ?? 1) < 1,
-    opacity: block.opacity ?? 1,
-  });
-
-  const mesh = new THREE.Mesh(geometry, material);
-
-  mesh.position.set(block.x, height / 2, block.z);
-  mesh.castShadow = block.category !== "parking";
-  mesh.receiveShadow = true;
-  mesh.userData.block = block;
-
-  const edges = new THREE.LineSegments(
-    new THREE.EdgesGeometry(geometry),
-    new THREE.LineBasicMaterial({
-      color: "#ffffff",
-      transparent: true,
-      opacity: block.clickable === false ? 0.16 : 0.34,
-    })
-  );
-
-  mesh.add(edges);
-
-  return mesh;
-}
-
-function makeEscalator(THREE: any, x: number, z: number, dir: 1 | -1) {
+function makeGroundFloorPlate(THREE: any) {
   const group = new THREE.Group();
+  const voidRect = getGroundVoid();
 
-  const baseMaterial = new THREE.MeshStandardMaterial({
-    color: "#5b18e8",
-    roughness: 0.42,
-    metalness: 0.08,
+  const material = new THREE.MeshStandardMaterial({
+    color: "#f7f4ee",
+    roughness: 0.84,
+    metalness: 0.02,
   });
 
-  const railMaterial = new THREE.MeshStandardMaterial({
-    color: "#ffffff",
-    roughness: 0.35,
-    metalness: 0.16,
-  });
+  material.userData.baseOpacity = 1;
 
-  const base = new THREE.Mesh(new THREE.BoxGeometry(2.2, 0.22, 6.4), baseMaterial);
-
-  base.position.y = 0.28;
-  base.castShadow = true;
-  base.receiveShadow = true;
-
-  group.add(base);
-
-  for (let i = 0; i < 9; i += 1) {
-    const step = new THREE.Mesh(
-      new THREE.BoxGeometry(2.1, 0.08, 0.38),
-      new THREE.MeshStandardMaterial({
-        color: i % 2 === 0 ? "#3b0dbb" : "#6d28ff",
-        roughness: 0.5,
-      })
+  function addPlate(x1: number, x2: number, z1: number, z2: number) {
+    const width = Math.max(0.01, x2 - x1);
+    const depth = Math.max(0.01, z2 - z1);
+    const mesh = new THREE.Mesh(
+      new THREE.BoxGeometry(width, 0.05, depth),
+      material.clone()
     );
 
-    step.position.set(0, 0.48 + i * 0.025, -2.7 + i * 0.68);
-    step.castShadow = true;
-    group.add(step);
+    mesh.material.userData.baseOpacity = 1;
+    mesh.position.set((x1 + x2) / 2, -0.025, (z1 + z2) / 2);
+    mesh.receiveShadow = true;
+    group.add(mesh);
   }
 
-  const leftRail = new THREE.Mesh(new THREE.BoxGeometry(0.08, 0.45, 6.5), railMaterial);
-  const rightRail = leftRail.clone();
+  const left = -PLAN_WIDTH / 2;
+  const right = PLAN_WIDTH / 2;
+  const top = -PLAN_DEPTH / 2;
+  const bottom = PLAN_DEPTH / 2;
 
-  leftRail.position.set(-1.22, 0.72, 0);
-  rightRail.position.set(1.22, 0.72, 0);
+  // Üst bant
+  addPlate(left, right, top, voidRect.z1);
 
-  group.add(leftRail, rightRail);
+  // Alt bant
+  addPlate(left, right, voidRect.z2, bottom);
 
-  group.position.set(x, 0.04, z);
-  group.rotation.y = dir === 1 ? 0 : Math.PI;
+  // Sol bant: kullanıcının beyazla işaretlediği taraf normal zemin kalır.
+  addPlate(left, voidRect.x1, voidRect.z1, voidRect.z2);
+
+  // Sağ bant
+  addPlate(voidRect.x2, right, voidRect.z1, voidRect.z2);
+
+  const borderMaterial = new THREE.LineBasicMaterial({
+    color: "#ffffff",
+    transparent: true,
+    opacity: 0.22,
+  });
+
+  borderMaterial.userData.baseOpacity = 0.22;
+
+  const outerBorder = new THREE.LineSegments(
+    new THREE.EdgesGeometry(new THREE.BoxGeometry(PLAN_WIDTH, 0.05, PLAN_DEPTH)),
+    borderMaterial
+  );
+
+  outerBorder.position.set(0, 0.035, 0);
+  group.add(outerBorder);
 
   return group;
 }
 
-function makeParkingRampHint(THREE: any) {
+function makeFirstFloorPlate(THREE: any) {
   const group = new THREE.Group();
+
   const material = new THREE.MeshStandardMaterial({
-    color: "#111111",
-    roughness: 0.78,
+    color: "#f7f4ee",
+    roughness: 0.84,
     metalness: 0.02,
-    transparent: true,
-    opacity: 0.58,
   });
 
-  const leftCut = new THREE.Mesh(new THREE.BoxGeometry(8, 0.1, 8), material);
+  material.userData.baseOpacity = 1;
 
-  leftCut.position.set(-19.5, 0.01, 28.2);
-  leftCut.rotation.y = Math.PI / 4;
+  const holes = FIRST_ATRIUMS.map((rect) => {
+    const outer = rectEdges(rect.left, rect.top, rect.width, rect.depth);
 
-  const rightCut = new THREE.Mesh(new THREE.BoxGeometry(8, 0.1, 8), material);
+    return {
+      x1: outer.x1 + FIRST_ATRIUM_INSET,
+      x2: outer.x2 - FIRST_ATRIUM_INSET,
+      z1: outer.z1 + FIRST_ATRIUM_INSET,
+      z2: outer.z2 - FIRST_ATRIUM_INSET,
+    };
+  });
 
-  rightCut.position.set(20.5, 0.01, 27.8);
-  rightCut.rotation.y = -Math.PI / 4;
+  const xCuts = [
+    -PLAN_WIDTH / 2,
+    PLAN_WIDTH / 2,
+    ...holes.flatMap((hole) => [hole.x1, hole.x2]),
+  ].sort((a, b) => a - b);
 
-  group.add(leftCut, rightCut);
+  const zCuts = [
+    -PLAN_DEPTH / 2,
+    PLAN_DEPTH / 2,
+    ...holes.flatMap((hole) => [hole.z1, hole.z2]),
+  ].sort((a, b) => a - b);
+
+  function isInsideHole(cx: number, cz: number) {
+    return holes.some(
+      (hole) =>
+        cx > hole.x1 &&
+        cx < hole.x2 &&
+        cz > hole.z1 &&
+        cz < hole.z2
+    );
+  }
+
+  for (let xIndex = 0; xIndex < xCuts.length - 1; xIndex += 1) {
+    for (let zIndex = 0; zIndex < zCuts.length - 1; zIndex += 1) {
+      const x1 = xCuts[xIndex];
+      const x2 = xCuts[xIndex + 1];
+      const z1 = zCuts[zIndex];
+      const z2 = zCuts[zIndex + 1];
+
+      const width = x2 - x1;
+      const depth = z2 - z1;
+      const cx = (x1 + x2) / 2;
+      const cz = (z1 + z2) / 2;
+
+      if (width <= 0.05 || depth <= 0.05 || isInsideHole(cx, cz)) {
+        continue;
+      }
+
+      const mesh = new THREE.Mesh(
+        new THREE.BoxGeometry(width, 0.05, depth),
+        material.clone()
+      );
+
+      mesh.material.userData.baseOpacity = 1;
+      mesh.position.set(cx, -0.025, cz);
+      mesh.receiveShadow = true;
+
+      group.add(mesh);
+    }
+  }
+
+  return group;
+}
+
+function makeSecondFloorPlate(THREE: any) {
+  const group = new THREE.Group();
+
+  const material = new THREE.MeshStandardMaterial({
+    color: "#f7f4ee",
+    roughness: 0.84,
+    metalness: 0.02,
+  });
+
+  material.userData.baseOpacity = 1;
+
+  const holes = SECOND_ATRIUMS.map((rect) => {
+    const outer = rectEdges(rect.left, rect.top, rect.width, rect.depth);
+
+    return {
+      x1: outer.x1 + SECOND_ATRIUM_INSET,
+      x2: outer.x2 - SECOND_ATRIUM_INSET,
+      z1: outer.z1 + SECOND_ATRIUM_INSET,
+      z2: outer.z2 - SECOND_ATRIUM_INSET,
+    };
+  });
+
+  const xCuts = [
+    -PLAN_WIDTH / 2,
+    PLAN_WIDTH / 2,
+    ...holes.flatMap((hole) => [hole.x1, hole.x2]),
+  ].sort((a, b) => a - b);
+
+  const zCuts = [
+    -PLAN_DEPTH / 2,
+    PLAN_DEPTH / 2,
+    ...holes.flatMap((hole) => [hole.z1, hole.z2]),
+  ].sort((a, b) => a - b);
+
+  function isInsideHole(cx: number, cz: number) {
+    return holes.some(
+      (hole) =>
+        cx > hole.x1 &&
+        cx < hole.x2 &&
+        cz > hole.z1 &&
+        cz < hole.z2
+    );
+  }
+
+  for (let xIndex = 0; xIndex < xCuts.length - 1; xIndex += 1) {
+    for (let zIndex = 0; zIndex < zCuts.length - 1; zIndex += 1) {
+      const x1 = xCuts[xIndex];
+      const x2 = xCuts[xIndex + 1];
+      const z1 = zCuts[zIndex];
+      const z2 = zCuts[zIndex + 1];
+
+      const width = x2 - x1;
+      const depth = z2 - z1;
+      const cx = (x1 + x2) / 2;
+      const cz = (z1 + z2) / 2;
+
+      if (width <= 0.05 || depth <= 0.05 || isInsideHole(cx, cz)) {
+        continue;
+      }
+
+      const mesh = new THREE.Mesh(
+        new THREE.BoxGeometry(width, 0.05, depth),
+        material.clone()
+      );
+
+      mesh.material.userData.baseOpacity = 1;
+      mesh.position.set(cx, -0.025, cz);
+      mesh.receiveShadow = true;
+
+      group.add(mesh);
+    }
+  }
+
+  return group;
+}
+
+function makeGroundAtriumFrame(THREE: any) {
+  const group = new THREE.Group();
+
+  const outer = getGroundAtriumOuter();
+  const voidRect = getGroundVoid();
+
+  const outerWidth = outer.x2 - outer.x1;
+  const outerDepth = outer.z2 - outer.z1;
+  const voidWidth = voidRect.x2 - voidRect.x1;
+  const voidDepth = voidRect.z2 - voidRect.z1;
+
+  const outerCenterX = (outer.x1 + outer.x2) / 2;
+  const outerCenterZ = (outer.z1 + outer.z2) / 2;
+  const voidCenterX = (voidRect.x1 + voidRect.x2) / 2;
+  const voidCenterZ = (voidRect.z1 + voidRect.z2) / 2;
+
+  const shaftDepth = FLOOR_Y.ground - FLOOR_Y.basement - TH;
+
+  // Siyah çizgili atrium çerçevesi: görseldeki dikdörtgenin sınırı.
+  const frameMaterial = new THREE.MeshStandardMaterial({
+    color: "#111111",
+    roughness: 0.55,
+    metalness: 0.06,
+  });
+
+  frameMaterial.userData.baseOpacity = 1;
+
+  const top = new THREE.Mesh(
+    new THREE.BoxGeometry(outerWidth, 0.18, 0.36),
+    frameMaterial
+  );
+  top.position.set(outerCenterX, 0.14, outer.z1);
+
+  const bottom = top.clone();
+  bottom.position.z = outer.z2;
+
+  const left = new THREE.Mesh(
+    new THREE.BoxGeometry(0.36, 0.18, outerDepth),
+    frameMaterial
+  );
+  left.position.set(outer.x1, 0.14, outerCenterZ);
+
+  const right = left.clone();
+  right.position.x = outer.x2;
+
+  group.add(top, bottom, left, right);
+
+  // Void'in iç duvarları. Sadece kırmızı işaretlenen boşluk bölümüne uygulanır.
+  const wallMaterial = new THREE.MeshStandardMaterial({
+    color: "#f4f1eb",
+    roughness: 0.96,
+    metalness: 0,
+  });
+
+  wallMaterial.userData.baseOpacity = 1;
+
+  const wallThickness = 0.22;
+  const wallY = -shaftDepth / 2;
+
+  const wallTop = new THREE.Mesh(
+    new THREE.BoxGeometry(voidWidth, shaftDepth, wallThickness),
+    wallMaterial
+  );
+  wallTop.position.set(voidCenterX, wallY, voidRect.z1 + wallThickness / 2);
+
+  const wallBottom = wallTop.clone();
+  wallBottom.position.z = voidRect.z2 - wallThickness / 2;
+
+  const wallLeft = new THREE.Mesh(
+    new THREE.BoxGeometry(wallThickness, shaftDepth, voidDepth),
+    wallMaterial
+  );
+  wallLeft.position.set(voidRect.x1 + wallThickness / 2, wallY, voidCenterZ);
+
+  const wallRight = wallLeft.clone();
+  wallRight.position.x = voidRect.x2 - wallThickness / 2;
+
+  group.add(wallTop, wallBottom, wallLeft, wallRight);
+
+  const bottomMaterial = new THREE.MeshStandardMaterial({
+    color: "#fbfaf7",
+    roughness: 1,
+    metalness: 0,
+  });
+
+  bottomMaterial.userData.baseOpacity = 1;
+
+  const bottomPlane = new THREE.Mesh(
+    new THREE.PlaneGeometry(voidWidth - 0.2, voidDepth - 0.2),
+    bottomMaterial
+  );
+
+  bottomPlane.rotation.x = -Math.PI / 2;
+  bottomPlane.position.set(voidCenterX, -shaftDepth + 0.04, voidCenterZ);
+
+  group.add(bottomPlane);
+
+  const light1 = new THREE.PointLight(0xffffff, 0.95, 36);
+  light1.position.set(voidCenterX, -1.2, voidCenterZ);
+
+  const light2 = new THREE.PointLight(0xfff4cc, 0.55, 30);
+  light2.position.set(voidCenterX, -shaftDepth + 1.8, voidCenterZ);
+
+  group.add(light1, light2);
+
+  return group;
+}
+
+function makeFirstFloorAtriumFrames(THREE: any) {
+  const group = new THREE.Group();
+
+  function makeFrame(left: number, top: number, width: number, depth: number) {
+    const rect = rectEdges(left, top, width, depth);
+    const w = rect.x2 - rect.x1;
+    const d = rect.z2 - rect.z1;
+    const cx = (rect.x1 + rect.x2) / 2;
+    const cz = (rect.z1 + rect.z2) / 2;
+
+    const material = new THREE.MeshStandardMaterial({
+      color: "#080808",
+      roughness: 0.55,
+      metalness: 0.06,
+    });
+
+    material.userData.baseOpacity = 1;
+
+    const y = 0.22;
+
+    const topBar = new THREE.Mesh(
+      new THREE.BoxGeometry(w, 0.12, 0.36),
+      material
+    );
+    topBar.position.set(cx, y, rect.z1);
+
+    const bottomBar = topBar.clone();
+    bottomBar.position.z = rect.z2;
+
+    const leftBar = new THREE.Mesh(
+      new THREE.BoxGeometry(0.36, 0.12, d),
+      material
+    );
+    leftBar.position.set(rect.x1, y, cz);
+
+    const rightBar = leftBar.clone();
+    rightBar.position.x = rect.x2;
+
+    group.add(topBar, bottomBar, leftBar, rightBar);
+  }
+
+  FIRST_ATRIUMS.forEach((rect) => {
+    makeFrame(rect.left, rect.top, rect.width, rect.depth);
+  });
+
+  return group;
+}
+
+function makeSecondFloorAtriumFrames(THREE: any) {
+  const group = new THREE.Group();
+
+  function makeFrame(left: number, top: number, width: number, depth: number) {
+    const rect = rectEdges(left, top, width, depth);
+    const w = rect.x2 - rect.x1;
+    const d = rect.z2 - rect.z1;
+    const cx = (rect.x1 + rect.x2) / 2;
+    const cz = (rect.z1 + rect.z2) / 2;
+
+    const material = new THREE.MeshStandardMaterial({
+      color: "#080808",
+      roughness: 0.55,
+      metalness: 0.06,
+    });
+
+    material.userData.baseOpacity = 1;
+
+    const y = 0.22;
+
+    const topBar = new THREE.Mesh(
+      new THREE.BoxGeometry(w, 0.12, 0.36),
+      material
+    );
+    topBar.position.set(cx, y, rect.z1);
+
+    const bottomBar = topBar.clone();
+    bottomBar.position.z = rect.z2;
+
+    const leftBar = new THREE.Mesh(
+      new THREE.BoxGeometry(0.36, 0.12, d),
+      material
+    );
+    leftBar.position.set(rect.x1, y, cz);
+
+    const rightBar = leftBar.clone();
+    rightBar.position.x = rect.x2;
+
+    group.add(topBar, bottomBar, leftBar, rightBar);
+  }
+
+  SECOND_ATRIUMS.forEach((rect) => {
+    makeFrame(rect.left, rect.top, rect.width, rect.depth);
+  });
+
+  return group;
+}
+
+function makeStepTexture(THREE: any) {
+  const canvas = document.createElement("canvas");
+
+  canvas.width = 64;
+  canvas.height = 64;
+
+  const context = canvas.getContext("2d");
+
+  if (!context) {
+    return null;
+  }
+
+  context.fillStyle = "#c7ccd2";
+  context.fillRect(0, 0, 64, 64);
+
+  context.strokeStyle = "#969da6";
+  context.lineWidth = 4;
+
+  for (let i = 0; i <= 64; i += 12) {
+    context.beginPath();
+    context.moveTo(0, i);
+    context.lineTo(64, i);
+    context.stroke();
+  }
+
+  const texture = new THREE.CanvasTexture(canvas);
+
+  texture.wrapS = THREE.RepeatWrapping;
+  texture.wrapT = THREE.RepeatWrapping;
+  texture.repeat.set(6, 1);
+  texture.encoding = THREE.sRGBEncoding;
+
+  return texture;
+}
+
+function makeEscalator(
+  THREE: any,
+  x: number,
+  z: number,
+  yBottom: number,
+  yTop: number,
+  dir: 1 | -1,
+  rotationY = 0
+) {
+  const run = 8.4;
+  const rise = yTop - yBottom;
+  const length = Math.hypot(run, rise);
+  const angle = Math.atan2(rise, run) * dir;
+
+  const group = new THREE.Group();
+
+  const rampMaterial = new THREE.MeshStandardMaterial({
+    color: 0xc2c8cf,
+    roughness: 0.55,
+    metalness: 0.5,
+    map: makeStepTexture(THREE),
+  });
+
+  rampMaterial.userData.baseOpacity = 1;
+
+  const ramp = new THREE.Mesh(
+    new THREE.BoxGeometry(length, 0.34, 2.0),
+    rampMaterial
+  );
+
+  ramp.castShadow = true;
+  ramp.receiveShadow = true;
+
+  group.add(ramp);
+
+  const balustradeMaterial = new THREE.MeshStandardMaterial({
+    color: 0x9aa3ad,
+    roughness: 0.35,
+    metalness: 0.55,
+    transparent: true,
+    opacity: 0.55,
+  });
+
+  balustradeMaterial.userData.baseOpacity = 0.55;
+
+  const balustradeGeometry = new THREE.BoxGeometry(length, 0.9, 0.1);
+
+  const leftGlass = new THREE.Mesh(balustradeGeometry, balustradeMaterial);
+  leftGlass.position.set(0, 0.5, 1.0);
+
+  const rightGlass = leftGlass.clone();
+  rightGlass.position.z = -1.0;
+
+  group.add(leftGlass, rightGlass);
+
+  const handrailMaterial = new THREE.MeshStandardMaterial({
+    color: 0x3a3f45,
+    roughness: 0.4,
+    metalness: 0.5,
+  });
+
+  handrailMaterial.userData.baseOpacity = 1;
+
+  const handrailGeometry = new THREE.BoxGeometry(length, 0.12, 0.16);
+
+  const leftHandrail = new THREE.Mesh(handrailGeometry, handrailMaterial);
+  leftHandrail.position.set(0, 0.97, 1.0);
+
+  const rightHandrail = leftHandrail.clone();
+  rightHandrail.position.z = -1.0;
+
+  group.add(leftHandrail, rightHandrail);
+
+  group.rotation.z = angle;
+  group.rotation.y = rotationY;
+  group.position.set(x, (yBottom + yTop) / 2, z);
 
   return group;
 }

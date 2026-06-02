@@ -30,7 +30,7 @@ type BentoCard = {
 
 const content = {
   tr: {
-    eyebrow: "Plan Your Visit",
+    eyebrow: "Ziyaret Rehberi",
     title: "Ziyaretini Planla",
     subtitle:
       "Etkinlikler, hediye kartı, aile eğlencesi ve sıradaki deneyimi tek bakışta keşfet.",
@@ -64,7 +64,7 @@ const content = {
     },
   },
   en: {
-    eyebrow: "Plan Your Visit",
+    eyebrow: "Visit Guide",
     title: "Plan Your Visit",
     subtitle:
       "Discover events, gift cards, family entertainment and the next experience at a glance.",

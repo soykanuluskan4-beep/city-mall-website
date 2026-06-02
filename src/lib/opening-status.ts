@@ -13,6 +13,7 @@ const OPEN_TIME = "10:00";
 
 function getMinutesFromTime(time: string) {
   const [hours, minutes] = time.split(":").map(Number);
+
   return hours * 60 + minutes;
 }
 

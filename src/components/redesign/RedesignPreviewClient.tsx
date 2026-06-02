@@ -24,23 +24,27 @@ export function RedesignPreviewClient({
 }: RedesignPreviewClientProps) {
   return (
     <div className={`redesign-preview-root [&~footer]:hidden ${outfit.className}`}>
-      <style>{`
-  body:has(.redesign-preview-root) header:not(.preview-navbar) {
-    display: none !important;
-  }
+      <style
+  dangerouslySetInnerHTML={{
+    __html: `
+      body:has(.redesign-preview-root) > header:not(.preview-navbar) {
+        display: none !important;
+      }
 
-  body:has(.redesign-preview-root) footer:not(.preview-footer) {
-    display: none !important;
-  }
+      body:has(.redesign-preview-root) footer:not(.preview-footer) {
+        display: none !important;
+      }
 
-  body:has(.redesign-preview-root) header.preview-navbar {
-    display: block !important;
-  }
+      body:has(.redesign-preview-root) header.preview-navbar {
+        display: block !important;
+      }
 
-  body:has(.redesign-preview-root) footer.preview-footer {
-    display: block !important;
-  }
-`}</style>
+      body:has(.redesign-preview-root) footer.preview-footer {
+        display: block !important;
+      }
+    `,
+  }}
+/>
 
       <PreviewNavbar locale={locale} />
 

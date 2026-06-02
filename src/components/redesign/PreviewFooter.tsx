@@ -35,7 +35,7 @@ const content = {
     terms: "Kullanım Koşulları",
     exploreLinks: [
       { href: "stores", label: "Mağazalar" },
-      { href: "dining", label: "Yeme-İçme" },
+      { href: "dining", label: "Restoranlar" },
       { href: "events", label: "Etkinlikler" },
       { href: "cinema", label: "Cinemall" },
       { href: "kids", label: "Çocuk & Eğlence" },

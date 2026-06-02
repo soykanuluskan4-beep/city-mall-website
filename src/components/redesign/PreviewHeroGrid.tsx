@@ -11,6 +11,7 @@ import {
   ShoppingBag,
   Utensils,
 } from "lucide-react";
+import type { LucideIcon } from "lucide-react";
 import { useState } from "react";
 import type { Locale } from "@/types/content";
 
@@ -25,8 +26,10 @@ type HeroCard = {
   href: string;
   image: string;
   video?: string;
+  poster?: string;
   alt: string;
-  icon: typeof ShoppingBag;
+  cardCta: string;
+  icon: LucideIcon;
   className: string;
   titleClassName: string;
   overlay: string;
@@ -35,92 +38,95 @@ type HeroCard = {
 
 const content = {
   tr: {
-    eyebrow: "Cinematic Redesign Preview",
-    title: "CityMall deneyimi yeniden kurgulanıyor.",
-    description:
-      "Alışveriş, lezzet, sinema, etkinlik ve ziyaret planlamasını daha premium, daha sinematik ve daha keşfedilebilir bir giriş deneyiminde topluyoruz.",
-    primaryCta: "Mağazaları Keşfet",
-    secondaryCta: "Haritaya Git",
+    title: "CityMall'ı Keşfet.",
+    primaryCta: "Mağazaları Gör",
+secondaryCta: "Ziyareti Planla",
     cards: {
       fashion: {
-        eyebrow: "Fashion / Luxury",
-        title: "Fashion",
-        description:
-          "Slow motion vitrin hissi, sezon stilleri ve premium alışveriş rotaları.",
-        alt: "Premium fashion shopping atmosphere",
-      },
-      dining: {
-        eyebrow: "Dining",
-        title: "Dining",
-        description: "Sıcak tonlar, restoranlar ve lezzet molaları.",
-        alt: "Warm dining atmosphere",
-      },
-      cinema: {
-        eyebrow: "Cinemall",
-        title: "Cinema",
-        description: "Koyu neon atmosfer, film ve seans deneyimi.",
-        alt: "Cinema atmosphere",
-      },
-      events: {
-        eyebrow: "What’s Happening",
-        title: "Events",
-        description: "CityMall’de bu hafta olanları keşfet.",
-        alt: "Live event atmosphere",
-      },
-      explore: {
-        eyebrow: "Explore Mall",
-        title: "Explore",
-        description: "Katlar, hizmetler ve ziyaret rotaları.",
-        alt: "Interactive mall map preview",
-      },
+      eyebrow: "Moda / Premium",
+      title: "Moda",
+  description:
+    "Slow motion vitrin hissi, sezon stilleri ve premium alışveriş rotaları.",
+  alt: "Premium fashion shopping atmosphere",
+  cardCta: "Koleksiyonu Gör",
+},
+dining: {
+  eyebrow: "Restoranlar",
+  title: "Yemek",
+  description: "Sıcak tonlar, restoranlar ve lezzet molaları.",
+  alt: "Warm dining atmosphere",
+  cardCta: "Restoranları Keşfet",
+},
+cinema: {
+  eyebrow: "Cinemall",
+  title: "Sinema",
+  description: "Koyu neon atmosfer, film ve seans deneyimi.",
+  alt: "Cinema atmosphere",
+  cardCta: "Seansları Gör",
+},
+events: {
+  eyebrow: "Neler Oluyor?",
+  title: "Etkinlikler",
+  description: "CityMall’de bu hafta olanları keşfet.",
+  alt: "Live event atmosphere",
+  cardCta: "Programa Bak",
+},
+explore: {
+  eyebrow: "Kat Rehberi",
+  title: "AVM Haritası",
+  description: "Katlar, hizmetler ve ziyaret rotaları.",
+  alt: "Interactive mall map preview",
+  cardCta: "Kat Planını Gör",
+},
     },
   },
   en: {
-    eyebrow: "Cinematic Redesign Preview",
-    title: "The CityMall experience is being redesigned.",
-    description:
-      "We are bringing shopping, dining, cinema, events and visit planning into a more premium, cinematic and discoverable entrance experience.",
-    primaryCta: "Explore Stores",
-    secondaryCta: "Open Map",
+    title: "Explore CityMall.",
+    primaryCta: "View Stores",
+    secondaryCta: "Plan Your Visit",
     cards: {
       fashion: {
-        eyebrow: "Fashion / Luxury",
-        title: "Fashion",
-        description:
-          "Slow-motion window feeling, seasonal styles and premium shopping routes.",
-        alt: "Premium fashion shopping atmosphere",
-      },
-      dining: {
-        eyebrow: "Dining",
-        title: "Dining",
-        description: "Warm tones, restaurants and tasteful breaks.",
-        alt: "Warm dining atmosphere",
-      },
-      cinema: {
-        eyebrow: "Cinemall",
-        title: "Cinema",
-        description: "Dark neon atmosphere, movies and showtimes.",
-        alt: "Cinema atmosphere",
-      },
-      events: {
-        eyebrow: "What’s Happening",
-        title: "Events",
-        description: "Discover what’s happening at CityMall this week.",
-        alt: "Live event atmosphere",
-      },
-      explore: {
-        eyebrow: "Explore Mall",
-        title: "Explore",
-        description: "Floors, services and visitor routes.",
-        alt: "Interactive mall map preview",
-      },
+  eyebrow: "Fashion / Luxury",
+  title: "Fashion",
+  description:
+    "Slow-motion window feeling, seasonal styles and premium shopping routes.",
+  alt: "Premium fashion shopping atmosphere",
+  cardCta: "View Collection",
+},
+dining: {
+  eyebrow: "Resrtaurants",
+  title: "Dining",
+  description: "Warm tones, restaurants and tasteful breaks.",
+  alt: "Warm dining atmosphere",
+  cardCta: "Explore Restaurants",
+},
+cinema: {
+  eyebrow: "Cinemall",
+  title: "Cinema",
+  description: "Dark neon atmosphere, movies and showtimes.",
+  alt: "Cinema atmosphere",
+  cardCta: "View Showtimes",
+},
+events: {
+  eyebrow: "What’s Happening",
+  title: "Events",
+  description: "Discover what’s happening at CityMall this week.",
+  alt: "Live event atmosphere",
+  cardCta: "See Program",
+},
+explore: {
+  eyebrow: "Explore Mall",
+  title: "Explore",
+  description: "Floors, services and visitor routes.",
+  alt: "Interactive mall map preview",
+  cardCta: "View Floor Plan",
+},
     },
   },
 };
 
 const images = {
-  fashion:
-    "https://images.unsplash.com/photo-1496747611176-843222e1e57c?auto=format&fit=crop&w=1800&q=85",
+  fashionPoster: "/videos/fashion-hero-poster.jpg",
   dining:
     "https://images.unsplash.com/photo-1555396273-367ea4eb4db5?auto=format&fit=crop&w=1200&q=85",
   cinema:
@@ -137,8 +143,9 @@ export function PreviewHeroGrid({ locale }: PreviewHeroGridProps) {
   const cards: HeroCard[] = [
     {
       href: `/${locale}/stores`,
-      image: images.fashion,
+      image: images.fashionPoster,
       video: "/videos/fashion-hero.mp4",
+      poster: "/videos/fashion-hero-poster.jpg",
       icon: ShoppingBag,
       className:
         "order-1 min-h-[440px] lg:col-start-1 lg:col-end-4 lg:row-start-2 lg:row-end-4 lg:min-h-0",
@@ -249,25 +256,22 @@ export function PreviewHeroGrid({ locale }: PreviewHeroGridProps) {
         }
       `}</style>
 
-      <div className="pointer-events-none absolute inset-0 -z-10 bg-[radial-gradient(circle_at_12%_8%,rgba(180,126,47,0.16),transparent_28%),radial-gradient(circle_at_82%_18%,rgba(17,24,39,0.08),transparent_30%)]" />
+      <div className="pointer-events-none absolute inset-0 -z-10 bg-[radial-gradient(circle_at_12%_8%,rgba(232,49,42,0.10),transparent_28%),radial-gradient(circle_at_82%_18%,rgba(0,114,188,0.08),transparent_30%)]" />
 
       <div className="container">
         <div className="mb-7 grid gap-5 lg:grid-cols-[1fr_auto] lg:items-end">
           <div>
-
-            <h1 className="mt-5 max-w-5xl text-4xl font-semibold tracking-tight text-text-primary md:text-6xl lg:text-7xl">
+            <h1 className="max-w-5xl text-4xl font-semibold tracking-tight text-text-primary md:text-6xl lg:text-7xl">
               {copy.title}
             </h1>
 
-            <p className="mt-5 max-w-3xl text-base leading-8 text-text-secondary md:text-lg">
-              {copy.description}
-            </p>
+            
           </div>
 
           <div className="flex flex-col gap-3 sm:flex-row lg:pb-1">
             <Link
               href={`/${locale}/stores`}
-              className="inline-flex items-center justify-center gap-2 rounded-full bg-text-primary px-6 py-3 text-sm font-semibold text-white shadow-card transition hover:-translate-y-0.5 hover:opacity-90"
+              className="inline-flex items-center justify-center gap-2 rounded-full bg-[#FFD100] px-6 py-3 text-sm font-semibold text-black shadow-card transition hover:-translate-y-0.5 hover:bg-[#F7941D]"
             >
               {copy.primaryCta}
               <ArrowRight className="h-4 w-4" aria-hidden="true" />
@@ -297,7 +301,7 @@ function PreviewHeroCard({ card }: { card: HeroCard }) {
   const [isVideoReady, setIsVideoReady] = useState(false);
   const [hasVideoError, setHasVideoError] = useState(false);
 
-  const shouldShowImage = !card.video || hasVideoError;
+  const shouldShowImage = !card.video || hasVideoError || !isVideoReady;
 
   return (
     <Link
@@ -305,16 +309,16 @@ function PreviewHeroCard({ card }: { card: HeroCard }) {
       className={`preview-hero-card group relative isolate flex overflow-hidden rounded-[1.65rem] border border-white/15 bg-text-primary p-5 text-white shadow-[0_20px_60px_rgba(17,24,39,0.16)] transition duration-500 hover:-translate-y-1 hover:scale-[1.01] hover:border-white/28 hover:shadow-[0_28px_80px_rgba(17,24,39,0.24)] md:p-6 ${card.className}`}
     >
       <img
-        src={card.image}
+        src={card.poster ?? card.image}
         alt={card.alt}
-        className={`absolute inset-0 -z-30 h-full w-full scale-[1.01] object-cover transition duration-700 ease-out group-hover:scale-[1.055] ${
+        className={`absolute inset-0 -z-30 h-full w-full scale-[1.01] object-cover transition duration-300 ease-out group-hover:scale-[1.055] ${
           shouldShowImage ? "opacity-100" : "opacity-0"
         }`}
       />
 
       {card.video && !hasVideoError ? (
         <video
-          className={`hero-background-video absolute inset-0 -z-20 h-full w-full scale-[1.01] object-cover transition duration-700 ease-out group-hover:scale-[1.055] ${
+          className={`hero-background-video absolute inset-0 -z-20 h-full w-full scale-[1.01] object-cover transition duration-300 ease-out group-hover:scale-[1.055] ${
             isVideoReady ? "opacity-100" : "opacity-0"
           }`}
           autoPlay
@@ -322,6 +326,7 @@ function PreviewHeroCard({ card }: { card: HeroCard }) {
           loop
           playsInline
           preload="auto"
+          poster={card.poster ?? card.image}
           aria-label={card.alt}
           onLoadedData={() => setIsVideoReady(true)}
           onCanPlay={() => setIsVideoReady(true)}
@@ -364,7 +369,7 @@ function PreviewHeroCard({ card }: { card: HeroCard }) {
         </p>
 
         <div className="mt-5 inline-flex items-center gap-2 text-sm font-semibold text-white/86 transition duration-300 group-hover:gap-3 group-hover:text-white">
-          Explore
+          {card.cardCta}
           <ArrowRight className="h-4 w-4" aria-hidden="true" />
         </div>
       </div>

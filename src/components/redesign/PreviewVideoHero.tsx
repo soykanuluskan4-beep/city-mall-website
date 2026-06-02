@@ -31,14 +31,15 @@ const content = {
 };
 
 const videoSrc = "/videos/hero-main.mp4";
+const videoPoster = "/videos/hero-main-poster.jpg";
 
 export function PreviewVideoHero({ locale }: PreviewVideoHeroProps) {
   const copy = content[locale];
 
- const [isVideoReady, setIsVideoReady] = useState(false);
- const [hasVideoError, setHasVideoError] = useState(false);
+  const [isVideoReady, setIsVideoReady] = useState(false);
+  const [hasVideoError, setHasVideoError] = useState(false);
 
- const showFallback = hasVideoError;
+  const shouldShowPoster = hasVideoError || !isVideoReady;
 
   return (
     <section className="relative isolate min-h-[100svh] overflow-hidden bg-text-primary text-white">
@@ -112,49 +113,52 @@ export function PreviewVideoHero({ locale }: PreviewVideoHeroProps) {
       `}</style>
 
       <div className="preview-video-hero-media absolute inset-0 -z-30">
-        <div
-  className={`absolute inset-0 bg-[radial-gradient(circle_at_35%_30%,rgba(180,126,47,0.18),transparent_34%),linear-gradient(135deg,#17110c,#05070c_58%,#111827)] transition duration-500 ${
-    showFallback ? "opacity-100" : "opacity-0"
-  }`}
-/>
+        <img
+          src={videoPoster}
+          alt=""
+          className={`absolute inset-0 h-full w-full object-cover transition duration-300 ${
+            shouldShowPoster ? "opacity-100" : "opacity-0"
+          }`}
+        />
 
         {!hasVideoError ? (
-         <video
-  className={`absolute inset-0 h-full w-full object-cover transition duration-300 ${
-    isVideoReady ? "opacity-100" : "opacity-0"
-  }`}
-  autoPlay
-  muted
-  loop
-  playsInline
-  preload="auto"
-  poster="/videos/hero-poster.jpg"
-  aria-hidden="true"
-  onLoadedData={() => setIsVideoReady(true)}
-  onCanPlay={() => setIsVideoReady(true)}
-  onError={() => setHasVideoError(true)}
->
-  <source src={videoSrc} type="video/mp4" />
-</video>
+          <video
+            className={`absolute inset-0 h-full w-full object-cover transition duration-300 ${
+              isVideoReady ? "opacity-100" : "opacity-0"
+            }`}
+            autoPlay
+            muted
+            loop
+            playsInline
+            preload="auto"
+            poster={videoPoster}
+            aria-hidden="true"
+            onLoadedData={() => setIsVideoReady(true)}
+            onCanPlay={() => setIsVideoReady(true)}
+            onError={() => setHasVideoError(true)}
+          >
+            <source src={videoSrc} type="video/mp4" />
+          </video>
         ) : null}
       </div>
 
       <div className="absolute inset-0 -z-20 bg-[linear-gradient(180deg,rgba(5,8,14,0.44)_0%,rgba(5,8,14,0.42)_38%,rgba(5,8,14,0.82)_100%)]" />
-      <div className="absolute inset-0 -z-20 bg-[radial-gradient(circle_at_18%_18%,rgba(180,126,47,0.24),transparent_34%),radial-gradient(circle_at_80%_20%,rgba(255,255,255,0.08),transparent_26%)]" />
+      <div className="absolute inset-0 -z-20 bg-[radial-gradient(circle_at_18%_18%,rgba(232,49,42,0.20),transparent_34%),radial-gradient(circle_at_80%_20%,rgba(0,114,188,0.10),transparent_26%)]" />
 
       <div className="pointer-events-none absolute inset-0 -z-10 opacity-[0.13] mix-blend-overlay [background-image:radial-gradient(circle_at_center,rgba(255,255,255,0.62)_0_1px,transparent_1px)] [background-size:4px_4px]" />
 
-      <div className="preview-video-hero-glow pointer-events-none absolute inset-x-0 bottom-0 -z-10 h-1/2 bg-[radial-gradient(circle_at_bottom,rgba(180,126,47,0.26),transparent_58%)] [animation:heroAmbientGlow_8s_ease-in-out_infinite]" />
+      <div className="preview-video-hero-glow pointer-events-none absolute inset-x-0 bottom-0 -z-10 h-1/2 bg-[radial-gradient(circle_at_bottom,rgba(255,209,0,0.20),transparent_58%)] [animation:heroAmbientGlow_8s_ease-in-out_infinite]" />
 
       <div className="container relative flex min-h-[100svh] flex-col">
         <div className="flex flex-1 items-end pb-16 pt-32 md:pb-20 lg:pb-24">
           <div className="max-w-6xl">
-            
-
             <h1 className="preview-video-hero-copy mt-0 max-w-[12ch] text-[clamp(3rem,7.6vw,7.4rem)] font-semibold leading-[0.9] tracking-[-0.055em] text-white [animation:heroCopyReveal_950ms_cubic-bezier(0.22,1,0.36,1)_220ms_both]">
               {copy.title}
             </h1>
 
+            <p className="preview-video-hero-copy mt-7 max-w-2xl text-base leading-8 text-white/82 md:text-xl [animation:heroCopyReveal_950ms_cubic-bezier(0.22,1,0.36,1)_320ms_both]">
+              {copy.description}
+            </p>
 
             <div className="preview-video-hero-cta mt-9 flex flex-col gap-3 sm:flex-row [animation:heroCopyReveal_950ms_cubic-bezier(0.22,1,0.36,1)_420ms_both]">
               <Link
