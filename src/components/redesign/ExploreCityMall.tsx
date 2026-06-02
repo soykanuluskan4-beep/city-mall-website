@@ -1,26 +1,22 @@
 "use client";
 
+import { FloorMap3D } from "@/components/redesign/FloorMap3D";
+import Link from "next/link";
 import {
   Accessibility,
   Baby,
   BatteryCharging,
   Car,
+  ChevronRight,
   Clock3,
   CreditCard,
-  Film,
   Gift,
-  Layers3,
-  MapPinned,
-  ShoppingBag,
-  Sparkles,
-  Utensils,
-  Wifi,
-  Gamepad2,
   Landmark,
+  Layers3,
+  Wifi,
 } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
 import { useEffect, useMemo, useRef, useState } from "react";
-import type { CSSProperties } from "react";
 import {
   getOpeningStatus,
   type OpeningStatus,
@@ -31,52 +27,34 @@ type ExploreCityMallProps = {
   locale: Locale;
 };
 
-type FloorKey = "basement" | "ground" | "first" | "second";
-
-type FloorBlock = {
-  label: string;
-  type: "fashion" | "dining" | "cinema" | "kids" | "service" | "parking";
-  x: number;
-  y: number;
-  w: number;
-  h: number;
-};
-
 type ServiceItem = {
   icon: LucideIcon;
   label: string;
 };
 
+type TimeInfo = {
+  dayName: string;
+  hoursRange: string;
+};
+
 const content = {
   tr: {
-    eyebrow: "Explore CityMall",
-    title: "Explore CityMall",
+    eyebrow: "CityMall Rehberi",
+    title: "CityMall'ı Keşfet",
     subtitle: "İhtiyacın olan her şey tek noktada.",
-    floorGuide: "İnteraktif Kat Rehberi",
+    floorGuide: "Kat Planını Gör",
     floorText:
-      "Katları değiştirerek mağaza, yeme-içme, sinema ve aile alanlarını hızlıca keşfet.",
+      "Mağaza konumları, kat bilgileri ve ziyaret rotaları için harita sayfasına geç.",
+    mapCta: "Kat Planını Gör",
+    mapHelper: "Detaylı kat planı ve mağaza konumları için harita sayfasını aç.",
     today: "BUGÜN",
     openingHours: "Çalışma Saatleri",
-    hoursRange: "10:00 — 22:00",
     open: "Şu an açık",
     closed: "Kapalı",
     defaultClosed: "Kapalı · Yarın 10:00'da açılıyor",
+    servicesEyebrow: "AVM Hizmetleri",
     services: "Hizmetler",
     servicesText: "Ziyaretini kolaylaştıran temel hizmetler.",
-    floors: {
-      basement: "-1",
-      ground: "Zemin",
-      first: "1. Kat",
-      second: "2. Kat",
-    },
-    mapLabels: {
-      fashion: "Moda",
-      dining: "Yeme-İçme",
-      cinema: "Cinemall",
-      kids: "FunLab",
-      service: "Hizmet",
-      parking: "Otopark",
-    },
     serviceItems: {
       valet: "Vale",
       wifi: "Ücretsiz Wi-Fi",
@@ -89,34 +67,22 @@ const content = {
     },
   },
   en: {
-    eyebrow: "Explore CityMall",
+    eyebrow: "CityMall Guide",
     title: "Explore CityMall",
     subtitle: "Everything you need in one destination.",
-    floorGuide: "Interactive Floor Guide",
+    floorGuide: "View Floor Plan",
     floorText:
-      "Switch between floors to discover stores, dining, cinema and family areas quickly.",
+      "Open the map page for store locations, floor details and visitor routes.",
+    mapCta: "View Floor Plan",
+    mapHelper: "Open the map page for detailed floor plans and store locations.",
     today: "TODAY",
     openingHours: "Opening Hours",
-    hoursRange: "10:00 — 22:00",
     open: "Currently Open",
     closed: "Closed",
     defaultClosed: "Closed · Opens tomorrow at 10:00",
+    servicesEyebrow: "Mall Services",
     services: "Services",
     servicesText: "Essential services that make every visit easier.",
-    floors: {
-      basement: "-1",
-      ground: "Ground",
-      first: "1st",
-      second: "2nd",
-    },
-    mapLabels: {
-      fashion: "Fashion",
-      dining: "Dining",
-      cinema: "Cinemall",
-      kids: "FunLab",
-      service: "Service",
-      parking: "Parking",
-    },
     serviceItems: {
       valet: "Valet",
       wifi: "Free Wi-Fi",
@@ -130,44 +96,6 @@ const content = {
   },
 };
 
-const floorOrder: FloorKey[] = ["basement", "ground", "first", "second"];
-
-const floorBlocks: Record<FloorKey, FloorBlock[]> = {
-  basement: [
-    { label: "Parking", type: "parking", x: 8, y: 18, w: 34, h: 24 },
-    { label: "Services", type: "service", x: 50, y: 16, w: 28, h: 22 },
-    { label: "ATM", type: "service", x: 18, y: 58, w: 24, h: 18 },
-    { label: "Access", type: "service", x: 58, y: 54, w: 30, h: 20 },
-  ],
-  ground: [
-    { label: "Fashion", type: "fashion", x: 8, y: 15, w: 28, h: 23 },
-    { label: "Dining", type: "dining", x: 45, y: 13, w: 30, h: 22 },
-    { label: "Services", type: "service", x: 14, y: 56, w: 26, h: 22 },
-    { label: "Fashion", type: "fashion", x: 55, y: 55, w: 34, h: 24 },
-  ],
-  first: [
-    { label: "Fashion", type: "fashion", x: 9, y: 16, w: 34, h: 24 },
-    { label: "Home", type: "service", x: 52, y: 14, w: 30, h: 22 },
-    { label: "Books", type: "service", x: 15, y: 58, w: 28, h: 20 },
-    { label: "Beauty", type: "fashion", x: 56, y: 56, w: 30, h: 21 },
-  ],
-  second: [
-    { label: "Cinemall", type: "cinema", x: 8, y: 16, w: 36, h: 25 },
-    { label: "Food Court", type: "dining", x: 54, y: 15, w: 32, h: 23 },
-    { label: "FunLab", type: "kids", x: 16, y: 58, w: 30, h: 22 },
-    { label: "Kids", type: "kids", x: 58, y: 57, w: 28, h: 20 },
-  ],
-};
-
-const typeStyles: Record<FloorBlock["type"], string> = {
-  fashion: "border-[#EC008C]/25 bg-[#EC008C] text-white",
-  dining: "border-[#F7941D]/25 bg-[#F7941D] text-black",
-  cinema: "border-[#0072BC]/25 bg-[#0072BC] text-white",
-  kids: "border-[#FFD100]/30 bg-[#FFD100] text-black",
-  service: "border-[#39B54A]/25 bg-[#39B54A] text-white",
-  parking: "border-[#0072BC]/25 bg-[#0072BC] text-white",
-};
-
 const serviceColorClasses = [
   "bg-[#E8312A] text-white",
   "bg-[#0072BC] text-white",
@@ -179,29 +107,36 @@ const serviceColorClasses = [
   "bg-[#EC008C] text-white",
 ];
 
-const typeIcons: Record<FloorBlock["type"], LucideIcon> = {
-  fashion: ShoppingBag,
-  dining: Utensils,
-  cinema: Film,
-  kids: Gamepad2,
-  service: Sparkles,
-  parking: Car,
+const cityMallCoordinates = {
+  lat: 35.1259061,
+  lng: 33.921234,
 };
 
-function getDayName(locale: Locale) {
+const mapEmbedUrl = `https://www.google.com/maps?q=${cityMallCoordinates.lat},${cityMallCoordinates.lng}&ll=${cityMallCoordinates.lat},${cityMallCoordinates.lng}&z=17&hl=tr&output=embed`;
+
+const cityMallMapsUrl = "https://maps.app.goo.gl/KDUQpTdHwGMozPGF6";
+  
+function getDayName(locale: Locale, date = new Date()) {
   return new Intl.DateTimeFormat(locale === "tr" ? "tr-TR" : "en-US", {
     weekday: "long",
-  }).format(new Date());
+  }).format(date);
+}
+
+function getTodayHoursRange(date = new Date()) {
+  const day = date.getDay();
+  const isWeekend = day === 0 || day === 6;
+
+  return isWeekend ? "10:00 — 23:00" : "10:00 — 22:00";
 }
 
 export function ExploreCityMall({ locale }: ExploreCityMallProps) {
   const copy = content[locale];
   const sectionRef = useRef<HTMLElement | null>(null);
   const [isVisible, setIsVisible] = useState(false);
-  const [activeFloor, setActiveFloor] = useState<FloorKey>("ground");
   const [openingStatus, setOpeningStatus] = useState<OpeningStatus | null>(
     null
   );
+  const [timeInfo, setTimeInfo] = useState<TimeInfo | null>(null);
 
   const services: ServiceItem[] = useMemo(
     () => [
@@ -241,7 +176,13 @@ export function ExploreCityMall({ locale }: ExploreCityMallProps) {
 
   useEffect(() => {
     function updateOpeningStatus() {
-      setOpeningStatus(getOpeningStatus(locale));
+      const now = new Date();
+
+      setOpeningStatus(getOpeningStatus(locale, now));
+      setTimeInfo({
+        dayName: getDayName(locale, now),
+        hoursRange: getTodayHoursRange(now),
+      });
     }
 
     updateOpeningStatus();
@@ -270,23 +211,8 @@ export function ExploreCityMall({ locale }: ExploreCityMallProps) {
           }
         }
 
-        @keyframes floorMapEnter {
-          0% {
-            opacity: 0;
-            transform: translateY(12px);
-            filter: blur(10px);
-          }
-          100% {
-            opacity: 1;
-            transform: translateY(0);
-            filter: blur(0);
-          }
-        }
-
         @media (prefers-reduced-motion: reduce) {
           .explore-citymall-reveal,
-          .floor-map-transition,
-          .floor-block,
           .service-item {
             animation: none !important;
             transition: none !important;
@@ -298,7 +224,7 @@ export function ExploreCityMall({ locale }: ExploreCityMallProps) {
       `}</style>
 
       <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-text-primary/10 to-transparent" />
-      <div className="pointer-events-none absolute inset-0 -z-10 bg-[radial-gradient(circle_at_18%_0%,rgba(180,126,47,0.10),transparent_30%),radial-gradient(circle_at_84%_16%,rgba(17,24,39,0.05),transparent_28%)]" />
+      <div className="pointer-events-none absolute inset-0 -z-10 bg-[radial-gradient(circle_at_18%_0%,rgba(232,49,42,0.08),transparent_30%),radial-gradient(circle_at_84%_16%,rgba(0,114,188,0.07),transparent_28%)]" />
 
       <div className="container">
         <div
@@ -328,17 +254,14 @@ export function ExploreCityMall({ locale }: ExploreCityMallProps) {
               : "opacity-0"
           }`}
         >
-          <FloorNavigator
-            locale={locale}
-            activeFloor={activeFloor}
-            setActiveFloor={setActiveFloor}
-          />
+          <FloorNavigator locale={locale} />
 
           <div className="grid gap-6">
             <OpeningHoursCard
               locale={locale}
               openingStatus={openingStatus}
-              dayName={getDayName(locale)}
+              dayName={timeInfo?.dayName ?? (locale === "tr" ? "Bugün" : "Today")}
+              hoursRange={timeInfo?.hoursRange ?? "10:00 — 22:00"}
             />
 
             <ServicesCard services={services} locale={locale} />
@@ -351,186 +274,83 @@ export function ExploreCityMall({ locale }: ExploreCityMallProps) {
   );
 }
 
-function FloorNavigator({
-  locale,
-  activeFloor,
-  setActiveFloor,
-}: {
-  locale: Locale;
-  activeFloor: FloorKey;
-  setActiveFloor: (floor: FloorKey) => void;
-}) {
+function FloorNavigator({ locale }: { locale: Locale }) {
   const copy = content[locale];
 
   return (
     <div className="min-h-[420px] rounded-[2rem] border border-white/60 bg-white/70 p-5 shadow-[0_8px_32px_rgba(0,0,0,0.08)] backdrop-blur-xl md:p-6">
-      <div className="flex flex-col gap-5 md:flex-row md:items-start md:justify-between">
-        <div>
-          <div className="mb-3 inline-flex h-11 w-11 items-center justify-center rounded-2xl border border-border-default bg-white text-text-primary shadow-card">
-            <Layers3 className="h-5 w-5" aria-hidden="true" />
-          </div>
-
-          <h3 className="text-2xl font-semibold tracking-tight text-text-primary md:text-3xl">
-            {copy.floorGuide}
-          </h3>
-
-          <p className="mt-2 max-w-xl text-sm leading-6 text-text-secondary">
-            {copy.floorText}
-          </p>
+      <div>
+        <div className="mb-3 inline-flex h-11 w-11 items-center justify-center rounded-2xl border border-border-default bg-white text-text-primary shadow-card">
+          <Layers3 className="h-5 w-5" aria-hidden="true" />
         </div>
 
-        <div className="flex flex-wrap gap-2">
-          {floorOrder.map((floor) => {
-            const isActive = activeFloor === floor;
+        <h3 className="text-2xl font-semibold tracking-tight text-text-primary md:text-3xl">
+          {copy.floorGuide}
+        </h3>
 
-            return (
-              <button
-                key={floor}
-                type="button"
-                onClick={() => setActiveFloor(floor)}
-                className={`rounded-full px-4 py-2 text-sm font-semibold transition ${
-                  isActive
-                    ? "bg-text-primary text-white shadow-card"
-                    : "border border-border-default bg-white text-text-secondary hover:bg-surface-muted hover:text-text-primary"
-                }`}
-              >
-                {copy.floors[floor]}
-              </button>
-            );
-          })}
-        </div>
+        <p className="mt-2 max-w-xl text-sm leading-6 text-text-secondary">
+          {copy.floorText}
+        </p>
       </div>
 
-      <div className="mt-7 rounded-[1.5rem] border border-border-default bg-[#f7f2ea] p-4 shadow-inner">
-        <div
-          key={activeFloor}
-          className="floor-map-transition grid gap-3 [animation:floorMapEnter_450ms_cubic-bezier(0.22,1,0.36,1)_both] sm:grid-cols-2"
+      <div className="mt-7 rounded-[1.5rem] border border-border-default bg-white p-5 shadow-card">
+        <Link
+          href={`/${locale}/map`}
+          className="inline-flex w-full items-center justify-center gap-2 rounded-full bg-[#FFD100] px-6 py-4 text-sm font-semibold text-black shadow-card transition hover:-translate-y-0.5 hover:bg-[#F7941D]"
         >
-          {floorOrder.map((floor) => (
-            <MiniFloorPlate
-              key={floor}
-              floor={floor}
-              locale={locale}
-              isActive={activeFloor === floor}
-              onClick={() => setActiveFloor(floor)}
-            />
-          ))}
-        </div>
+          {copy.mapCta}
+          <ChevronRight className="h-4 w-4" aria-hidden="true" />
+        </Link>
+
+        <p className="mt-4 text-center text-sm leading-6 text-text-secondary">
+          {copy.mapHelper}
+        </p>
       </div>
+
+      <div className="mt-5">
+  <FloorMap3D locale={locale} />
+</div>
+
+<div className="mt-5 overflow-hidden rounded-[1.5rem] border border-border-default bg-white shadow-card">
+  <div className="relative h-[320px] w-full overflow-hidden rounded-[1.5rem]">
+    <iframe
+      title={
+        locale === "tr"
+          ? "CityMall konum haritası"
+          : "CityMall location map"
+      }
+      src={mapEmbedUrl}
+      className="h-full w-full border-0"
+      loading="lazy"
+      referrerPolicy="no-referrer-when-downgrade"
+      allowFullScreen
+    />
+
+    <a
+      href={cityMallMapsUrl}
+      target="_blank"
+      rel="noreferrer"
+      className="absolute left-3 top-3 z-20 inline-flex items-center gap-2 rounded-md border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-[#1a73e8] shadow-[0_2px_8px_rgba(15,23,42,0.18)] transition hover:bg-slate-50"
+    >
+      {locale === "tr" ? "Haritada Göster" : "View on Map"}
+      <span aria-hidden="true">↗</span>
+    </a>
+  </div>
+</div>
     </div>
   );
 }
 
-function MiniFloorPlate({
-  floor,
-  locale,
-  isActive,
-  onClick,
-}: {
-  floor: FloorKey;
-  locale: Locale;
-  isActive: boolean;
-  onClick: () => void;
-}) {
-  const copy = content[locale];
-
-  return (
-    <button
-      type="button"
-      onClick={onClick}
-      className={`group relative h-[190px] overflow-hidden rounded-[1.25rem] border bg-[linear-gradient(135deg,rgba(255,255,255,0.95),rgba(245,245,243,0.72))] p-3 text-left transition duration-300 hover:-translate-y-0.5 hover:shadow-[0_18px_44px_rgba(15,23,42,0.13)] ${
-        isActive
-          ? "border-text-primary shadow-[0_18px_50px_rgba(15,23,42,0.16)]"
-          : "border-white/80 shadow-card"
-      }`}
-      aria-pressed={isActive}
-    >
-      <div className="absolute left-[8%] top-1/2 h-3 w-[84%] -translate-y-1/2 rounded-full bg-slate-900/8" />
-      <div className="absolute left-1/2 top-[14%] h-[72%] w-3 -translate-x-1/2 rounded-full bg-slate-900/8" />
-
-      <div
-        className={`absolute left-3 top-3 z-10 rounded-full px-3 py-1.5 text-xs font-semibold shadow-card ${
-          isActive
-            ? "bg-text-primary text-white"
-            : "border border-border-default bg-white/82 text-text-secondary"
-        }`}
-      >
-        {copy.floors[floor]}
-      </div>
-
-      <div className="absolute right-3 top-3 z-10 flex h-8 w-8 items-center justify-center rounded-full border border-border-default bg-white/82 text-text-primary shadow-card">
-        <MapPinned className="h-3.5 w-3.5" aria-hidden="true" />
-      </div>
-
-      {floorBlocks[floor].map((block) => (
-        <MiniFloorBlock
-          key={`${floor}-${block.label}-${block.x}`}
-          block={block}
-          locale={locale}
-          isActiveFloor={isActive}
-        />
-      ))}
-
-      <div
-        className={`pointer-events-none absolute inset-0 rounded-[1.25rem] transition duration-300 ${
-          isActive
-            ? "ring-2 ring-text-primary/12"
-            : "ring-1 ring-white/40 group-hover:ring-text-primary/8"
-        }`}
-      />
-    </button>
-  );
-}
-
-function MiniFloorBlock({
-  block,
-  locale,
-  isActiveFloor,
-}: {
-  block: FloorBlock;
-  locale: Locale;
-  isActiveFloor: boolean;
-}) {
-  const copy = content[locale];
-  const Icon = typeIcons[block.type];
-
-  const style = {
-    left: `${block.x}%`,
-    top: `${block.y}%`,
-    width: `${block.w}%`,
-    height: `${block.h}%`,
-  } as CSSProperties;
-
-  return (
-    <div
-      style={style}
-      className={`floor-block absolute flex flex-col justify-between rounded-xl border p-2 shadow-[0_10px_24px_rgba(15,23,42,0.08)] transition duration-300 group-hover:shadow-[0_14px_34px_rgba(15,23,42,0.15)] ${
-        typeStyles[block.type]
-      } ${isActiveFloor ? "opacity-100" : "opacity-72"}`}
-    >
-      <Icon className="h-3.5 w-3.5 shrink-0" aria-hidden="true" />
-
-      <div className="min-w-0">
-        <p className="truncate text-[0.68rem] font-bold leading-tight">
-          {block.label}
-        </p>
-
-        <p className="mt-0.5 hidden truncate text-[0.55rem] font-semibold uppercase tracking-[0.12em] opacity-60 md:block">
-          {copy.mapLabels[block.type]}
-        </p>
-      </div>
-    </div>
-  );
-}
-  
 function OpeningHoursCard({
   locale,
   openingStatus,
   dayName,
+  hoursRange,
 }: {
   locale: Locale;
   openingStatus: OpeningStatus | null;
   dayName: string;
+  hoursRange: string;
 }) {
   const copy = content[locale];
   const isOpen = Boolean(openingStatus?.isOpen);
@@ -578,7 +398,7 @@ function OpeningHoursCard({
         </p>
 
         <p className="mt-2 text-4xl font-semibold tracking-tight text-text-primary">
-          {copy.hoursRange}
+          {hoursRange}
         </p>
 
         <p className="mt-3 text-sm leading-6 text-text-secondary">
@@ -602,7 +422,7 @@ function ServicesCard({
     <div className="rounded-[2rem] border border-white/60 bg-white/70 p-6 shadow-[0_8px_32px_rgba(0,0,0,0.08)] backdrop-blur-xl">
       <div className="mb-6">
         <p className="text-xs font-semibold uppercase tracking-[0.25em] text-text-muted">
-          {copy.services}
+          {copy.servicesEyebrow}
         </p>
 
         <h3 className="mt-2 text-3xl font-semibold tracking-tight text-text-primary">
