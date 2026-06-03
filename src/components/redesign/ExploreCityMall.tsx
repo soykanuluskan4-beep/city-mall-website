@@ -1,7 +1,6 @@
 "use client";
 
 import { FloorMap3D } from "@/components/redesign/FloorMap3D";
-import Link from "next/link";
 import {
   Accessibility,
   Baby,
@@ -294,20 +293,25 @@ function FloorNavigator({ locale }: { locale: Locale }) {
       </div>
 
       <div className="mt-7 rounded-[1.5rem] border border-border-default bg-white p-5 shadow-card">
-        <Link
-          href={`/${locale}/map`}
-          className="inline-flex w-full items-center justify-center gap-2 rounded-full bg-[#FFD100] px-6 py-4 text-sm font-semibold text-black shadow-card transition hover:-translate-y-0.5 hover:bg-[#F7941D]"
-        >
-          {copy.mapCta}
-          <ChevronRight className="h-4 w-4" aria-hidden="true" />
-        </Link>
+        <button
+  type="button"
+  onClick={() => {
+    document
+      .getElementById("citymall-3d-floor-guide")
+      ?.scrollIntoView({ behavior: "smooth", block: "start" });
+  }}
+  className="inline-flex w-full items-center justify-center gap-2 rounded-full bg-[#FFD100] px-6 py-4 text-sm font-semibold text-black shadow-card transition hover:-translate-y-0.5 hover:bg-[#F7941D]"
+>
+  {copy.mapCta}
+  <ChevronRight className="h-4 w-4 rotate-90" aria-hidden="true" />
+</button>
 
         <p className="mt-4 text-center text-sm leading-6 text-text-secondary">
           {copy.mapHelper}
         </p>
       </div>
 
-      <div className="mt-5">
+      <div id="citymall-3d-floor-guide" className="scroll-mt-24">
   <FloorMap3D locale={locale} />
 </div>
 

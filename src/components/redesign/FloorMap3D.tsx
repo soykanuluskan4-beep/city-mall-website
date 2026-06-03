@@ -60,6 +60,7 @@ type SceneApi = {
   applySearch: (query: string, matchIds: Set<string>) => void;
   focusBlock: (id: string | null) => void;
   setActiveFloor: (floor: FloorKey) => void;
+  resetCamera: () => void;
 };
 
 const THREE_CDN_URL =
@@ -306,23 +307,36 @@ function getFirstFloorEscalatorAnchors() {
 }
 
 const RAW_BASEMENT_BLOCKS: FloorBlock[] = [
-  makeBlock("basement", "b-unimar-top", "Ünimar", "service", 0, 0, 28.5, 6.3),
+  makeBlock("basement", "b-unimar-top", "Ünimar", "service", 0, 0, 28.5, 6.3, {
+    visualColor: "#F7941D",
+  }),
   makeBlock(
-    "basement",
-    "b-sconto",
-    "Sconto Super Store",
-    "service",
-    28.5,
-    0,
-    71.5,
-    12.5
-  ),
-  makeBlock("basement", "b-unimar-left", "Ünimar", "service", 0, 6.3, 8.1, 15.6),
+  "basement",
+  "b-sconto",
+  "Sconto Super Store",
+  "service",
+  28.5,
+  0,
+  71.5,
+  12.5,
+  {
+    visualColor: "#003B73",
+  }
+),
+  makeBlock("basement", "b-unimar-left", "Ünimar", "service", 0, 6.3, 8.1, 15.6, {
+    visualColor: "#F7941D",
+  }), 
   makeBlock("basement", "b-jupiter", "Jupiter", "technology", 0, 21.9, 8.1, 9.3),
   makeBlock("basement", "b-toyzz-shop", "Toyzz Shop", "entertainment", 0, 31.2, 8.1, 13.7, {
-    route: "/kids",
-  }),
-  makeBlock("basement", "b-chicco", "Chicco", "market", 0, 52.0, 8.1, 9.5),
+  route: "/kids",
+}),
+makeBlock("basement", "b-left-stairs-wc", "Merdiven ve WC", "service", 0, 44.9, 8.1, 7.1, {
+  clickable: false,
+  opacity: 0.55,
+  height: 1.2,
+  visualColor: "#5b18e8",
+}),
+makeBlock("basement", "b-chicco", "Chicco", "market", 0, 52.0, 8.1, 9.5),
   makeBlock("basement", "b-techno-life", "Techno Life", "technology", 0, 61.5, 8.1, 26.3),
   makeBlock("basement", "b-closed-left", "Closed", "closed", 0, 87.8, 18.2, 12.2, {
     clickable: false,
@@ -423,6 +437,10 @@ const RAW_BASEMENT_BLOCKS: FloorBlock[] = [
 ];
 
 const BASEMENT_BLOCKS = RAW_BASEMENT_BLOCKS.map((block, index) => {
+  if (block.visualColor) {
+    return block;
+  }
+
   if (block.category === "closed" || block.category === "parking") {
     return block;
   }
@@ -434,15 +452,21 @@ const BASEMENT_BLOCKS = RAW_BASEMENT_BLOCKS.map((block, index) => {
 });
 
 const GROUND_BLOCKS: FloorBlock[] = [
-  makeBlock("ground", "g-lc-waikiki", "LC Waikiki", "fashion", 0, 0, 33.0, 13.6),
+  makeBlock("ground", "g-lc-waikiki", "LC Waikiki", "fashion", 0, 0, 33.0, 13.6, {
+  visualColor: "#5b18e8",
+}),
   makeBlock("ground", "g-defacto", "Defacto", "fashion", 33.0, 0, 34.0, 4.5, {
     visualColor: "#9bbac2",
   }),
   makeBlock("ground", "g-flo", "FLO", "fashion", 67.0, 0, 33.0, 13.6, {
     visualColor: "#ff8a45",
   }),
-  makeBlock("ground", "g-jakamen", "Jakamen", "fashion", 0, 13.6, 5.8, 9.8),
-  makeBlock("ground", "g-pierre-cardin", "Pierre Cardin", "fashion", 0, 23.4, 5.8, 8.4),
+  makeBlock("ground", "g-jakamen", "Jakamen", "fashion", 0, 13.6, 5.8, 9.8, {
+  visualColor: "#222222",
+}),
+  makeBlock("ground", "g-pierre-cardin", "Pierre Cardin", "fashion", 0, 23.4, 5.8, 8.4, {
+  visualColor: "#6B6256",
+}),
   makeBlock("ground", "g-avva", "Avva", "fashion", 0, 31.8, 5.8, 8.0, {
     visualColor: "#8dbdf2",
   }),
@@ -737,6 +761,12 @@ export function FloorMap3D({ locale }: FloorMap3DProps) {
   const [resultCount, setResultCount] = useState<number | null>(null);
   const [hoveredBlock, setHoveredBlock] = useState<FloorBlock | null>(null);
   const [selectedBlock, setSelectedBlock] = useState<FloorBlock | null>(null);
+  const [isMobilePanelOpen, setIsMobilePanelOpen] = useState(false);
+
+function closeSelectedBlock() {
+  setSelectedBlock(null);
+  sceneApiRef.current?.resetCamera();
+}
 
   const clickableBlocks = useMemo(
     () => FLOOR_BLOCKS.filter((block) => block.clickable !== false),
@@ -811,16 +841,42 @@ export function FloorMap3D({ locale }: FloorMap3DProps) {
       className="relative h-[380px] w-full overflow-hidden rounded-2xl border border-border-default bg-[#0f0f10] shadow-card md:h-[500px]"
       style={{ fontFamily: "Outfit, sans-serif" }}
     >
-      <div ref={containerRef} className="absolute inset-0" />
+            <div ref={containerRef} className="absolute inset-0" />
+
+      <button
+        type="button"
+        onClick={() => setIsMobilePanelOpen((value) => !value)}
+        className="absolute left-4 top-4 z-50 flex h-11 w-11 items-center justify-center rounded-full border border-white/16 bg-black/35 text-xl font-semibold text-white shadow-[0_14px_40px_rgba(0,0,0,0.28)] backdrop-blur-xl transition hover:bg-black/50"
+        aria-label={
+          isMobilePanelOpen
+            ? text.close
+            : locale === "tr"
+              ? "Menüyü aç"
+              : "Open menu"
+        }
+      >
+        {isMobilePanelOpen ? (
+          <X className="h-5 w-5" aria-hidden="true" />
+        ) : (
+          <span aria-hidden="true">☰</span>
+        )}
+      </button>
 
       <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_22%_10%,rgba(232,49,42,0.16),transparent_28%),linear-gradient(180deg,rgba(15,15,16,0.05),rgba(15,15,16,0.34))]" />
 
-      <div className="absolute left-3 top-3 z-20 w-[min(330px,calc(100%-24px))] rounded-2xl border border-white/14 bg-black/42 p-4 text-white shadow-[0_18px_54px_rgba(0,0,0,0.28)] backdrop-blur-xl md:left-4 md:top-4">
+      <div
+        className={`absolute left-4 top-20 z-40 w-[min(330px,calc(100%-32px))] rounded-2xl border border-white/14 bg-black/42 p-4 text-white shadow-[0_18px_54px_rgba(0,0,0,0.28)] backdrop-blur-xl transition duration-300 ${
+          isMobilePanelOpen
+            ? "translate-y-0 opacity-100"
+            : "pointer-events-none -translate-y-3 opacity-0"
+        }`}
+      >
         <div className="flex items-start justify-between gap-4">
           <div>
             <p className="text-xs font-semibold uppercase tracking-[0.24em] text-white/52">
               {FLOOR_LABELS[activeFloor][locale]}
             </p>
+
             <h3 className="mt-1 text-lg font-semibold tracking-tight">
               {text.title}
             </h3>
@@ -832,24 +888,28 @@ export function FloorMap3D({ locale }: FloorMap3DProps) {
         </div>
 
         <div className="mt-4 grid grid-cols-4 gap-2">
-          {(["basement", "ground", "first", "second"] as FloorKey[]).map((floor) => (
-            <button
-              key={floor}
-              type="button"
-              onClick={() => {
-                setActiveFloor(floor);
-                sceneApiRef.current?.setActiveFloor(floor);
-                sceneApiRef.current?.focusBlock(null);
-              }}
-              className={`rounded-full px-4 py-2 text-xs font-semibold transition ${
-                activeFloor === floor
-                  ? "bg-[#E8312A] text-white"
-                  : "border border-white/14 bg-white/10 text-white/68 hover:bg-white/16 hover:text-white"
-              }`}
-            >
-              {text.floors[floor]}
-            </button>
-          ))}
+          {(["basement", "ground", "first", "second"] as FloorKey[]).map(
+            (floor) => (
+              <button
+                key={floor}
+                type="button"
+                onClick={() => {
+                  setActiveFloor(floor);
+                  sceneApiRef.current?.setActiveFloor(floor);
+                  sceneApiRef.current?.focusBlock(null);
+                }}
+                className={`flex min-h-[46px] min-w-0 items-center justify-center rounded-full px-2 py-2 text-center text-xs font-semibold leading-tight transition ${
+                  activeFloor === floor
+                    ? "bg-[#E8312A] text-white"
+                    : "border border-white/14 bg-white/10 text-white/68 hover:bg-white/16 hover:text-white"
+                }`}
+              >
+                <span className="block w-full text-center leading-tight">
+                  {text.floors[floor]}
+                </span>
+              </button>
+            )
+          )}
         </div>
 
         <label className="mt-4 flex items-center gap-2 rounded-full border border-white/14 bg-white/10 px-4 py-3 text-sm text-white/80">
@@ -918,7 +978,7 @@ export function FloorMap3D({ locale }: FloorMap3DProps) {
 
               <button
                 type="button"
-                onClick={() => setSelectedBlock(null)}
+                onClick={closeSelectedBlock}
                 className="rounded-full border border-white/14 p-2 text-white/60 transition hover:bg-white/10 hover:text-white"
                 aria-label={text.close}
               >
@@ -1233,6 +1293,37 @@ root.add(escalatorGroup);
     hoverMesh: null as any,
   };
 
+  const touchState = {
+  mode: null as "rotate" | "pinchpan" | null,
+  moved: false,
+  startX: 0,
+  startY: 0,
+  lastX: 0,
+  lastY: 0,
+  lastDistance: 0,
+  lastMidX: 0,
+  lastMidY: 0,
+};
+
+function getTouchDistance(touches: TouchList) {
+  const dx = touches[0].clientX - touches[1].clientX;
+  const dy = touches[0].clientY - touches[1].clientY;
+
+  return Math.hypot(dx, dy);
+}
+
+function getTouchMidpoint(touches: TouchList) {
+  return {
+    x: (touches[0].clientX + touches[1].clientX) / 2,
+    y: (touches[0].clientY + touches[1].clientY) / 2,
+  };
+}
+
+function clampCameraTarget() {
+  rig.targetTarget.x = Math.max(-28, Math.min(28, rig.targetTarget.x));
+  rig.targetTarget.z = Math.max(-36, Math.min(36, rig.targetTarget.z));
+}
+
   let selectedMesh: any = null;
   let activeFloor: FloorKey = "basement";
 
@@ -1325,27 +1416,32 @@ escalatorObjects.forEach((escalator) => {
     camera.lookAt(rig.target.x, rig.target.y, rig.target.z);
   }
 
-  function setPointerFromEvent(event: PointerEvent) {
-    const rect = renderer.domElement.getBoundingClientRect();
+  function setPointerFromClient(clientX: number, clientY: number) {
+  const rect = renderer.domElement.getBoundingClientRect();
 
-    pointer.x = ((event.clientX - rect.left) / rect.width) * 2 - 1;
-    pointer.y = -((event.clientY - rect.top) / rect.height) * 2 + 1;
-  }
+  pointer.x = ((clientX - rect.left) / rect.width) * 2 - 1;
+  pointer.y = -((clientY - rect.top) / rect.height) * 2 + 1;
+}
 
-  function getIntersection(event: PointerEvent) {
-    setPointerFromEvent(event);
-    raycaster.setFromCamera(pointer, camera);
+function getIntersectionFromClient(clientX: number, clientY: number) {
+  setPointerFromClient(clientX, clientY);
 
-    const hits = raycaster.intersectObjects(clickableMeshes, false);
+  raycaster.setFromCamera(pointer, camera);
 
-    const activeHit = hits.find((hit: any) => {
-      const block = hit.object.userData.block as FloorBlock;
+  const hits = raycaster.intersectObjects(clickableMeshes, false);
 
-      return block.floor === activeFloor;
-    });
+  const activeHit = hits.find((hit: any) => {
+    const block = hit.object.userData.block as FloorBlock;
 
-    return activeHit?.object ?? null;
-  }
+    return block.floor === activeFloor;
+  });
+
+  return activeHit?.object ?? null;
+}
+
+function getIntersection(event: PointerEvent) {
+  return getIntersectionFromClient(event.clientX, event.clientY);
+}
 
   function paintMesh(mesh: any, mode: "default" | "dim" | "match" | "hover" | "selected") {
     const block = mesh.userData.block as FloorBlock;
@@ -1455,96 +1551,233 @@ escalatorObjects.forEach((escalator) => {
     updateFloorVisibility();
   }
 
-  sceneApiRef.current = {
-    applySearch,
-    focusBlock,
-    setActiveFloor,
-  };
+  function resetCamera() {
+  if (selectedMesh) {
+    paintMesh(selectedMesh, "default");
+    selectedMesh = null;
+  }
 
-  function onPointerDown(event: PointerEvent) {
-    pointerState.isDown = true;
-    pointerState.moved = false;
+  clearHover();
+
+  rig.thetaTarget = -0.58;
+  rig.phiTarget = 0.98;
+  rig.radiusTarget = 74;
+  rig.targetTarget.set(0, FLOOR_Y[activeFloor], 0);
+}
+
+  sceneApiRef.current = {
+  applySearch,
+  focusBlock,
+  setActiveFloor,
+  resetCamera,
+};
+
+  function selectMesh(mesh: any) {
+  if (!mesh) {
+    return;
+  }
+
+  const block = mesh.userData.block as FloorBlock;
+
+  if (selectedMesh && selectedMesh !== mesh) {
+    paintMesh(selectedMesh, "default");
+  }
+
+  selectedMesh = mesh;
+  setSelectedBlock(block);
+  paintMesh(mesh, "selected");
+  setActiveFloor(block.floor);
+  focusBlock(block.id);
+}
+
+function onPointerDown(event: PointerEvent) {
+  if (event.pointerType === "touch") {
+    return;
+  }
+
+  pointerState.isDown = true;
+  pointerState.moved = false;
+  pointerState.lastX = event.clientX;
+  pointerState.lastY = event.clientY;
+  renderer.domElement.style.cursor = "grabbing";
+  event.preventDefault();
+}
+
+function onPointerMove(event: PointerEvent) {
+  if (event.pointerType === "touch") {
+    return;
+  }
+
+  if (pointerState.isDown) {
+    const dx = event.clientX - pointerState.lastX;
+    const dy = event.clientY - pointerState.lastY;
+
+    if (Math.abs(dx) + Math.abs(dy) > 3) {
+      pointerState.moved = true;
+    }
+
+    rig.thetaTarget -= dx * 0.006;
+    rig.phiTarget += dy * 0.005;
+    rig.phiTarget = Math.max(0.42, Math.min(1.24, rig.phiTarget));
+
     pointerState.lastX = event.clientX;
     pointerState.lastY = event.clientY;
-    renderer.domElement.style.cursor = "grabbing";
-    event.preventDefault();
+
+    return;
   }
 
-  function onPointerMove(event: PointerEvent) {
-    if (pointerState.isDown) {
-      const dx = event.clientX - pointerState.lastX;
-      const dy = event.clientY - pointerState.lastY;
+  const mesh = getIntersection(event);
 
-      if (Math.abs(dx) + Math.abs(dy) > 3) {
-        pointerState.moved = true;
-      }
+  if (mesh === pointerState.hoverMesh) {
+    return;
+  }
 
-      rig.thetaTarget -= dx * 0.006;
-      rig.phiTarget += dy * 0.005;
-      rig.phiTarget = Math.max(0.42, Math.min(1.24, rig.phiTarget));
+  if (pointerState.hoverMesh && pointerState.hoverMesh !== selectedMesh) {
+    paintMesh(pointerState.hoverMesh, "default");
+  }
 
-      pointerState.lastX = event.clientX;
-      pointerState.lastY = event.clientY;
+  pointerState.hoverMesh = mesh;
 
-      return;
-    }
+  if (mesh) {
+    const block = mesh.userData.block as FloorBlock;
 
+    paintMesh(mesh, "hover");
+    setHoveredBlock(block);
+    renderer.domElement.style.cursor = "pointer";
+    return;
+  }
+
+  clearHover();
+}
+
+function onPointerUp(event: PointerEvent) {
+  if (event.pointerType === "touch") {
+    return;
+  }
+
+  if (!pointerState.isDown) {
+    return;
+  }
+
+  pointerState.isDown = false;
+  renderer.domElement.style.cursor = "grab";
+
+  if (!pointerState.moved) {
     const mesh = getIntersection(event);
 
-    if (mesh === pointerState.hoverMesh) {
-      return;
-    }
-
-    if (pointerState.hoverMesh && pointerState.hoverMesh !== selectedMesh) {
-      paintMesh(pointerState.hoverMesh, "default");
-    }
-
-    pointerState.hoverMesh = mesh;
-
     if (mesh) {
-      const block = mesh.userData.block as FloorBlock;
-
-      paintMesh(mesh, "hover");
-      setHoveredBlock(block);
-      renderer.domElement.style.cursor = "pointer";
-      return;
-    }
-
-    clearHover();
-  }
-
-  function onPointerUp(event: PointerEvent) {
-    if (!pointerState.isDown) {
-      return;
-    }
-
-    pointerState.isDown = false;
-    renderer.domElement.style.cursor = "grab";
-
-    if (!pointerState.moved) {
-      const mesh = getIntersection(event);
-
-      if (mesh) {
-        const block = mesh.userData.block as FloorBlock;
-
-        if (selectedMesh && selectedMesh !== mesh) {
-          paintMesh(selectedMesh, "default");
-        }
-
-        selectedMesh = mesh;
-        setSelectedBlock(block);
-        paintMesh(mesh, "selected");
-        setActiveFloor(block.floor);
-        focusBlock(block.id);
-      }
+      selectMesh(mesh);
     }
   }
+}
 
   function onWheel(event: WheelEvent) {
     event.preventDefault();
     rig.radiusTarget += event.deltaY * 0.035;
     rig.radiusTarget = Math.max(30, Math.min(94, rig.radiusTarget));
   }
+
+  function onTouchStart(event: TouchEvent) {
+  event.preventDefault();
+
+  if (event.touches.length === 1) {
+    const touch = event.touches[0];
+
+    touchState.mode = "rotate";
+    touchState.moved = false;
+    touchState.startX = touch.clientX;
+    touchState.startY = touch.clientY;
+    touchState.lastX = touch.clientX;
+    touchState.lastY = touch.clientY;
+
+    return;
+  }
+
+  if (event.touches.length === 2) {
+    const midpoint = getTouchMidpoint(event.touches);
+
+    touchState.mode = "pinchpan";
+    touchState.moved = false;
+    touchState.lastDistance = getTouchDistance(event.touches);
+    touchState.lastMidX = midpoint.x;
+    touchState.lastMidY = midpoint.y;
+  }
+}
+
+function onTouchMove(event: TouchEvent) {
+  event.preventDefault();
+
+  if (event.touches.length === 1 && touchState.mode === "rotate") {
+    const touch = event.touches[0];
+    const dx = touch.clientX - touchState.lastX;
+    const dy = touch.clientY - touchState.lastY;
+
+    if (Math.abs(dx) + Math.abs(dy) > 4) {
+      touchState.moved = true;
+    }
+
+    rig.thetaTarget -= dx * 0.006;
+    rig.phiTarget += dy * 0.005;
+    rig.phiTarget = Math.max(0.42, Math.min(1.24, rig.phiTarget));
+
+    touchState.lastX = touch.clientX;
+    touchState.lastY = touch.clientY;
+
+    return;
+  }
+
+  if (event.touches.length === 2 && touchState.mode === "pinchpan") {
+    const distance = getTouchDistance(event.touches);
+    const midpoint = getTouchMidpoint(event.touches);
+
+    const distanceDelta = distance - touchState.lastDistance;
+    const midDx = midpoint.x - touchState.lastMidX;
+    const midDy = midpoint.y - touchState.lastMidY;
+
+    if (Math.abs(distanceDelta) + Math.abs(midDx) + Math.abs(midDy) > 3) {
+      touchState.moved = true;
+    }
+
+    rig.radiusTarget -= distanceDelta * 0.08;
+    rig.radiusTarget = Math.max(26, Math.min(100, rig.radiusTarget));
+
+    const panScale = rig.radiusTarget * 0.0022;
+
+    const rightX = Math.cos(rig.thetaTarget);
+    const rightZ = -Math.sin(rig.thetaTarget);
+
+    const forwardX = Math.sin(rig.thetaTarget);
+    const forwardZ = Math.cos(rig.thetaTarget);
+
+    rig.targetTarget.x -= midDx * panScale * rightX;
+    rig.targetTarget.z -= midDx * panScale * rightZ;
+
+    rig.targetTarget.x += midDy * panScale * forwardX;
+    rig.targetTarget.z += midDy * panScale * forwardZ;
+
+    clampCameraTarget();
+
+    touchState.lastDistance = distance;
+    touchState.lastMidX = midpoint.x;
+    touchState.lastMidY = midpoint.y;
+  }
+}
+
+function onTouchEnd(event: TouchEvent) {
+  event.preventDefault();
+
+  if (touchState.mode === "rotate" && !touchState.moved) {
+    const mesh = getIntersectionFromClient(touchState.startX, touchState.startY);
+
+    if (mesh) {
+      selectMesh(mesh);
+    }
+  }
+
+  if (event.touches.length === 0) {
+    touchState.mode = null;
+  }
+}
 
   const resizeObserver = new ResizeObserver(updateSize);
 
@@ -1554,6 +1787,19 @@ escalatorObjects.forEach((escalator) => {
   window.addEventListener("pointermove", onPointerMove);
   window.addEventListener("pointerup", onPointerUp);
   renderer.domElement.addEventListener("wheel", onWheel, { passive: false });
+
+  renderer.domElement.addEventListener("touchstart", onTouchStart, {
+  passive: false,
+});
+renderer.domElement.addEventListener("touchmove", onTouchMove, {
+  passive: false,
+});
+renderer.domElement.addEventListener("touchend", onTouchEnd, {
+  passive: false,
+});
+renderer.domElement.addEventListener("touchcancel", onTouchEnd, {
+  passive: false,
+});
 
   let frame = 0;
 
@@ -1582,6 +1828,11 @@ escalatorObjects.forEach((escalator) => {
     window.removeEventListener("pointermove", onPointerMove);
     window.removeEventListener("pointerup", onPointerUp);
     renderer.domElement.removeEventListener("wheel", onWheel);
+
+    renderer.domElement.removeEventListener("touchstart", onTouchStart);
+    renderer.domElement.removeEventListener("touchmove", onTouchMove);
+    renderer.domElement.removeEventListener("touchend", onTouchEnd);
+    renderer.domElement.removeEventListener("touchcancel", onTouchEnd);
 
     scene.traverse((object: any) => {
       if (object.geometry) {
