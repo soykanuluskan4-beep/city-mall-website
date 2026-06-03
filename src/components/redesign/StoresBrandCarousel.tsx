@@ -137,7 +137,7 @@ const storeBrands: StoreBrand[] = [
     image: "/stores/buff&bloom.JPG",
   },
   {
-    name: "Discountterra",
+    name: "Discounterra",
     image: "/stores/discounterra.JPG",
   },
   {
@@ -164,28 +164,28 @@ const storeBrands: StoreBrand[] = [
 
 function BrandCard({ brand }: { brand: StoreBrand }) {
   return (
-    <div className="group relative aspect-square w-[132px] shrink-0 overflow-hidden rounded-[1.35rem] border border-white/10 bg-[#111] shadow-[0_18px_50px_rgba(0,0,0,0.16)] transition duration-500 hover:-translate-y-[3px] hover:shadow-[0_24px_70px_rgba(0,0,0,0.24)] sm:w-[160px] lg:w-[188px] xl:w-[206px]">
+    <div className="group relative aspect-square w-[clamp(112px,32vw,132px)] shrink-0 overflow-hidden rounded-[1.35rem] border border-white/10 bg-[#111] shadow-[0_18px_50px_rgba(0,0,0,0.16)] transition duration-500 hover:-translate-y-[3px] hover:shadow-[0_24px_70px_rgba(0,0,0,0.24)] sm:w-[160px] lg:w-[188px] xl:w-[206px]">
       <Image
         src={brand.image}
         alt={brand.name}
         fill
-        sizes="(max-width: 640px) 132px, (max-width: 1024px) 160px, 206px"
+        sizes="(max-width: 640px) 32vw, (max-width: 1024px) 160px, 206px"
         className="object-cover transition duration-700 group-hover:scale-105"
       />
 
       <div className="absolute inset-0 bg-black/55 transition duration-500 group-hover:bg-black/35" />
 
-      <div className="absolute inset-0 flex items-center justify-center p-6">
+      <div className="absolute inset-0 flex items-center justify-center p-4 sm:p-6">
         {brand.logo ? (
           <Image
             src={brand.logo}
             alt={`${brand.name} logo`}
             width={220}
             height={90}
-            className="max-h-[60px] w-auto max-w-[78%] object-contain brightness-0 invert"
+            className="max-h-[54px] w-auto max-w-[78%] object-contain brightness-0 invert sm:max-h-[60px]"
           />
         ) : (
-          <span className="text-center text-[1.05rem] font-black uppercase leading-tight tracking-[0.1em] text-white drop-shadow-[0_4px_18px_rgba(0,0,0,0.55)] sm:text-[1.1rem]">
+          <span className="break-words text-center text-[0.82rem] font-black uppercase leading-tight tracking-[0.08em] text-white drop-shadow-[0_4px_18px_rgba(0,0,0,0.55)] sm:text-[1.1rem] sm:tracking-[0.1em]">
             {brand.name}
           </span>
         )}
@@ -204,9 +204,9 @@ function CarouselRow({
   const repeatedBrands = [...brands, ...brands];
 
   return (
-    <div className="brand-carousel-row overflow-hidden">
+    <div className="brand-carousel-row relative w-full min-w-0 max-w-full overflow-hidden">
       <div
-        className={`brand-carousel-track flex w-max gap-3 sm:gap-4 ${
+        className={`brand-carousel-track flex w-max max-w-none gap-3 will-change-transform sm:gap-4 ${
           direction === "left"
             ? "animate-[brandMarqueeLeft_82s_linear_infinite]"
             : "animate-[brandMarqueeRight_90s_linear_infinite]"
@@ -223,13 +223,15 @@ function CarouselRow({
   );
 }
 
-export function StoresBrandCarousel({ locale = "tr" }: StoresBrandCarouselProps) {
+export function StoresBrandCarousel({
+  locale = "tr",
+}: StoresBrandCarouselProps) {
   const rowOneBrands = storeBrands.filter((_, index) => index % 2 === 0);
   const rowTwoBrands = storeBrands.filter((_, index) => index % 2 === 1);
 
   return (
     <section
-      className="relative overflow-hidden py-8 md:py-10"
+      className="relative w-full max-w-full overflow-hidden overflow-x-clip py-8 md:py-10"
       aria-label={locale === "tr" ? "CityMall mağazaları" : "CityMall stores"}
     >
       <style>{`
@@ -251,6 +253,10 @@ export function StoresBrandCarousel({ locale = "tr" }: StoresBrandCarouselProps)
           }
         }
 
+        .brand-carousel-row {
+          contain: paint;
+        }
+
         .brand-carousel-row:hover .brand-carousel-track {
           animation-play-state: paused;
         }
@@ -263,10 +269,10 @@ export function StoresBrandCarousel({ locale = "tr" }: StoresBrandCarouselProps)
         }
       `}</style>
 
-      <div className="pointer-events-none absolute inset-y-0 left-0 z-10 w-16 bg-gradient-to-r from-[#f5f5f3] to-transparent md:w-28" />
-      <div className="pointer-events-none absolute inset-y-0 right-0 z-10 w-16 bg-gradient-to-l from-[#f5f5f3] to-transparent md:w-28" />
+      <div className="pointer-events-none absolute inset-y-0 left-0 z-10 w-10 bg-gradient-to-r from-[#f5f5f3] to-transparent sm:w-16 md:w-28" />
+      <div className="pointer-events-none absolute inset-y-0 right-0 z-10 w-10 bg-gradient-to-l from-[#f5f5f3] to-transparent sm:w-16 md:w-28" />
 
-      <div className="space-y-3 sm:space-y-4">
+      <div className="w-full min-w-0 max-w-full space-y-3 overflow-hidden sm:space-y-4">
         <CarouselRow brands={rowOneBrands} direction="left" />
         <CarouselRow brands={rowTwoBrands} direction="right" />
       </div>
