@@ -1,14 +1,12 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { locales } from "@/i18n/routing";
-import { StatsSection } from "@/components/home/StatsSection";
-import { VisitSummary } from "@/components/home/VisitSummary";
-import { FeaturedStores } from "@/components/home/FeaturedStores";
-import { CampaignSlider } from "@/components/home/CampaignSlider";
-import { DiningShowcase } from "@/components/home/DiningShowcase";
-import { EventsShowcase } from "@/components/home/EventsShowcase";
-import { HeroSection } from "@/components/home/HeroSection";
-import { QuickAccess } from "@/components/home/QuickAccess";
+import { ExploreCityMall } from "@/components/redesign/ExploreCityMall";
+import { LiveEventsCarousel } from "@/components/redesign/LiveEventsCarousel";
+import { PlanVisitBento } from "@/components/redesign/PlanVisitBento";
+import { PreviewHeroGrid } from "@/components/redesign/PreviewHeroGrid";
+import { PreviewVideoHero } from "@/components/redesign/PreviewVideoHero";
+import { StoresBrandCarousel } from "@/components/redesign/StoresBrandCarousel";
 import { createPageMetadata } from "@/lib/metadata";
 import {
   JsonLd,
@@ -59,18 +57,16 @@ export default function HomePage({ params }: HomePageProps) {
   const shoppingMallSchema = createShoppingMallSchema(locale);
 
   return (
-    <main className="bg-surface-default">
+    <main className="min-h-screen overflow-x-hidden bg-[#f5f5f3] text-text-primary">
       <JsonLd data={organizationSchema} />
       <JsonLd data={shoppingMallSchema} />
 
-      <HeroSection locale={locale} />
-      <QuickAccess locale={locale} />
-      <CampaignSlider locale={locale} />
-      <FeaturedStores locale={locale} />
-      <DiningShowcase locale={locale} />
-      <EventsShowcase locale={locale} />
-      <StatsSection locale={locale} />
-      <VisitSummary locale={locale} />
+      <PreviewVideoHero locale={locale} />
+      <PreviewHeroGrid locale={locale} />
+      <PlanVisitBento locale={locale} />
+      <LiveEventsCarousel locale={locale} />
+      <StoresBrandCarousel locale={locale} />
+      <ExploreCityMall locale={locale} />
     </main>
   );
 }

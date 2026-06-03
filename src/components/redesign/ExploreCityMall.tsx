@@ -6,13 +6,13 @@ import {
   Baby,
   BatteryCharging,
   Car,
-  ChevronRight,
   Clock3,
   CreditCard,
   Gift,
   Landmark,
-  Layers3,
   Wifi,
+  MapPinned,
+  ExternalLink,
 } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
 import { useEffect, useMemo, useRef, useState } from "react";
@@ -51,6 +51,9 @@ const content = {
     open: "Şu an açık",
     closed: "Kapalı",
     defaultClosed: "Kapalı · Yarın 10:00'da açılıyor",
+    locationTitle: "CityMall Cyprus Konumu",
+    locationText: "Gazimağusa içindeki konumu Google Maps üzerinde aç.",
+    openInMaps: "Google Maps’te Aç",
     servicesEyebrow: "AVM Hizmetleri",
     services: "Hizmetler",
     servicesText: "Ziyaretini kolaylaştıran temel hizmetler.",
@@ -79,6 +82,9 @@ const content = {
     open: "Currently Open",
     closed: "Closed",
     defaultClosed: "Closed · Opens tomorrow at 10:00",
+    locationTitle: "CityMall Cyprus Location",
+    locationText: "Open the Famagusta location on Google Maps.",
+    openInMaps: "Open in Google Maps",
     servicesEyebrow: "Mall Services",
     services: "Services",
     servicesText: "Essential services that make every visit easier.",
@@ -95,6 +101,11 @@ const content = {
   },
 };
 
+const cityMallMapsUrl = "https://maps.app.goo.gl/KDUQpTdHwGMozPGF6";
+
+const cityMallMapEmbedUrl =
+  "https://www.google.com/maps?q=35.1259061,33.921234&z=16&output=embed";
+
 const serviceColorClasses = [
   "bg-[#E8312A] text-white",
   "bg-[#0072BC] text-white",
@@ -106,15 +117,6 @@ const serviceColorClasses = [
   "bg-[#EC008C] text-white",
 ];
 
-const cityMallCoordinates = {
-  lat: 35.1259061,
-  lng: 33.921234,
-};
-
-const mapEmbedUrl = `https://www.google.com/maps?q=${cityMallCoordinates.lat},${cityMallCoordinates.lng}&ll=${cityMallCoordinates.lat},${cityMallCoordinates.lng}&z=17&hl=tr&output=embed`;
-
-const cityMallMapsUrl = "https://maps.app.goo.gl/KDUQpTdHwGMozPGF6";
-  
 function getDayName(locale: Locale, date = new Date()) {
   return new Intl.DateTimeFormat(locale === "tr" ? "tr-TR" : "en-US", {
     weekday: "long",
@@ -227,121 +229,34 @@ export function ExploreCityMall({ locale }: ExploreCityMallProps) {
 
       <div className="container">
         <div
-          className={`explore-citymall-reveal mx-auto mb-12 max-w-4xl text-center md:mb-16 ${
-            isVisible
-              ? "[animation:exploreReveal_850ms_cubic-bezier(0.22,1,0.36,1)_both]"
-              : "opacity-0"
-          }`}
-        >
-          <p className="mb-4 text-xs font-semibold uppercase tracking-[0.28em] text-text-muted">
-            {copy.eyebrow}
-          </p>
+  className={`explore-citymall-reveal ${
+    isVisible
+      ? "[animation:exploreReveal_900ms_cubic-bezier(0.22,1,0.36,1)_120ms_both]"
+      : "opacity-0"
+  }`}
+>
+  <div
+    id="citymall-3d-floor-guide"
+    className="scroll-mt-28 overflow-hidden rounded-[2rem] border border-white/60 bg-white/70 p-3 shadow-[0_8px_32px_rgba(0,0,0,0.08)] backdrop-blur-xl md:p-4 [&>div]:h-[340px] md:[&>div]:h-[420px] lg:[&>div]:h-[600px]"
+  >
+    <FloorMap3D locale={locale} />
+  </div>
 
-          <h2 className="text-4xl font-semibold tracking-tight text-text-primary md:text-6xl">
-            {copy.title}
-          </h2>
+  <div className="mt-6 grid gap-6 lg:grid-cols-2">
+    <OpeningHoursCard
+      locale={locale}
+      openingStatus={openingStatus}
+      dayName={timeInfo?.dayName ?? (locale === "tr" ? "Bugün" : "Today")}
+      hoursRange={timeInfo?.hoursRange ?? "10:00 — 22:00"}
+    />
 
-          <p className="mx-auto mt-5 max-w-2xl text-sm leading-7 text-text-secondary md:text-base">
-            {copy.subtitle}
-          </p>
-        </div>
-
-        <div
-          className={`explore-citymall-reveal grid gap-6 lg:grid-cols-[1.15fr_0.85fr] ${
-            isVisible
-              ? "[animation:exploreReveal_900ms_cubic-bezier(0.22,1,0.36,1)_120ms_both]"
-              : "opacity-0"
-          }`}
-        >
-          <FloorNavigator locale={locale} />
-
-          <div className="grid gap-6">
-            <OpeningHoursCard
-              locale={locale}
-              openingStatus={openingStatus}
-              dayName={timeInfo?.dayName ?? (locale === "tr" ? "Bugün" : "Today")}
-              hoursRange={timeInfo?.hoursRange ?? "10:00 — 22:00"}
-            />
-
-            <ServicesCard services={services} locale={locale} />
-          </div>
-        </div>
+    <ServicesCard services={services} locale={locale} />
+  </div>
+</div>
 
         <div className="mt-20 h-px bg-gradient-to-r from-transparent via-text-primary/10 to-transparent" />
       </div>
     </section>
-  );
-}
-
-function FloorNavigator({ locale }: { locale: Locale }) {
-  const copy = content[locale];
-
-  return (
-    <div className="min-h-[420px] rounded-[2rem] border border-white/60 bg-white/70 p-5 shadow-[0_8px_32px_rgba(0,0,0,0.08)] backdrop-blur-xl md:p-6">
-      <div>
-        <div className="mb-3 inline-flex h-11 w-11 items-center justify-center rounded-2xl border border-border-default bg-white text-text-primary shadow-card">
-          <Layers3 className="h-5 w-5" aria-hidden="true" />
-        </div>
-
-        <h3 className="text-2xl font-semibold tracking-tight text-text-primary md:text-3xl">
-          {copy.floorGuide}
-        </h3>
-
-        <p className="mt-2 max-w-xl text-sm leading-6 text-text-secondary">
-          {copy.floorText}
-        </p>
-      </div>
-
-      <div className="mt-7 rounded-[1.5rem] border border-border-default bg-white p-5 shadow-card">
-        <button
-  type="button"
-  onClick={() => {
-    document
-      .getElementById("citymall-3d-floor-guide")
-      ?.scrollIntoView({ behavior: "smooth", block: "start" });
-  }}
-  className="inline-flex w-full items-center justify-center gap-2 rounded-full bg-[#FFD100] px-6 py-4 text-sm font-semibold text-black shadow-card transition hover:-translate-y-0.5 hover:bg-[#F7941D]"
->
-  {copy.mapCta}
-  <ChevronRight className="h-4 w-4 rotate-90" aria-hidden="true" />
-</button>
-
-        <p className="mt-4 text-center text-sm leading-6 text-text-secondary">
-          {copy.mapHelper}
-        </p>
-      </div>
-
-      <div id="citymall-3d-floor-guide" className="scroll-mt-24">
-  <FloorMap3D locale={locale} />
-</div>
-
-<div className="mt-5 overflow-hidden rounded-[1.5rem] border border-border-default bg-white shadow-card">
-  <div className="relative h-[320px] w-full overflow-hidden rounded-[1.5rem]">
-    <iframe
-      title={
-        locale === "tr"
-          ? "CityMall konum haritası"
-          : "CityMall location map"
-      }
-      src={mapEmbedUrl}
-      className="h-full w-full border-0"
-      loading="lazy"
-      referrerPolicy="no-referrer-when-downgrade"
-      allowFullScreen
-    />
-
-    <a
-      href={cityMallMapsUrl}
-      target="_blank"
-      rel="noreferrer"
-      className="absolute left-3 top-3 z-20 inline-flex items-center gap-2 rounded-md border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-[#1a73e8] shadow-[0_2px_8px_rgba(15,23,42,0.18)] transition hover:bg-slate-50"
-    >
-      {locale === "tr" ? "Haritada Göster" : "View on Map"}
-      <span aria-hidden="true">↗</span>
-    </a>
-  </div>
-</div>
-    </div>
   );
 }
 
@@ -408,6 +323,50 @@ function OpeningHoursCard({
         <p className="mt-3 text-sm leading-6 text-text-secondary">
           {statusText}
         </p>
+      </div>
+            <div className="mt-5 overflow-hidden rounded-[1.5rem] border border-border-default bg-white shadow-card">
+        <div className="relative h-[230px] w-full overflow-hidden bg-surface-muted">
+          <iframe
+            title={
+              locale === "tr"
+                ? "CityMall Cyprus konum haritası"
+                : "CityMall Cyprus location map"
+            }
+            src={cityMallMapEmbedUrl}
+            className="h-full w-full border-0"
+            loading="lazy"
+            referrerPolicy="no-referrer-when-downgrade"
+            allowFullScreen
+          />
+        </div>
+
+        <div className="flex flex-col gap-4 border-t border-border-default p-5 sm:flex-row sm:items-center sm:justify-between">
+          <div className="flex items-start gap-3">
+            <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-[#FFD100] text-black">
+              <MapPinned className="h-5 w-5" aria-hidden="true" />
+            </div>
+
+            <div>
+              <p className="text-sm font-semibold text-text-primary">
+                {copy.locationTitle}
+              </p>
+
+              <p className="mt-1 text-sm leading-6 text-text-secondary">
+                {copy.locationText}
+              </p>
+            </div>
+          </div>
+
+          <a
+            href={cityMallMapsUrl}
+            target="_blank"
+            rel="noreferrer"
+            className="inline-flex shrink-0 items-center justify-center gap-2 rounded-full bg-text-primary px-4 py-3 text-sm font-semibold text-white transition hover:-translate-y-0.5 hover:bg-[#E8312A]"
+          >
+            {copy.openInMaps}
+            <ExternalLink className="h-4 w-4" aria-hidden="true" />
+          </a>
+        </div>
       </div>
     </div>
   );

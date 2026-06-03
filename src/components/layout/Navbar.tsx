@@ -1,148 +1,90 @@
 "use client";
 
-import Image from "next/image";
 import Link from "next/link";
-import { ChevronDown, Search } from "lucide-react";
+import Image from "next/image";
+import { Search } from "lucide-react";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
-import { MegaMenu } from "@/components/layout/MegaMenu";
 import { SearchOverlay } from "@/components/layout/SearchOverlay";
-import {
-  getOpeningStatus,
-  type OpeningStatus,
-} from "@/lib/opening-status";
+import type { Locale } from "@/types/content";
 
-const navLabels = {
-  tr: {
-    stores: "Mağazalar",
-    dining: "Yeme-İçme",
-    campaigns: "Kampanyalar",
-    events: "Etkinlikler",
-    cinema: "Cinemall",
-    kids: "Çocuk & Eğlence",
-    hours: "Saatler",
-    map: "Harita",
-    services: "Hizmetler",
-    giftCard: "Hediye Kartı",
-    about: "Hakkımızda",
-    leasing: "Kiralama",
-    contact: "İletişim",
-    privacy: "Gizlilik",
-    more: "Daha Fazla",
-    mainSections: "Ana Bölümler",
-    visitGroup: "Ziyaret",
-    corporateGroup: "Kurumsal",
-    menu: "Menü",
-    close: "Kapat",
-    openMenu: "Menüyü aç",
-    closeMenu: "Menüyü kapat",
-    search: "Sitede ara",
-  },
-  en: {
-    stores: "Stores",
-    dining: "Dining",
-    campaigns: "Campaigns",
-    events: "Events",
-    cinema: "Cinemall",
-    kids: "Kids & Entertainment",
-    hours: "Hours",
-    map: "Map",
-    services: "Services",
-    giftCard: "Gift Card",
-    about: "About Us",
-    leasing: "Leasing",
-    contact: "Contact",
-    privacy: "Privacy",
-    more: "More",
-    mainSections: "Main Sections",
-    visitGroup: "Visit",
-    corporateGroup: "Corporate",
-    menu: "Menu",
-    close: "Close",
-    openMenu: "Open menu",
-    closeMenu: "Close menu",
-    search: "Search the site",
-  },
+type NavbarProps = {
+  locale: Locale;
 };
-
-type Locale = keyof typeof navLabels;
-type NavKey = keyof (typeof navLabels)["tr"];
 
 type NavItem = {
   href: string;
-  key: NavKey;
+  key: "stores" | "dining" | "events" | "cinema" | "visit";
 };
 
-const desktopNavItems = [
+const content = {
+  tr: {
+    brand: "CityMall Cyprus",
+    location: "Gazimağusa",
+    search: "Sitede ara",
+    openMenu: "Menüyü aç",
+    closeMenu: "Menüyü kapat",
+    cta: "Ziyaret Planla",
+    links: {
+      stores: "Mağazalar",
+      dining: "Restoranlar",
+      events: "Etkinlikler",
+      cinema: "Cinemall",
+      visit: "Ziyaret Planla",
+      kids: "Çocuk & Eğlence",
+      services: "Hizmetler",
+      map: "Harita",
+      contact: "İletişim",
+    },
+    social: "Sosyal Medya",
+  },
+  en: {
+    brand: "CityMall Cyprus",
+    location: "Famagusta",
+    search: "Search the site",
+    openMenu: "Open menu",
+    closeMenu: "Close menu",
+    cta: "Plan Visit",
+    links: {
+      stores: "Stores",
+      dining: "Dining",
+      events: "Events",
+      cinema: "Cinemall",
+      visit: "Plan Visit",
+      kids: "Kids & Entertainment",
+      services: "Services",
+      map: "Map",
+      contact: "Contact",
+    },
+    social: "Social Media",
+  },
+};
+
+const desktopNavItems: NavItem[] = [
   { href: "stores", key: "stores" },
   { href: "dining", key: "dining" },
-  { href: "campaigns", key: "campaigns" },
+  { href: "events", key: "events" },
+  { href: "cinema", key: "cinema" },
+  { href: "map", key: "visit" },
+];
+
+const mobileNavItems = [
+  { href: "stores", key: "stores" },
+  { href: "dining", key: "dining" },
   { href: "events", key: "events" },
   { href: "cinema", key: "cinema" },
   { href: "kids", key: "kids" },
-  { href: "hours", key: "hours" },
-  { href: "map", key: "map" },
-] as const satisfies readonly NavItem[];
-
-const compactDesktopItems = [
-  { href: "stores", key: "stores" },
-  { href: "dining", key: "dining" },
-  { href: "campaigns", key: "campaigns" },
-  { href: "events", key: "events" },
-  { href: "cinema", key: "cinema" },
-] as const satisfies readonly NavItem[];
-
-const moreNavItems = [
-  { href: "kids", key: "kids" },
-  { href: "hours", key: "hours" },
   { href: "map", key: "map" },
   { href: "services", key: "services" },
-  { href: "gift-card", key: "giftCard" },
-] as const satisfies readonly NavItem[];
+  { href: "contact", key: "contact" },
+] as const;
 
-const mobileNavGroups = [
-  {
-    titleKey: "mainSections",
-    items: [
-      { href: "stores", key: "stores" },
-      { href: "dining", key: "dining" },
-      { href: "campaigns", key: "campaigns" },
-      { href: "events", key: "events" },
-      { href: "cinema", key: "cinema" },
-      { href: "kids", key: "kids" },
-    ],
-  },
-  {
-    titleKey: "visitGroup",
-    items: [
-      { href: "hours", key: "hours" },
-      { href: "map", key: "map" },
-      { href: "services", key: "services" },
-      { href: "gift-card", key: "giftCard" },
-    ],
-  },
-  {
-    titleKey: "corporateGroup",
-    items: [
-      { href: "about", key: "about" },
-      { href: "leasing", key: "leasing" },
-      { href: "contact", key: "contact" },
-    ],
-  },
-] as const satisfies readonly {
-  titleKey: NavKey;
-  items: readonly NavItem[];
-}[];
-
-function getLocaleFromPathname(pathname: string): Locale {
-  const segment = pathname.split("/")[1];
-
-  if (segment === "en" || segment === "tr") {
-    return segment;
-  }
-
-  return "tr";
-}
+const socialLinks = [
+  { label: "Instagram", icon: InstagramIcon },
+  { label: "TikTok", icon: TikTokIcon },
+  { label: "YouTube", icon: YouTubeIcon },
+  { label: "Facebook", icon: FacebookIcon },
+] as const;
 
 function switchLocalePath(pathname: string, nextLocale: Locale) {
   const segments = pathname.split("/");
@@ -155,28 +97,18 @@ function switchLocalePath(pathname: string, nextLocale: Locale) {
   return `/${nextLocale}`;
 }
 
-function isActivePath(pathname: string, href: string) {
-  return pathname === href || pathname.startsWith(`${href}/`);
-}
-
-export function Navbar() {
+export function Navbar({ locale }: NavbarProps) {
   const pathname = usePathname();
-  const locale = getLocaleFromPathname(pathname);
+  const copy = content[locale];
   const nextLocale = locale === "tr" ? "en" : "tr";
-  const labels = navLabels[locale];
 
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
-  const [isMegaMenuOpen, setIsMegaMenuOpen] = useState(false);
-  const [isMoreMenuOpen, setIsMoreMenuOpen] = useState(false);
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
-  const [openingStatus, setOpeningStatus] = useState<OpeningStatus | null>(
-    null
-  );
 
   useEffect(() => {
     function handleScroll() {
-      setIsScrolled(window.scrollY > 16);
+      setIsScrolled(window.scrollY > 24);
     }
 
     handleScroll();
@@ -189,334 +121,270 @@ export function Navbar() {
   }, []);
 
   useEffect(() => {
-    function updateOpeningStatus() {
-      setOpeningStatus(getOpeningStatus(locale));
+    if (!isMenuOpen) {
+      return;
     }
 
-    updateOpeningStatus();
-
-    const interval = window.setInterval(updateOpeningStatus, 60_000);
+    const originalOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
 
     return () => {
-      window.clearInterval(interval);
+      document.body.style.overflow = originalOverflow;
     };
-  }, [locale]);
+  }, [isMenuOpen]);
 
   function openSearch() {
     setIsMenuOpen(false);
-    setIsMegaMenuOpen(false);
-    setIsMoreMenuOpen(false);
     setIsSearchOpen(true);
   }
 
-  function renderDesktopLink(item: NavItem, paddingClass = "px-4") {
-    const href = `/${locale}/${item.href}`;
-    const isActive = isActivePath(pathname, href);
-
-    if (item.href === "stores") {
-      return (
-        <div
-          key={item.href}
-          className="relative"
-          onMouseEnter={() => setIsMegaMenuOpen(true)}
-          onMouseLeave={() => setIsMegaMenuOpen(false)}
-        >
-          <Link
-            href={href}
-            aria-haspopup="true"
-            aria-expanded={isMegaMenuOpen}
-            onFocus={() => setIsMegaMenuOpen(true)}
-            className={`rounded-full ${paddingClass} py-2 transition ${
-              isActive || isMegaMenuOpen
-                ? "bg-surface-default text-text-primary shadow-card"
-                : "hover:bg-surface-default hover:text-text-primary"
-            }`}
-          >
-            {labels[item.key]}
-          </Link>
-
-          {isMegaMenuOpen ? (
-            <MegaMenu
-              locale={locale}
-              onNavigate={() => setIsMegaMenuOpen(false)}
-            />
-          ) : null}
-        </div>
-      );
-    }
-
-    return (
-      <Link
-        key={item.href}
-        href={href}
-        className={`rounded-full ${paddingClass} py-2 transition ${
-          isActive
-            ? "bg-surface-default text-text-primary shadow-card"
-            : "hover:bg-surface-default hover:text-text-primary"
-        }`}
-      >
-        {labels[item.key]}
-      </Link>
-    );
+  function closeMenu() {
+    setIsMenuOpen(false);
   }
 
   return (
     <>
       <header
-        className={`sticky top-0 z-50 border-b transition-all duration-300 ${
-          isScrolled
-            ? "border-border-default bg-surface-default/95 shadow-card backdrop-blur-xl"
-            : "border-transparent bg-surface-default/90 backdrop-blur-md"
+        className={`preview-navbar fixed inset-x-0 top-0 z-[100] transition-all duration-300 ${
+          isScrolled || isMenuOpen
+          ? "border-b border-[#E8312A]/35 bg-[#0f0f10]/88 shadow-[0_20px_70px_rgba(232,49,42,0.18)] backdrop-blur-xl"
+          : "border-b border-transparent bg-transparent"
         }`}
       >
+        <style>{`
+          @keyframes previewMenuEnter {
+            0% {
+              opacity: 0;
+              transform: translateY(-12px);
+            }
+            100% {
+              opacity: 1;
+              transform: translateY(0);
+            }
+          }
+
+          @media (prefers-reduced-motion: reduce) {
+            .preview-navbar,
+            .preview-navbar-menu,
+            .preview-navbar-link,
+            .preview-navbar-social,
+            .preview-navbar-line {
+              animation: none !important;
+              transition: none !important;
+              transform: none !important;
+            }
+          }
+        `}</style>
+
         <div
-          className={`container flex items-center justify-between gap-4 transition-all duration-300 ${
-            isScrolled ? "min-h-[66px]" : "min-h-[82px]"
+          className={`container flex items-center justify-between gap-5 transition-all duration-300 ${
+            isScrolled || isMenuOpen ? "min-h-[74px]" : "min-h-[92px]"
           }`}
         >
           <Link
-            href={`/${locale}`}
-            className="flex shrink-0 items-center gap-3"
-            onClick={() => {
-              setIsMenuOpen(false);
-              setIsMegaMenuOpen(false);
-              setIsMoreMenuOpen(false);
-            }}
-            aria-label="CityMall Cyprus home"
-          >
-            <span
-              className={`flex items-center justify-center overflow-hidden rounded-2xl border border-border-default bg-surface-default shadow-card transition-all duration-300 ${
-                isScrolled ? "h-10 w-10" : "h-12 w-12"
-              }`}
-            >
-              <Image
-                src="/citymall-logo.png"
-                alt="CityMall Cyprus logo"
-                width={44}
-                height={44}
-                className={`w-auto object-contain transition-all duration-300 ${
-                  isScrolled ? "h-8" : "h-10"
-                }`}
-                priority
-              />
-            </span>
-
-            <span className="hidden leading-tight sm:block">
-              <span
-                className={`block font-semibold tracking-tight text-text-primary transition-all duration-300 ${
-                  isScrolled ? "text-sm" : "text-base"
-                }`}
-              >
-                CityMall Cyprus
-              </span>
-            </span>
-          </Link>
-
-          {openingStatus ? (
-            <div className="hidden items-center gap-2 rounded-full border border-border-default bg-surface-muted px-3 py-2 text-xs font-semibold text-text-secondary shadow-card lg:inline-flex">
-              <span
-                className={`h-2 w-2 rounded-full ${
-                  openingStatus.isOpen ? "bg-emerald-500" : "bg-text-muted"
-                }`}
-                aria-hidden="true"
-              />
-              <span>{openingStatus.statusText}</span>
-            </div>
-          ) : null}
-
-          <nav className="relative hidden items-center gap-1 rounded-full border border-border-default bg-surface-muted p-1 text-sm font-medium text-text-secondary xl:flex">
-            {desktopNavItems.map((item) => renderDesktopLink(item))}
-          </nav>
-
-          <nav className="relative hidden items-center gap-1 rounded-full border border-border-default bg-surface-muted p-1 text-sm font-medium text-text-secondary lg:flex xl:hidden">
-            {compactDesktopItems.map((item) =>
-              renderDesktopLink(item, "px-3")
-            )}
-
-            <div className="relative">
-  <button
-    type="button"
-    className={`inline-flex items-center gap-1 rounded-full px-3 py-2 transition ${
-      moreNavItems.some((item) =>
-        isActivePath(pathname, `/${locale}/${item.href}`)
-      ) || isMoreMenuOpen
-        ? "bg-surface-default text-text-primary shadow-card"
-        : "hover:bg-surface-default hover:text-text-primary"
-    }`}
-    aria-haspopup="true"
-    aria-expanded={isMoreMenuOpen}
-    onClick={() => {
-      setIsMoreMenuOpen((current) => !current);
-      setIsMegaMenuOpen(false);
+  href={`/${locale}`}
+  className="flex items-center"
+  aria-label="CityMall Cyprus"
+>
+  <Image
+    src="/citymall-logo.png"
+    alt="CityMall Cyprus"
+    width={154}
+    height={54}
+    priority
+    className="h-auto w-[132px] transition duration-300 md:w-[154px]"
+    style={{
+      filter: isScrolled ? "none" : "brightness(0) invert(1)",
     }}
-  >
-    {labels.more}
-    <ChevronDown
-      className={`h-4 w-4 transition ${
-        isMoreMenuOpen ? "rotate-180" : ""
-      }`}
-      aria-hidden="true"
-    />
-  </button>
+  />
+</Link>
 
-  {isMoreMenuOpen ? (
-    <div className="absolute right-0 top-full z-50 mt-2 w-56 rounded-3xl border border-border-default bg-surface-default p-2 shadow-elevated">
-      <div className="grid gap-1">
-        {moreNavItems.map((item) => {
-          const href = `/${locale}/${item.href}`;
-          const isActive = isActivePath(pathname, href);
+          <nav className="hidden items-center gap-8 text-sm font-semibold lg:flex">
+            {desktopNavItems.map((item) => {
+              const href = `/${locale}/${item.href}`;
+              const isActive = pathname === href;
 
-          return (
-            <Link
-              key={item.href}
-              href={href}
-              className={`rounded-2xl px-4 py-3 text-sm font-semibold transition ${
-                isActive
-                  ? "bg-brand-primary text-brand-foreground"
-                  : "text-text-secondary hover:bg-surface-muted hover:text-text-primary"
-              }`}
-              onClick={() => setIsMoreMenuOpen(false)}
-            >
-              {labels[item.key]}
-            </Link>
-          );
-        })}
-      </div>
-    </div>
-  ) : null}
-</div>
+              return (
+                <Link
+                  key={item.key}
+                  href={href}
+                  className={`preview-navbar-link group relative font-semibold text-white drop-shadow-[0_1px_12px_rgba(0,0,0,0.45)] transition ${
+                   isActive ? "text-white" : "text-white/88 hover:text-white"
+                  }`}
+                >
+                  {copy.links[item.key]}
+                  <span
+                    className={`absolute -bottom-2 left-0 h-px bg-[#E8312A] transition-all duration-300 ${
+                      isActive ? "w-full" : "w-0 group-hover:w-full"
+                    }`}
+                  />
+                </Link>
+              );
+            })}
           </nav>
 
-          <div className="flex items-center gap-2">
+          <div className="flex shrink-0 items-center gap-2 md:gap-3">
             <button
               type="button"
               onClick={openSearch}
-              className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-border-default bg-surface-default text-text-primary shadow-card transition hover:bg-surface-muted"
-              aria-label={labels.search}
+              aria-label={copy.search}
+              className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full border border-white/18 bg-white/10 text-white backdrop-blur-md transition hover:-translate-y-0.5 hover:bg-white/18"
             >
               <Search className="h-4 w-4" aria-hidden="true" />
             </button>
 
+            <div className="hidden items-center rounded-full border border-white/18 bg-white/10 p-1 text-xs font-semibold text-white backdrop-blur-md sm:flex">
+  <Link
+    href={switchLocalePath(pathname, "tr")}
+    className={`rounded-full px-3 py-2 text-white transition ${
+      locale === "tr"
+        ? "bg-white/18 shadow-[0_0_22px_rgba(255,255,255,0.12)]"
+        : "text-white/70 hover:bg-white/10 hover:text-white"
+    }`}
+    onClick={closeMenu}
+  >
+    TR
+  </Link>
+
+  <Link
+    href={switchLocalePath(pathname, "en")}
+    className={`rounded-full px-3 py-2 text-white transition ${
+      locale === "en"
+        ? "bg-white/18 shadow-[0_0_22px_rgba(255,255,255,0.12)]"
+        : "text-white/70 hover:bg-white/10 hover:text-white"
+    }`}
+    onClick={closeMenu}
+  >
+    EN
+  </Link>
+</div>
+
             <Link
-              href={`/${locale}/contact`}
-              className="hidden rounded-full bg-brand-primary px-4 py-2.5 text-sm font-semibold text-brand-foreground shadow-card transition hover:-translate-y-0.5 hover:opacity-90 md:inline-flex"
-              onClick={() => {
-                setIsMenuOpen(false);
-                setIsMegaMenuOpen(false);
-                setIsMoreMenuOpen(false);
-              }}
+              href={`/${locale}/map`}
+              className="hidden whitespace-nowrap rounded-full border border-[#FFD100]/55 bg-white/10 px-5 py-3 text-sm font-semibold text-white backdrop-blur-md transition hover:-translate-y-0.5 hover:bg-[#FFD100] hover:text-black xl:inline-flex"
             >
-              {labels.contact}
+              {copy.cta}
             </Link>
-
-            <div className="hidden items-center rounded-full border border-border-default bg-surface-muted p-1 shadow-card sm:flex">
-              <Link
-                href={switchLocalePath(pathname, "tr")}
-                className={`rounded-full px-3 py-1.5 text-xs font-semibold transition ${
-                  locale === "tr"
-                    ? "bg-surface-default text-text-primary shadow-card"
-                    : "text-text-muted hover:text-text-primary"
-                }`}
-                onClick={() => setIsMenuOpen(false)}
-              >
-                TR
-              </Link>
-
-              <Link
-                href={switchLocalePath(pathname, "en")}
-                className={`rounded-full px-3 py-1.5 text-xs font-semibold transition ${
-                  locale === "en"
-                    ? "bg-surface-default text-text-primary shadow-card"
-                    : "text-text-muted hover:text-text-primary"
-                }`}
-                onClick={() => setIsMenuOpen(false)}
-              >
-                EN
-              </Link>
-            </div>
 
             <Link
               href={switchLocalePath(pathname, nextLocale)}
-              className="rounded-full border border-border-default bg-surface-default px-3 py-2 text-sm font-semibold text-text-primary shadow-card transition hover:bg-surface-muted sm:hidden"
-              onClick={() => setIsMenuOpen(false)}
+              className="flex h-11 items-center rounded-full border border-white/14 bg-white/8 px-3 text-sm font-semibold text-white backdrop-blur-md transition hover:bg-white/14 sm:hidden"
+              onClick={closeMenu}
             >
               {nextLocale.toUpperCase()}
             </Link>
 
             <button
               type="button"
-              className="rounded-full border border-border-default bg-surface-default px-3 py-2 text-sm font-semibold text-text-primary shadow-card transition hover:bg-surface-muted lg:hidden"
-              aria-label={isMenuOpen ? labels.closeMenu : labels.openMenu}
-              aria-expanded={isMenuOpen}
               onClick={() => setIsMenuOpen((current) => !current)}
+              aria-label={isMenuOpen ? copy.closeMenu : copy.openMenu}
+              aria-expanded={isMenuOpen}
+              className="relative flex h-11 w-11 items-center justify-center rounded-full border border-white/14 bg-white/8 text-white backdrop-blur-md transition hover:bg-white/14 lg:hidden"
             >
-              {isMenuOpen ? labels.close : labels.menu}
+              <span className="sr-only">
+                {isMenuOpen ? copy.closeMenu : copy.openMenu}
+              </span>
+
+              <span
+                className={`preview-navbar-line absolute h-px w-5 bg-current transition duration-300 ${
+                  isMenuOpen ? "translate-y-0 rotate-45" : "-translate-y-1.5"
+                }`}
+              />
+              <span
+                className={`preview-navbar-line absolute h-px w-5 bg-current transition duration-300 ${
+                  isMenuOpen ? "opacity-0" : "opacity-100"
+                }`}
+              />
+              <span
+                className={`preview-navbar-line absolute h-px w-5 bg-current transition duration-300 ${
+                  isMenuOpen ? "translate-y-0 -rotate-45" : "translate-y-1.5"
+                }`}
+              />
             </button>
           </div>
         </div>
+      </header>
 
-        {isMenuOpen ? (
-          <div className="border-t border-border-default bg-surface-default lg:hidden">
-            <nav className="container grid gap-5 py-4">
-              <div className="flex items-center rounded-2xl border border-border-default bg-surface-muted p-1">
+      {isMenuOpen ? (
+        <div className="preview-navbar-menu fixed inset-0 z-[90] bg-[#0f0f10] text-white [animation:previewMenuEnter_320ms_cubic-bezier(0.22,1,0.36,1)_both] lg:hidden">
+          <div className="container flex min-h-screen flex-col pb-8 pt-28">
+            <nav className="grid gap-2">
+              {mobileNavItems.map((item) => (
+                <Link
+                  key={item.href}
+                  href={`/${locale}/${item.href}`}
+                  onClick={closeMenu}
+                  className="group flex items-center justify-between rounded-3xl border border-white/8 bg-white/[0.04] px-5 py-4 text-3xl font-semibold tracking-tight text-white transition hover:bg-white/[0.08]"
+                >
+                  {copy.links[item.key]}
+                  <span className="text-base text-white/34 transition group-hover:translate-x-1 group-hover:text-white">
+                    →
+                  </span>
+                </Link>
+              ))}
+            </nav>
+
+            <div className="mt-6 rounded-3xl border border-white/8 bg-white/[0.04] p-2">
+              <div className="grid grid-cols-2 gap-2">
                 <Link
                   href={switchLocalePath(pathname, "tr")}
-                  className={`flex-1 rounded-xl px-4 py-3 text-center text-sm font-semibold transition ${
-                    locale === "tr"
-                      ? "bg-surface-default text-text-primary shadow-card"
-                      : "text-text-muted"
-                  }`}
-                  onClick={() => setIsMenuOpen(false)}
+                  onClick={closeMenu}
+                  className={`rounded-2xl px-4 py-3 text-center text-sm font-semibold text-white transition ${
+  locale === "tr"
+    ? "bg-white/18 shadow-[0_0_22px_rgba(255,255,255,0.12)]"
+    : "text-white/60 hover:bg-white/10 hover:text-white"
+}`}
                 >
                   TR
                 </Link>
 
                 <Link
                   href={switchLocalePath(pathname, "en")}
-                  className={`flex-1 rounded-xl px-4 py-3 text-center text-sm font-semibold transition ${
+                  onClick={closeMenu}
+                  className={`rounded-2xl px-4 py-3 text-center text-sm font-semibold transition ${
                     locale === "en"
-                      ? "bg-surface-default text-text-primary shadow-card"
-                      : "text-text-muted"
+                      ? "bg-white text-text-primary"
+                      : "text-white/52"
                   }`}
-                  onClick={() => setIsMenuOpen(false)}
                 >
                   EN
                 </Link>
               </div>
+            </div>
 
-              {mobileNavGroups.map((group) => (
-                <section key={group.titleKey} className="grid gap-2">
-                  <p className="px-1 text-xs font-semibold uppercase tracking-[0.22em] text-text-muted">
-                    {labels[group.titleKey]}
-                  </p>
+            <Link
+  href={`/${locale}/map`}
+  className="hidden whitespace-nowrap rounded-full border border-white/28 bg-white/10 px-5 py-3 text-sm font-semibold text-white backdrop-blur-md transition hover:-translate-y-0.5 hover:bg-white hover:text-text-primary xl:inline-flex"
+>
+  {copy.cta}
+</Link>
 
-                  <div className="grid gap-2">
-                    {group.items.map((item) => {
-                      const href = `/${locale}/${item.href}`;
-                      const isActive = isActivePath(pathname, href);
+            <div className="mt-auto pt-10">
+              <p className="mb-4 text-xs font-semibold uppercase tracking-[0.25em] text-white/34">
+                {copy.social}
+              </p>
 
-                      return (
-                        <Link
-                          key={item.href}
-                          href={href}
-                          className={`rounded-2xl px-4 py-3 text-sm font-semibold transition ${
-                            isActive
-                              ? "bg-brand-primary text-brand-foreground shadow-card"
-                              : "bg-surface-muted text-text-secondary hover:bg-surface-subtle hover:text-text-primary"
-                          }`}
-                          onClick={() => setIsMenuOpen(false)}
-                        >
-                          {labels[item.key]}
-                        </Link>
-                      );
-                    })}
-                  </div>
-                </section>
-              ))}
-            </nav>
+              <div className="flex flex-wrap gap-3">
+                {socialLinks.map((item) => {
+                  const Icon = item.icon;
+
+                  return (
+                    <Link
+                      key={item.label}
+                      href={`/${locale}/contact`}
+                      aria-label={item.label}
+                      onClick={closeMenu}
+                      className="preview-navbar-social flex h-12 w-12 items-center justify-center rounded-full border border-white/10 bg-white/[0.06] text-white/72 transition hover:-translate-y-1 hover:bg-white/[0.12] hover:text-white"
+                    >
+                      <Icon className="h-5 w-5" />
+                    </Link>
+                  );
+                })}
+              </div>
+            </div>
           </div>
-        ) : null}
-      </header>
+        </div>
+      ) : null}
 
       <SearchOverlay
         locale={locale}
@@ -526,3 +394,69 @@ export function Navbar() {
     </>
   );
 }
+
+function InstagramIcon({ className }: { className?: string }) {
+  return (
+    <svg viewBox="0 0 24 24" className={className} fill="none" aria-hidden="true">
+      <rect
+        x="3"
+        y="3"
+        width="18"
+        height="18"
+        rx="5"
+        stroke="currentColor"
+        strokeWidth="1.8"
+      />
+      <circle cx="12" cy="12" r="4" stroke="currentColor" strokeWidth="1.8" />
+      <circle cx="17.5" cy="6.5" r="1" fill="currentColor" />
+    </svg>
+  );
+}
+
+function TikTokIcon({ className }: { className?: string }) {
+  return (
+    <svg viewBox="0 0 24 24" className={className} fill="none" aria-hidden="true">
+      <path
+        d="M14.5 3v10.2a4.2 4.2 0 1 1-4.2-4.2"
+        stroke="currentColor"
+        strokeWidth="1.9"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+      <path
+        d="M14.5 5.4c1.1 2.1 2.8 3.2 5 3.4"
+        stroke="currentColor"
+        strokeWidth="1.9"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
+  );
+}
+
+function YouTubeIcon({ className }: { className?: string }) {
+  return (
+    <svg viewBox="0 0 24 24" className={className} fill="none" aria-hidden="true">
+      <rect
+        x="3"
+        y="6"
+        width="18"
+        height="12"
+        rx="4"
+        stroke="currentColor"
+        strokeWidth="1.8"
+      />
+      <path d="M10 9.5v5l4.5-2.5L10 9.5Z" fill="currentColor" />
+    </svg>
+  );
+}
+
+function FacebookIcon({ className }: { className?: string }) {
+  return (
+    <svg viewBox="0 0 24 24" className={className} fill="currentColor" aria-hidden="true">
+      <path d="M14.2 8.4V6.9c0-.7.5-1.1 1.2-1.1h1.5V3.2c-.3 0-1.3-.1-2.5-.1-2.5 0-4.2 1.5-4.2 4.3v1H7.5v3h2.7v9.5h3.3v-9.5h2.7l.4-3h-3.1Z" />
+    </svg>
+  );
+}
+
+export default Navbar;

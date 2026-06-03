@@ -1,7 +1,8 @@
 "use client";
 
 import Link from "next/link";
-import { Search, } from "lucide-react";
+import Image from "next/image";
+import { Search } from "lucide-react";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import { SearchOverlay } from "@/components/layout/SearchOverlay";
@@ -146,7 +147,8 @@ export function PreviewNavbar({ locale }: PreviewNavbarProps) {
       <header
         className={`preview-navbar fixed inset-x-0 top-0 z-[100] transition-all duration-300 ${
           isScrolled || isMenuOpen
-        ? "border-b border-[#E8312A]/35 bg-[#0f0f10]/88 shadow-[0_20px_70px_rgba(232,49,42,0.18)] backdrop-blur-xl"            : "border-b border-transparent bg-transparent"
+          ? "border-b border-[#E8312A]/35 bg-[#0f0f10]/88 shadow-[0_20px_70px_rgba(232,49,42,0.18)] backdrop-blur-xl"
+          : "border-b border-transparent bg-transparent"
         }`}
       >
         <style>{`
@@ -180,18 +182,21 @@ export function PreviewNavbar({ locale }: PreviewNavbarProps) {
           }`}
         >
           <Link
-  href={`/${locale}/redesign-preview`}
-  className="group flex min-w-0 shrink-0 flex-col leading-none"
-  onClick={closeMenu}
-  aria-label="CityMall Cyprus redesign preview"
+  href={`/${locale}`}
+  className="flex items-center"
+  aria-label="CityMall Cyprus"
 >
-  <span className="block text-base font-semibold tracking-tight text-white drop-shadow-[0_1px_12px_rgba(0,0,0,0.55)] md:text-lg">
-    {copy.brand}
-  </span>
-
-  <span className="mt-2 block text-[0.68rem] font-semibold uppercase tracking-[0.32em] text-white drop-shadow-[0_1px_12px_rgba(0,0,0,0.55)]">
-    {copy.location}
-  </span>
+  <Image
+    src="/citymall-logo.png"
+    alt="CityMall Cyprus"
+    width={154}
+    height={54}
+    priority
+    className="h-auto w-[132px] transition duration-300 md:w-[154px]"
+    style={{
+      filter: isScrolled ? "none" : "brightness(0) invert(1)",
+    }}
+  />
 </Link>
 
           <nav className="hidden items-center gap-8 text-sm font-semibold lg:flex">

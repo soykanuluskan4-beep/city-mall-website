@@ -3,398 +3,322 @@
 import Image from "next/image";
 import Link from "next/link";
 import { FormEvent, useState } from "react";
-import {
-  CheckCircle2,
-  Mail,
-  MapPin,
-  MessageCircle,
-  Phone,
-  Send,
-} from "lucide-react";
-
-const footerContent = {
-  tr: {
-    description:
-      "CityMall Cyprus’da alışveriş, yeme-içme, Cinemall, etkinlikler ve ziyaretçi hizmetlerini tek noktada keşfedin.",
-    quickLinks: "Hızlı Linkler",
-    visit: "Ziyaret",
-    corporate: "Kurumsal",
-    contact: "İletişim",
-    social: "Sosyal Medya",
-    newsletterTitle: "CityMall’dan haber alın",
-    newsletterText:
-      "Kampanyalar, etkinlikler ve duyurular için e-posta adresinizi bırakın.",
-    newsletterPlaceholder: "E-posta adresiniz",
-    newsletterButton: "Abone Ol",
-    newsletterSuccess:
-      "Teşekkürler. E-posta adresiniz bilgilendirme listesi için alınmıştır.",
-    copyright: "© 2026 CityMall Cyprus. Tüm hakları saklıdır.",
-    contactInfo: {
-      addressLabel: "Adres",
-      address: "Gazimağusa, Kuzey Kıbrıs",
-      phoneLabel: "Telefon",
-      phone: "Bilgi için iletişime geçin",
-      emailLabel: "E-posta",
-      email: "info@citymallcyprus.com",
-      whatsappLabel: "WhatsApp",
-      whatsapp: "WhatsApp için iletişim",
-    },
-    links: {
-      stores: "Mağazalar",
-      dining: "Yeme-İçme",
-      campaigns: "Kampanyalar",
-      events: "Etkinlikler",
-      cinema: "Cinemall",
-      kids: "Çocuk & Eğlence",
-      giftCard: "Hediye Kartı",
-      hours: "Çalışma Saatleri",
-      map: "Harita",
-      parking: "Otopark",
-      services: "Hizmetler",
-      accessibility: "Erişilebilirlik",
-      about: "Hakkımızda",
-      press: "Basın / Medya",
-      leasing: "Kiralama",
-      careers: "Kariyer",
-      contact: "İletişim",
-      privacy: "Gizlilik Politikası",
-      terms: "Kullanım Koşulları",
-      kvkk: "KVKK",
-    },
-  },
-  en: {
-    description:
-      "Explore shopping, dining, Cinemall, events and visitor services at CityMall Cyprus.",
-    quickLinks: "Quick Links",
-    visit: "Visit",
-    corporate: "Corporate",
-    contact: "Contact",
-    social: "Social Media",
-    newsletterTitle: "Stay updated with CityMall",
-    newsletterText:
-      "Leave your email for campaigns, events and announcements.",
-    newsletterPlaceholder: "Your email address",
-    newsletterButton: "Subscribe",
-    newsletterSuccess:
-      "Thank you. Your email address has been received for updates.",
-    copyright: "© 2026 CityMall Cyprus. All rights reserved.",
-    contactInfo: {
-      addressLabel: "Address",
-      address: "Famagusta, Northern Cyprus",
-      phoneLabel: "Phone",
-      phone: "Contact us for information",
-      emailLabel: "Email",
-      email: "info@citymallcyprus.com",
-      whatsappLabel: "WhatsApp",
-      whatsapp: "Contact us on WhatsApp",
-    },
-    links: {
-      stores: "Stores",
-      dining: "Dining",
-      campaigns: "Campaigns",
-      events: "Events",
-      cinema: "Cinemall",
-      kids: "Kids & Entertainment",
-      giftCard: "Gift Card",
-      hours: "Opening Hours",
-      map: "Map",
-      parking: "Parking",
-      services: "Services",
-      accessibility: "Accessibility",
-      about: "About Us",
-      press: "Press / Media",
-      leasing: "Leasing",
-      careers: "Careers",
-      contact: "Contact",
-      privacy: "Privacy Policy",
-      terms: "Terms of Use",
-      kvkk: "KVKK",
-    },
-  },
-};
-
-const quickLinks = [
-  { href: "stores", key: "stores" },
-  { href: "dining", key: "dining" },
-  { href: "campaigns", key: "campaigns" },
-  { href: "events", key: "events" },
-  { href: "cinema", key: "cinema" },
-  { href: "kids", key: "kids" },
-  { href: "gift-card", key: "giftCard" },
-] as const;
-
-const visitLinks = [
-  { href: "hours", key: "hours" },
-  { href: "map", key: "map" },
-  { href: "map#parking", key: "parking" },
-  { href: "services", key: "services" },
-  { href: "services", key: "accessibility" },
-] as const;
-
-const corporateLinks = [
-  { href: "about", key: "about" },
-  { href: "press", key: "press" },
-  { href: "leasing", key: "leasing" },
-  { href: "careers", key: "careers" },
-  { href: "contact", key: "contact" },
-] as const;
-
-const legalLinks = [
-  { href: "privacy", key: "privacy" },
-  { href: "terms", key: "terms" },
-  { href: "privacy", key: "kvkk" },
-] as const;
-
-const socialLinks = [
-  {
-    label: "Instagram",
-    icon: InstagramIcon,
-  },
-  {
-    label: "Facebook",
-    icon: FacebookIcon,
-  },
-] as const;
-
-function InstagramIcon({ className }: { className?: string }) {
-  return (
-    <svg
-      viewBox="0 0 24 24"
-      className={className}
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="1.8"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      aria-hidden="true"
-    >
-      <rect x="3" y="3" width="18" height="18" rx="5" />
-      <circle cx="12" cy="12" r="4" />
-      <circle cx="17.5" cy="6.5" r="0.9" fill="currentColor" stroke="none" />
-    </svg>
-  );
-}
-
-function FacebookIcon({ className }: { className?: string }) {
-  return (
-    <svg
-      viewBox="0 0 24 24"
-      className={className}
-      fill="currentColor"
-      aria-hidden="true"
-    >
-      <path d="M14.2 8.4V6.9c0-.7.5-1.1 1.2-1.1h1.5V3.2c-.3 0-1.3-.1-2.5-.1-2.5 0-4.2 1.5-4.2 4.3v1H7.5v3h2.7v9.5h3.3v-9.5h2.7l.4-3h-3.1Z" />
-    </svg>
-  );
-}
+import { ArrowRight, ChevronDown, Mail } from "lucide-react";
+import type { Locale } from "@/types/content";
 
 type FooterProps = {
-  locale?: "tr" | "en";
+  locale: Locale;
 };
 
-export function Footer({ locale = "tr" }: FooterProps) {
-  const content = footerContent[locale];
-  const [email, setEmail] = useState("");
-  const [subscribed, setSubscribed] = useState(false);
+type FooterLink = {
+  href: string;
+  label: string;
+};
 
-  function handleSubscribe(event: FormEvent<HTMLFormElement>) {
+const content = {
+  tr: {
+    brand: "CityMall Cyprus",
+    location: "Gazimağusa",
+    slogan: "Alışveriş, lezzet ve deneyimin buluştuğu yer.",
+    movingText: "CITYMALL • FASHION • EVENTS • FOOD • CINEMA • LIFESTYLE •",
+    exploreTitle: "Keşfet",
+    visitTitle: "Ziyaret",
+    newsletterTitle: "Güncel kal",
+    newsletterText: "Etkinlikler ve fırsatlardan haberdar ol.",
+    newsletterHelper: "CityMall’dan haftalık güncellemeler alın.",
+    newsletterPlaceholder: "E-posta adresiniz",
+    newsletterButton: "Abone Ol",
+    newsletterSuccess: "Teşekkürler. E-posta adresiniz alındı.",
+    copyright: "© 2026 CityMall Cyprus",
+    rights: "Tüm hakları saklıdır.",
+    privacy: "Gizlilik Politikası",
+    terms: "Kullanım Koşulları",
+    exploreLinks: [
+      { href: "stores", label: "Mağazalar" },
+      { href: "dining", label: "Restoranlar" },
+      { href: "events", label: "Etkinlikler" },
+      { href: "cinema", label: "Cinemall" },
+      { href: "kids", label: "Çocuk & Eğlence" },
+      { href: "gift-card", label: "Hediye Kartı" },
+    ],
+    visitLinks: [
+      { href: "hours", label: "Çalışma Saatleri" },
+      { href: "map#parking", label: "Otopark" },
+      { href: "services", label: "Hizmetler" },
+      { href: "map", label: "Harita" },
+      { href: "contact", label: "İletişim" },
+    ],
+  },
+  en: {
+    brand: "CityMall Cyprus",
+    location: "Famagusta",
+    slogan: "Where shopping, dining & experiences come together.",
+    movingText: "CITYMALL • FASHION • EVENTS • FOOD • CINEMA • LIFESTYLE •",
+    exploreTitle: "Explore",
+    visitTitle: "Visit",
+    newsletterTitle: "Stay updated",
+    newsletterText: "Stay updated with events & offers.",
+    newsletterHelper: "Get weekly updates from CityMall.",
+    newsletterPlaceholder: "Your email address",
+    newsletterButton: "Subscribe",
+    newsletterSuccess: "Thank you. Your email address has been received.",
+    copyright: "© 2026 CityMall Cyprus",
+    rights: "All rights reserved.",
+    privacy: "Privacy Policy",
+    terms: "Terms of Use",
+    exploreLinks: [
+      { href: "stores", label: "Stores" },
+      { href: "dining", label: "Dining" },
+      { href: "events", label: "Events" },
+      { href: "cinema", label: "Cinemall" },
+      { href: "kids", label: "Kids & Entertainment" },
+      { href: "gift-card", label: "Gift Card" },
+    ],
+    visitLinks: [
+      { href: "hours", label: "Opening Hours" },
+      { href: "map#parking", label: "Parking" },
+      { href: "services", label: "Services" },
+      { href: "map", label: "Map" },
+      { href: "contact", label: "Contact" },
+    ],
+  },
+};
+
+const socialLinks = [
+  { label: "Instagram", icon: InstagramIcon },
+  { label: "TikTok", icon: TikTokIcon },
+  { label: "YouTube", icon: YouTubeIcon },
+  { label: "Facebook", icon: FacebookIcon },
+] as const;
+
+export function Footer({ locale }: FooterProps) {
+  const copy = content[locale];
+  const [email, setEmail] = useState("");
+  const [submitted, setSubmitted] = useState(false);
+  const [openGroup, setOpenGroup] = useState<"explore" | "visit" | null>(
+    "explore"
+  );
+
+  function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
 
     if (!email.trim()) {
       return;
     }
 
-    setSubscribed(true);
+    setSubmitted(true);
     setEmail("");
   }
 
   return (
-    <footer className="overflow-x-hidden border-t border-border-default bg-text-primary text-white">
-      <div className="container py-12 md:py-16">
-        <div className="grid gap-10 xl:grid-cols-[1.25fr_0.75fr_0.75fr_0.75fr_1fr]">
-          <section className="min-w-0">
-            <div className="flex items-center gap-3">
-              <span className="flex h-14 w-14 items-center justify-center overflow-hidden rounded-2xl border border-white/10 bg-white shadow-card">
+    <footer className="preview-footer relative overflow-hidden bg-[#0f0f10] text-white">
+      <style>{`
+        @keyframes previewFooterMarquee {
+          0% {
+            transform: translate3d(0, 0, 0);
+          }
+          100% {
+            transform: translate3d(-50%, 0, 0);
+          }
+        }
+
+        @keyframes footerReveal {
+          0% {
+            opacity: 0;
+            transform: translateY(18px);
+          }
+          100% {
+            opacity: 1;
+            transform: translateY(0);
+          }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+          .preview-footer-marquee,
+          .preview-footer-reveal,
+          .preview-footer-link,
+          .preview-footer-social {
+            animation: none !important;
+            transition: none !important;
+            transform: none !important;
+          }
+        }
+      `}</style>
+
+      <div className="pointer-events-none absolute inset-x-0 top-0 h-32 bg-gradient-to-b from-[#f5f5f3] via-[#1d1d1b] to-[#0f0f10]" />
+
+      <div className="relative border-y border-white/8 pt-24">
+        <div className="pointer-events-none overflow-hidden whitespace-nowrap pb-10">
+          <div className="preview-footer-marquee flex w-max gap-10 text-[clamp(3.8rem,10vw,9rem)] font-semibold uppercase leading-none tracking-[-0.06em] text-white/[0.09] [animation:previewFooterMarquee_58s_linear_infinite]">
+            <span>{copy.movingText}</span>
+            <span>{copy.movingText}</span>
+            <span>{copy.movingText}</span>
+            <span>{copy.movingText}</span>
+          </div>
+        </div>
+      </div>
+
+      <div className="container relative pb-10 pt-14 md:pb-12 md:pt-20">
+        <div className="preview-footer-reveal grid gap-10 [animation:footerReveal_800ms_cubic-bezier(0.22,1,0.36,1)_both] lg:grid-cols-[1.35fr_0.75fr_0.75fr_1fr] lg:gap-14">
+          <section>
+            <Link
+              href={`/${locale}`}
+              className="inline-flex items-center gap-4"
+              aria-label="CityMall Cyprus home"
+            >
+              <span className="flex h-16 w-16 items-center justify-center overflow-hidden rounded-3xl border border-white/10 bg-white shadow-[0_18px_50px_rgba(0,0,0,0.22)]">
                 <Image
                   src="/citymall-logo.png"
                   alt="CityMall Cyprus logo"
-                  width={48}
-                  height={48}
-                  className="h-11 w-auto object-contain"
+                  width={56}
+                  height={56}
+                  className="h-12 w-auto object-contain"
                 />
               </span>
 
-              <div className="min-w-0">
-                <h2 className="text-xl font-semibold tracking-tight">
-                  CityMall Cyprus
-                </h2>
-                <p className="mt-1 text-xs font-semibold uppercase tracking-[0.2em] text-white/45">
-                  {locale === "tr" ? "Gazimağusa" : "Famagusta"}
-                </p>
-              </div>
-            </div>
+              <span>
+                <span className="block text-xl font-semibold tracking-tight">
+                  {copy.brand}
+                </span>
+                <span className="mt-1 block text-xs font-semibold uppercase tracking-[0.24em] text-white/38">
+                  {copy.location}
+                </span>
+              </span>
+            </Link>
 
-            <p className="mt-5 max-w-xl text-sm leading-6 text-white/68">
-              {content.description}
+            <p className="mt-6 max-w-md text-sm leading-7 text-white/58 md:text-base">
+              {copy.slogan}
             </p>
 
-            <div className="mt-6">
-              <p className="text-xs font-semibold uppercase tracking-[0.22em] text-white/45">
-                {content.social}
-              </p>
+            <div className="mt-7 flex flex-wrap gap-3">
+              {socialLinks.map((item) => {
+                const Icon = item.icon;
 
-              <div className="mt-3 flex flex-wrap gap-2">
-                {socialLinks.map((item) => {
-                  const Icon = item.icon;
-
-                  return (
-                    <Link
-                      key={item.label}
-                      href={`/${locale}/contact`}
-                      aria-label={item.label}
-                      className="flex h-11 w-11 items-center justify-center rounded-full border border-white/10 bg-white/10 text-white transition hover:-translate-y-0.5 hover:bg-white/18"
-                    >
-                      <Icon className="h-5 w-5" aria-hidden="true" />
-                    </Link>
-                  );
-                })}
-              </div>
+                return (
+                  <Link
+                    key={item.label}
+                    href={`/${locale}/contact`}
+                    aria-label={item.label}
+                    className="preview-footer-social flex h-11 w-11 items-center justify-center rounded-full border border-white/10 bg-white/[0.06] text-white/74 transition hover:-translate-y-1 hover:border-white/22 hover:bg-white/[0.12] hover:text-white hover:shadow-[0_0_28px_rgba(232,49,42,0.22)]"
+                  >
+                    <Icon className="h-5 w-5" />
+                  </Link>
+                );
+              })}
             </div>
           </section>
 
-          <FooterLinkColumn
-            title={content.quickLinks}
-            links={quickLinks}
+          <FooterColumn
+            title={copy.exploreTitle}
+            links={copy.exploreLinks}
             locale={locale}
-            labels={content.links}
           />
 
-          <FooterLinkColumn
-            title={content.visit}
-            links={visitLinks}
+          <FooterColumn
+            title={copy.visitTitle}
+            links={copy.visitLinks}
             locale={locale}
-            labels={content.links}
           />
 
-          <FooterLinkColumn
-            title={content.corporate}
-            links={corporateLinks}
-            locale={locale}
-            labels={content.links}
-          />
-
-          <section className="min-w-0">
-            <h3 className="text-sm font-semibold uppercase tracking-[0.22em] text-white/45">
-              {content.contact}
+          <section>
+            <h3 className="text-sm font-semibold uppercase tracking-[0.25em] text-white/38">
+              {copy.newsletterTitle}
             </h3>
 
-            <div className="mt-5 grid gap-4">
-              <ContactRow
-                icon={MapPin}
-                label={content.contactInfo.addressLabel}
-                value={content.contactInfo.address}
-              />
+            <p className="mt-5 text-2xl font-semibold leading-tight tracking-tight text-white">
+              {copy.newsletterText}
+            </p>
 
-              <ContactRow
-                icon={Phone}
-                label={content.contactInfo.phoneLabel}
-                value={content.contactInfo.phone}
-              />
+            <p className="mt-3 text-sm leading-6 text-white/54">
+              {copy.newsletterHelper}
+            </p>
 
-              <ContactRow
-                icon={Mail}
-                label={content.contactInfo.emailLabel}
-                value={content.contactInfo.email}
-                href={`mailto:${content.contactInfo.email}`}
-              />
+            <form onSubmit={handleSubmit} className="mt-6 space-y-3">
+              <label htmlFor="preview-footer-email" className="sr-only">
+                {copy.newsletterPlaceholder}
+              </label>
 
-              <ContactRow
-                icon={MessageCircle}
-                label={content.contactInfo.whatsappLabel}
-                value={content.contactInfo.whatsapp}
-                href={`/${locale}/contact`}
-              />
-            </div>
+              <div className="flex overflow-hidden rounded-full border border-white/12 bg-white/[0.06] p-1 backdrop-blur-md focus-within:border-white/28">
+                <div className="flex min-w-0 flex-1 items-center gap-2 px-4">
+                  <Mail className="h-4 w-4 shrink-0 text-white/42" />
+                  <input
+                    id="preview-footer-email"
+                    type="email"
+                    value={email}
+                    onChange={(event) => {
+                      setEmail(event.target.value);
 
-            <Link
-              href={`/${locale}/contact`}
-              className="mt-6 inline-flex w-full items-center justify-center rounded-full bg-brand-primary px-5 py-3 text-sm font-semibold text-brand-foreground shadow-card transition hover:-translate-y-0.5 hover:opacity-90"
-            >
-              {content.links.contact}
-            </Link>
+                      if (submitted) {
+                        setSubmitted(false);
+                      }
+                    }}
+                    placeholder={copy.newsletterPlaceholder}
+                    className="min-w-0 flex-1 bg-transparent py-3 text-sm font-medium text-white outline-none placeholder:text-white/34"
+                  />
+                </div>
+
+                <button
+                  type="submit"
+                  className="inline-flex shrink-0 items-center justify-center rounded-full bg-[#FFD100] px-5 py-3 text-sm font-semibold text-black transition hover:bg-[#F7941D]"                >
+                  <span className="hidden sm:inline">{copy.newsletterButton}</span>
+                  <ArrowRight className="h-4 w-4 sm:ml-2" aria-hidden="true" />
+                </button>
+              </div>
+
+              {submitted ? (
+                <p className="rounded-2xl border border-emerald-400/20 bg-emerald-400/10 px-4 py-3 text-sm leading-6 text-emerald-100">
+                  {copy.newsletterSuccess}
+                </p>
+              ) : null}
+            </form>
+          </section>
+
+          <section className="grid gap-3 lg:hidden">
+            <MobileAccordion
+              title={copy.exploreTitle}
+              links={copy.exploreLinks}
+              locale={locale}
+              isOpen={openGroup === "explore"}
+              onToggle={() =>
+                setOpenGroup((current) =>
+                  current === "explore" ? null : "explore"
+                )
+              }
+            />
+
+            <MobileAccordion
+              title={copy.visitTitle}
+              links={copy.visitLinks}
+              locale={locale}
+              isOpen={openGroup === "visit"}
+              onToggle={() =>
+                setOpenGroup((current) => (current === "visit" ? null : "visit"))
+              }
+            />
           </section>
         </div>
 
-        <section className="mt-12 rounded-[2rem] border border-white/10 bg-white/10 p-5 backdrop-blur md:p-6">
-          <div className="grid gap-5 lg:grid-cols-[1fr_1fr] lg:items-center">
-            <div>
-              <h3 className="text-2xl font-semibold tracking-tight">
-                {content.newsletterTitle}
-              </h3>
+        <div className="mt-14 border-t border-white/10 pt-6">
+          <div className="flex flex-col gap-4 text-xs text-white/42 md:flex-row md:items-center md:justify-between">
+            <p>
+              {copy.copyright}. {copy.rights}
+            </p>
 
-              <p className="mt-2 text-sm leading-6 text-white/64">
-                {content.newsletterText}
-              </p>
-            </div>
-
-            <form
-              onSubmit={handleSubscribe}
-              className="flex min-w-0 flex-col gap-3 sm:flex-row"
-            >
-              <label className="sr-only" htmlFor="footer-newsletter">
-                {content.newsletterPlaceholder}
-              </label>
-
-              <input
-                id="footer-newsletter"
-                type="email"
-                value={email}
-                onChange={(event) => {
-                  setEmail(event.target.value);
-                  if (subscribed) {
-                    setSubscribed(false);
-                  }
-                }}
-                placeholder={content.newsletterPlaceholder}
-                className="min-w-0 flex-1 rounded-full border border-white/10 bg-white px-5 py-3 text-sm font-semibold text-text-primary outline-none transition placeholder:text-text-muted focus:border-brand-primary"
-              />
-
-              <button
-                type="submit"
-                className="inline-flex items-center justify-center gap-2 rounded-full bg-brand-primary px-6 py-3 text-sm font-semibold text-brand-foreground shadow-card transition hover:-translate-y-0.5 hover:opacity-90"
+            <div className="flex flex-wrap items-center gap-x-3 gap-y-2">
+              <Link
+                href={`/${locale}/privacy`}
+                className="transition hover:text-white"
               >
-                {content.newsletterButton}
-                <Send className="h-4 w-4" aria-hidden="true" />
-              </button>
-            </form>
-          </div>
-
-          {subscribed ? (
-            <div className="mt-4 flex items-start gap-2 rounded-2xl border border-emerald-400/20 bg-emerald-400/10 p-4 text-sm leading-6 text-emerald-100">
-              <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0" />
-              <span>{content.newsletterSuccess}</span>
+                {copy.privacy}
+              </Link>
+              <span aria-hidden="true">·</span>
+              <Link
+                href={`/${locale}/terms`}
+                className="transition hover:text-white"
+              >
+                {copy.terms}
+              </Link>
             </div>
-          ) : null}
-        </section>
-      </div>
-
-      <div className="border-t border-white/10 py-5">
-        <div className="container flex flex-col gap-4 text-xs text-white/50 md:flex-row md:items-center md:justify-between">
-          <p>{content.copyright}</p>
-
-          <div className="flex flex-wrap items-center gap-x-3 gap-y-2">
-            {legalLinks.map((link, index) => (
-              <span key={link.key} className="inline-flex items-center gap-3">
-                {index > 0 ? <span aria-hidden="true">·</span> : null}
-
-                <Link
-                  href={`/${locale}/${link.href}`}
-                  className="transition hover:text-white"
-                >
-                  {content.links[link.key]}
-                </Link>
-              </span>
-            ))}
           </div>
         </div>
       </div>
@@ -402,75 +326,149 @@ export function Footer({ locale = "tr" }: FooterProps) {
   );
 }
 
-type FooterLinkColumnProps = {
-  title: string;
-  links: readonly {
-    href: string;
-    key: keyof (typeof footerContent)["tr"]["links"];
-  }[];
-  locale: "tr" | "en";
-  labels: (typeof footerContent)["tr"]["links"];
-};
-
-function FooterLinkColumn({
+function FooterColumn({
   title,
   links,
   locale,
-  labels,
-}: FooterLinkColumnProps) {
+}: {
+  title: string;
+  links: FooterLink[];
+  locale: Locale;
+}) {
   return (
-    <section className="min-w-0">
-      <h3 className="text-sm font-semibold uppercase tracking-[0.22em] text-white/45">
+    <section className="hidden lg:block">
+      <h3 className="text-sm font-semibold uppercase tracking-[0.25em] text-white/38">
         {title}
       </h3>
 
-      <div className="mt-5 grid gap-3 text-sm text-white/68">
+      <div className="mt-5 grid gap-3">
         {links.map((link) => (
-          <Link
-            key={`${link.href}-${link.key}`}
-            href={`/${locale}/${link.href}`}
-            className="w-fit transition hover:text-white"
-          >
-            {labels[link.key]}
-          </Link>
+          <FooterTextLink key={link.href} link={link} locale={locale} />
         ))}
       </div>
     </section>
   );
 }
 
-type ContactRowProps = {
-  icon: typeof MapPin;
-  label: string;
-  value: string;
-  href?: string;
-};
+function MobileAccordion({
+  title,
+  links,
+  locale,
+  isOpen,
+  onToggle,
+}: {
+  title: string;
+  links: FooterLink[];
+  locale: Locale;
+  isOpen: boolean;
+  onToggle: () => void;
+}) {
+  return (
+    <div className="rounded-3xl border border-white/10 bg-white/[0.05]">
+      <button
+        type="button"
+        onClick={onToggle}
+        className="flex w-full items-center justify-between px-5 py-4 text-left text-sm font-semibold uppercase tracking-[0.2em] text-white/70"
+        aria-expanded={isOpen}
+      >
+        {title}
+        <ChevronDown
+          className={`h-4 w-4 transition ${isOpen ? "rotate-180" : ""}`}
+          aria-hidden="true"
+        />
+      </button>
 
-function ContactRow({ icon: Icon, label, value, href }: ContactRowProps) {
-  const content = (
-    <div className="flex min-w-0 gap-3">
-      <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-2xl border border-white/10 bg-white/10 text-white">
-        <Icon className="h-4 w-4" aria-hidden="true" />
-      </div>
-
-      <div className="min-w-0">
-        <p className="text-xs font-semibold uppercase tracking-[0.16em] text-white/38">
-          {label}
-        </p>
-        <p className="mt-1 break-words text-sm font-medium leading-5 text-white/72">
-          {value}
-        </p>
-      </div>
+      {isOpen ? (
+        <div className="grid gap-3 px-5 pb-5">
+          {links.map((link) => (
+            <FooterTextLink key={link.href} link={link} locale={locale} />
+          ))}
+        </div>
+      ) : null}
     </div>
   );
-
-  if (href) {
-    return (
-      <Link href={href} className="block transition hover:text-white">
-        {content}
-      </Link>
-    );
-  }
-
-  return content;
 }
+
+function FooterTextLink({
+  link,
+  locale,
+}: {
+  link: FooterLink;
+  locale: Locale;
+}) {
+  return (
+    <Link
+      href={`/${locale}/${link.href}`}
+      className="preview-footer-link group relative w-fit text-sm font-medium text-white/58 transition hover:text-white"
+    >
+      {link.label}
+      <span className="absolute -bottom-1 left-0 h-px w-0 bg-white/70 transition-all duration-300 group-hover:w-full" />
+    </Link>
+  );
+}
+
+function InstagramIcon({ className }: { className?: string }) {
+  return (
+    <svg viewBox="0 0 24 24" className={className} fill="none" aria-hidden="true">
+      <rect
+        x="3"
+        y="3"
+        width="18"
+        height="18"
+        rx="5"
+        stroke="currentColor"
+        strokeWidth="1.8"
+      />
+      <circle cx="12" cy="12" r="4" stroke="currentColor" strokeWidth="1.8" />
+      <circle cx="17.5" cy="6.5" r="1" fill="currentColor" />
+    </svg>
+  );
+}
+
+function TikTokIcon({ className }: { className?: string }) {
+  return (
+    <svg viewBox="0 0 24 24" className={className} fill="none" aria-hidden="true">
+      <path
+        d="M14.5 3v10.2a4.2 4.2 0 1 1-4.2-4.2"
+        stroke="currentColor"
+        strokeWidth="1.9"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+      <path
+        d="M14.5 5.4c1.1 2.1 2.8 3.2 5 3.4"
+        stroke="currentColor"
+        strokeWidth="1.9"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
+  );
+}
+
+function YouTubeIcon({ className }: { className?: string }) {
+  return (
+    <svg viewBox="0 0 24 24" className={className} fill="none" aria-hidden="true">
+      <rect
+        x="3"
+        y="6"
+        width="18"
+        height="12"
+        rx="4"
+        stroke="currentColor"
+        strokeWidth="1.8"
+      />
+      <path d="M10 9.5v5l4.5-2.5L10 9.5Z" fill="currentColor" />
+    </svg>
+  );
+}
+
+function FacebookIcon({ className }: { className?: string }) {
+  return (
+    <svg viewBox="0 0 24 24" className={className} fill="currentColor" aria-hidden="true">
+      <path d="M14.2 8.4V6.9c0-.7.5-1.1 1.2-1.1h1.5V3.2c-.3 0-1.3-.1-2.5-.1-2.5 0-4.2 1.5-4.2 4.3v1H7.5v3h2.7v9.5h3.3v-9.5h2.7l.4-3h-3.1Z" />
+    </svg>
+  );
+}
+
+export default Footer;

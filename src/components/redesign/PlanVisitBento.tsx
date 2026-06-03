@@ -37,30 +37,30 @@ const content = {
     cta: "Keşfet",
     cards: {
       happening: {
-        title: "What’s Happening",
+        title: "Etkinlikler",
         description: "CityMall’deki etkinlikleri ve canlı deneyimleri keşfet.",
         alt: "CityMall etkinlik atmosferi",
       },
       giftCard: {
-        title: "Gift Card",
+        title: "Hediye Kartı",
         description: "Özel günler için şık ve kolay bir hediye seçeneği.",
         alt: "Premium hediye kartı ve alışveriş atmosferi",
       },
       kids: {
-        title: "FunLab / Kids",
+        title: "FunLab / Çocuk",
         description: "Çocuklar ve aileler için eğlenceli bir AVM deneyimi.",
         alt: "Çocuk ve aile eğlence atmosferi",
       },
       nextFallback: {
-        title: "Next Experience",
+        title: "Sonraki Deneyim",
         description: "Yeni etkinlikler ve deneyimler yakında duyurulacak.",
         alt: "Yaklaşan etkinlik atmosferi",
       },
     },
     badges: {
-      today: "Bugün",
-      thisWeek: "Bu Hafta",
-      upcoming: "Yakında",
+      today: "BUGÜN",
+      thisWeek: "BU HAFTA",
+      upcoming: "YAKINDA",
     },
   },
   en: {
@@ -92,9 +92,9 @@ const content = {
       },
     },
     badges: {
-      today: "Happening Today",
-      thisWeek: "This Week",
-      upcoming: "Upcoming",
+      today: "HAPPENING TODAY",
+      thisWeek: "THIS WEEK",
+      upcoming: "UPCOMING",
     },
   },
 };
@@ -172,14 +172,18 @@ export function PlanVisitBento({ locale }: PlanVisitBentoProps) {
           ? copy.badges.thisWeek
           : copy.badges.upcoming;
 
+    const eventTitle = getLocalizedText(nextEvent.title, locale);
+    const eventLocation = getLocalizedText(nextEvent.location, locale);
+    const eventDate = formatEventDate(nextEvent.date, locale);
+
     return {
-      title: getLocalizedText(nextEvent.title, locale),
-      description: `${formatEventDate(nextEvent.date, locale)} · ${getLocalizedText(
-        nextEvent.location,
-        locale
-      )}`,
+      title: copy.cards.nextFallback.title,
+      description:
+        locale === "tr"
+          ? `${eventTitle} · ${eventDate} · ${eventLocation}`
+          : `${eventTitle} · ${eventDate} · ${eventLocation}`,
       image: nextEvent.image || images.next,
-      alt: getLocalizedText(nextEvent.title, locale),
+      alt: eventTitle,
       badge,
     };
   }, [copy, locale, nextEvent]);
@@ -327,7 +331,7 @@ export function PlanVisitBento({ locale }: PlanVisitBentoProps) {
       <div className="container relative">
         <div className="mx-auto mb-12 max-w-4xl text-center md:mb-14">
           <p className="mb-4 text-xs font-semibold uppercase tracking-[0.28em] text-text-muted">
-             {copy.eyebrow}
+            {copy.eyebrow}
           </p>
 
           <div className="overflow-hidden">
@@ -343,7 +347,7 @@ export function PlanVisitBento({ locale }: PlanVisitBentoProps) {
           </div>
 
           <p className="mx-auto mt-5 max-w-2xl text-sm leading-7 text-text-secondary md:text-base">
-             {copy.subtitle}
+            {copy.subtitle}
           </p>
         </div>
 
@@ -416,11 +420,11 @@ function PlanVisitCard({
           </div>
 
           <span
-  aria-hidden="true"
-  className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full border border-border-default bg-white text-text-primary shadow-[0_12px_30px_rgba(0,0,0,0.14)] transition duration-300 group-hover:scale-105 group-hover:bg-surface-muted"
->
-  <ArrowUpRight className="h-5 w-5 transition duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
-</span>
+            aria-hidden="true"
+            className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full border border-border-default bg-white text-text-primary shadow-[0_12px_30px_rgba(0,0,0,0.14)] transition duration-300 group-hover:scale-105 group-hover:bg-surface-muted"
+          >
+            <ArrowUpRight className="h-5 w-5 transition duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+          </span>
         </div>
 
         <span className="sr-only">{cta}</span>

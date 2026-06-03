@@ -1,58 +1,32 @@
-import type { Metadata } from "next";
-import { NextIntlClientProvider } from "next-intl";
 import { CookieBanner } from "@/components/common/CookieBanner";
-import { notFound } from "next/navigation";
-import { locales, type Locale } from "@/i18n/routing";
-import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
-import { createPageMetadata } from "@/lib/metadata";
+import { Navbar } from "@/components/layout/Navbar";
+import type { Locale } from "@/types/content";
+import { Outfit } from "next/font/google";
 
-type LocaleLayoutProps = {
-  children: React.ReactNode;
-  params: {
-    locale: string;
-  };
-};
+const outfit = Outfit({
+  subsets: ["latin"],
+  weight: ["400", "500", "600", "700", "800"],
+  variable: "--font-outfit",
+});
 
-async function getLocaleMessages(locale: Locale) {
-  return (await import(`../../messages/${locale}.json`)).default;
-}
-
-export function generateMetadata({
-  params,
-}: {
-  params: { locale: string };
-}): Metadata {
-  const locale = params.locale as Locale;
-
-  if (!locales.includes(locale)) {
-    return {};
-  }
-
-  return createPageMetadata({
-    locale,
-    path: "",
-  });
-}
-
-export default async function LocaleLayout({
+export default function LocaleLayout({
   children,
   params,
-}: LocaleLayoutProps) {
-  const locale = params.locale as Locale;
-
-  if (!locales.includes(locale)) {
-    notFound();
-  }
-
-  const messages = await getLocaleMessages(locale);
+}: {
+  children: React.ReactNode;
+  params: { locale: Locale };
+}) {
+  const locale = params.locale;
 
   return (
-  <NextIntlClientProvider locale={locale} messages={messages}>
-    <Navbar />
-    {children}
-    <Footer locale={locale} />
-    <CookieBanner locale={locale} />
-  </NextIntlClientProvider>
-);
+    <div
+      className={`${outfit.variable} ${outfit.className} min-h-screen bg-surface-default font-sans text-text-primary antialiased`}
+    >
+      <Navbar locale={locale} />
+      {children}
+      <Footer locale={locale} />
+      <CookieBanner locale={locale} />
+    </div>
+  );
 }

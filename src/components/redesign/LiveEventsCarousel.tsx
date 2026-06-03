@@ -4,7 +4,6 @@
 
 import Link from "next/link";
 import { ArrowRight, ArrowUpRight, CalendarDays, Clock3 } from "lucide-react";
-import type { CSSProperties } from "react";
 import { events } from "@/data/events";
 import { getLocalizedText } from "@/lib/locale";
 import type { Event, Locale } from "@/types/content";
@@ -22,7 +21,6 @@ type EventCardItem = {
   image: string;
   href: string;
   rotation: string;
-  featured?: boolean;
 };
 
 const content = {
@@ -142,14 +140,19 @@ function getBadge(event: Event, locale: Locale) {
 
 function createEventCards(locale: Locale): EventCardItem[] {
   const sortedEvents = [...events].sort(
-  (a, b) => getEventTimestamp(a.date) - getEventTimestamp(b.date)
-);
+    (a, b) => getEventTimestamp(a.date) - getEventTimestamp(b.date)
+  );
 
   const sourceEvents = sortedEvents.length ? sortedEvents : events;
 
   return sourceEvents.map((event, index) => {
-    const isFeatured = index % 5 === 1;
-    const rotationMap = ["-rotate-[0.8deg]", "rotate-[0.65deg]", "-rotate-[0.45deg]", "rotate-[0.35deg]", "rotate-0"];
+    const rotationMap = [
+      "-rotate-[0.8deg]",
+      "rotate-[0.65deg]",
+      "-rotate-[0.45deg]",
+      "rotate-[0.35deg]",
+      "rotate-0",
+    ];
 
     return {
       id: event.id,
@@ -160,7 +163,6 @@ function createEventCards(locale: Locale): EventCardItem[] {
       image: event.image || fallbackImages[index % fallbackImages.length],
       href: `/${locale}/events`,
       rotation: rotationMap[index % rotationMap.length],
-      featured: isFeatured,
     };
   });
 }
@@ -195,10 +197,10 @@ export function LiveEventsCarousel({ locale }: LiveEventsCarouselProps) {
         }
 
         @media (hover: hover) and (pointer: fine) {
-  .live-events-carousel:hover .live-events-track {
-    animation-play-state: paused;
-  }
-}
+          .live-events-carousel:hover .live-events-track {
+            animation-play-state: paused;
+          }
+        }
 
         @media (prefers-reduced-motion: reduce) {
           .live-events-track,
@@ -212,7 +214,7 @@ export function LiveEventsCarousel({ locale }: LiveEventsCarouselProps) {
       `}</style>
 
       <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-text-primary/10 to-transparent" />
-<div className="pointer-events-none absolute inset-0 -z-10 bg-[radial-gradient(circle_at_20%_0%,rgba(180,126,47,0.10),transparent_30%),radial-gradient(circle_at_90%_24%,rgba(17,24,39,0.05),transparent_28%)]" />
+      <div className="pointer-events-none absolute inset-0 -z-10 bg-[radial-gradient(circle_at_20%_0%,rgba(180,126,47,0.10),transparent_30%),radial-gradient(circle_at_90%_24%,rgba(17,24,39,0.05),transparent_28%)]" />
 
       <div className="container relative">
         <div className="mb-12 grid gap-8 md:mb-14 lg:grid-cols-[1fr_auto] lg:items-end">
@@ -223,7 +225,9 @@ export function LiveEventsCarousel({ locale }: LiveEventsCarouselProps) {
 
             <h2 className="max-w-3xl text-4xl font-semibold leading-[0.98] tracking-tight text-text-primary md:text-6xl">
               <span className="block">{copy.titleLineOne}</span>
-              <span className="block text-text-secondary">{copy.titleLineTwo}</span>
+              <span className="block text-text-secondary">
+                {copy.titleLineTwo}
+              </span>
             </h2>
 
             <p className="mt-5 max-w-xl text-sm leading-7 text-text-secondary md:text-base">
@@ -241,7 +245,7 @@ export function LiveEventsCarousel({ locale }: LiveEventsCarouselProps) {
         </div>
       </div>
 
-        <div className="live-events-carousel relative w-full overflow-hidden">
+      <div className="live-events-carousel relative w-full overflow-hidden">
         <div className="pointer-events-none absolute inset-y-0 left-0 z-10 w-24 bg-gradient-to-r from-[#f5f5f3] to-transparent md:w-40" />
         <div className="pointer-events-none absolute inset-y-0 right-0 z-10 w-24 bg-gradient-to-l from-[#f5f5f3] to-transparent md:w-40" />
 
@@ -272,17 +276,12 @@ function LiveEventCard({
   detailsLabel: string;
   ariaHidden?: boolean;
 }) {
-  const style = {
-    "--card-width": event.featured ? "360px" : "300px",
-  } as CSSProperties;
-
   return (
     <article
       aria-hidden={ariaHidden}
-      style={style}
-      className={`live-events-card group w-[var(--card-width)] shrink-0 overflow-hidden rounded-[1.55rem] bg-white text-text-primary shadow-[0_28px_90px_rgba(0,0,0,0.32)] transition duration-500 hover:-translate-y-2 hover:rotate-0 hover:shadow-[0_34px_110px_rgba(255,255,255,0.10)] ${event.rotation}`}
+      className={`live-events-card group flex h-[420px] w-[300px] shrink-0 flex-col overflow-hidden rounded-[1.55rem] bg-white text-text-primary shadow-[0_28px_90px_rgba(0,0,0,0.32)] transition duration-500 hover:-translate-y-2 hover:rotate-0 hover:shadow-[0_34px_110px_rgba(255,255,255,0.10)] md:w-[340px] ${event.rotation}`}
     >
-      <div className="relative aspect-[1.1/0.78] overflow-hidden bg-surface-muted">
+      <div className="relative h-[220px] shrink-0 overflow-hidden bg-surface-muted">
         <img
           src={event.image}
           alt={event.title}
@@ -294,7 +293,7 @@ function LiveEventCard({
         </span>
       </div>
 
-      <div className="min-h-[215px] p-5 md:p-6">
+      <div className="flex min-h-0 flex-1 flex-col p-5 md:p-6">
         <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-xs font-medium text-text-muted">
           <span className="inline-flex items-center gap-1.5">
             <CalendarDays className="h-3.5 w-3.5" aria-hidden="true" />
@@ -307,17 +306,19 @@ function LiveEventCard({
           </span>
         </div>
 
-        <h3 className="mt-4 line-clamp-3 text-2xl font-semibold leading-tight tracking-tight text-text-primary">
+        <h3 className="mt-4 line-clamp-2 text-2xl font-semibold leading-tight tracking-tight text-text-primary">
           {event.title}
         </h3>
 
-        <Link
-          href={event.href}
-          className="mt-8 inline-flex items-center justify-center gap-2 rounded-full border border-text-primary/22 px-4 py-2.5 text-xs font-semibold text-text-primary transition hover:bg-text-primary hover:text-white"
-        >
-          {detailsLabel}
-          <ArrowUpRight className="h-3.5 w-3.5" aria-hidden="true" />
-        </Link>
+        <div className="mt-auto pt-5">
+          <Link
+            href={event.href}
+            className="inline-flex items-center justify-center gap-2 rounded-full border border-text-primary/22 px-4 py-2.5 text-xs font-semibold text-text-primary transition hover:bg-text-primary hover:text-white"
+          >
+            {detailsLabel}
+            <ArrowUpRight className="h-3.5 w-3.5" aria-hidden="true" />
+          </Link>
+        </div>
       </div>
     </article>
   );
