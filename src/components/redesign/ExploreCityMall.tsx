@@ -41,6 +41,10 @@ const content = {
     eyebrow: "CityMall Rehberi",
     title: "CityMall'ı Keşfet",
     subtitle: "İhtiyacın olan her şey tek noktada.",
+    floorMapEyebrow: "KAT REHBERİ",
+    floorMapTitle: "CityMall'ı Keşfet",
+    floorMapSubtitle:
+    "Mağaza konumları ve kat bilgileri için interaktif haritayı kullan.",
     floorGuide: "Kat Planını Gör",
     floorText:
       "Mağaza konumları, kat bilgileri ve ziyaret rotaları için harita sayfasına geç.",
@@ -72,6 +76,10 @@ const content = {
     eyebrow: "CityMall Guide",
     title: "Explore CityMall",
     subtitle: "Everything you need in one destination.",
+    floorMapEyebrow: "FLOOR GUIDE",
+    floorMapTitle: "Explore CityMall",
+    floorMapSubtitle:
+    "Use the interactive map to find store locations and floor information.",
     floorGuide: "View Floor Plan",
     floorText:
       "Open the map page for store locations, floor details and visitor routes.",
@@ -195,9 +203,10 @@ export function ExploreCityMall({ locale }: ExploreCityMallProps) {
 
   return (
     <section
+      id="explore-citymall"
       ref={sectionRef}
-      className="relative isolate overflow-hidden bg-[#f5f5f3] py-20 text-text-primary md:py-28"
-    >
+      className="relative isolate scroll-mt-24 overflow-hidden bg-[#f5f5f3] py-20 text-text-primary md:scroll-mt-28 md:py-28"
+     >
       <style>{`
         @keyframes exploreReveal {
           0% {
@@ -235,6 +244,21 @@ export function ExploreCityMall({ locale }: ExploreCityMallProps) {
       : "opacity-0"
   }`}
 >
+
+<div className="mx-auto mb-8 max-w-4xl text-center md:mb-10">
+  <p className="mb-4 text-xs font-semibold uppercase tracking-[0.28em] text-text-muted">
+    {copy.floorMapEyebrow}
+  </p>
+
+  <h3 className="text-4xl font-semibold tracking-tight text-text-primary md:text-6xl">
+    {copy.floorMapTitle}
+  </h3>
+
+  <p className="mx-auto mt-5 max-w-2xl text-sm leading-7 text-text-secondary md:text-base">
+    {copy.floorMapSubtitle}
+  </p>
+</div>
+
   <div
     id="citymall-3d-floor-guide"
     className="scroll-mt-28 overflow-hidden rounded-[2rem] border border-white/60 bg-white/70 p-3 shadow-[0_8px_32px_rgba(0,0,0,0.08)] backdrop-blur-xl md:p-4 [&>div]:h-[340px] md:[&>div]:h-[420px] lg:[&>div]:h-[600px]"

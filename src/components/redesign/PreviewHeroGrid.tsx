@@ -185,7 +185,7 @@ export function PreviewHeroGrid({ locale }: PreviewHeroGridProps) {
       ...copy.cards.events,
     },
     {
-      href: `/${locale}/map`,
+      href: "#explore-citymall",
       image: images.explore,
       icon: MapPinned,
       className:
@@ -278,7 +278,7 @@ export function PreviewHeroGrid({ locale }: PreviewHeroGridProps) {
             </Link>
 
             <Link
-              href={`/${locale}/map`}
+              href="#explore-citymall"
               className="inline-flex items-center justify-center rounded-full border border-border-default bg-white/70 px-6 py-3 text-sm font-semibold text-text-primary shadow-card backdrop-blur transition hover:-translate-y-0.5 hover:bg-white"
             >
               {copy.secondaryCta}

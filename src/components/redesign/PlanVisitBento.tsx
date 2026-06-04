@@ -37,10 +37,10 @@ const content = {
     cta: "Keşfet",
     cards: {
       happening: {
-        title: "Etkinlikler",
-        description: "CityMall’deki etkinlikleri ve canlı deneyimleri keşfet.",
-        alt: "CityMall etkinlik atmosferi",
-      },
+        title: "Kampanyalar",
+        description: "Seçili markalarda özel fırsatlar.",
+        alt: "CityMall kampanya ve alışveriş atmosferi",
+       },
       giftCard: {
         title: "Hediye Kartı",
         description: "Özel günler için şık ve kolay bir hediye seçeneği.",
@@ -71,9 +71,9 @@ const content = {
     cta: "Explore",
     cards: {
       happening: {
-        title: "What’s Happening",
-        description: "Explore events and live experiences at CityMall.",
-        alt: "CityMall event atmosphere",
+       title: "Campaigns",
+       description: "Exclusive offers from selected brands.",
+       alt: "CityMall campaign and shopping atmosphere",
       },
       giftCard: {
         title: "Gift Card",
@@ -101,7 +101,7 @@ const content = {
 
 const images = {
   happening:
-    "https://images.unsplash.com/photo-1501281668745-f7f57925c3b4?auto=format&fit=crop&w=1400&q=85",
+  "https://images.unsplash.com/photo-1607083206869-4c7672e72a8a?auto=format&fit=crop&w=1400&q=85",
   giftCard:
     "https://images.unsplash.com/photo-1512909006721-3d6018887383?auto=format&fit=crop&w=1400&q=85",
   kids:
@@ -193,7 +193,7 @@ export function PlanVisitBento({ locale }: PlanVisitBentoProps) {
       key: "happening",
       title: copy.cards.happening.title,
       description: copy.cards.happening.description,
-      href: `/${locale}/events`,
+      href: `/${locale}/campaigns`,
       image: images.happening,
       alt: copy.cards.happening.alt,
       fromX: -40,

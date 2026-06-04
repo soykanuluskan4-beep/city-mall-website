@@ -712,8 +712,16 @@ function getContrastText(category: Category) {
     : "text-white";
 }
 
-function getBlockHref(locale: Locale, block: FloorBlock) {
-  return `/${locale}${block.route ?? "/stores"}`;
+function getBlockHref(block: FloorBlock, activeLocale: Locale) {
+  if (block.category === "food") {
+    return `/${activeLocale}/dining`;
+  }
+
+  if (block.category === "entertainment") {
+    return `/${activeLocale}/cinema`;
+  }
+
+  return `/${activeLocale}/stores`;
 }
 
 function loadThreeScript() {
@@ -952,63 +960,67 @@ function closeSelectedBlock() {
       ) : null}
 
       <div
-        className={`absolute bottom-0 right-0 top-auto z-30 w-full border-t border-white/10 bg-[#0f0f10]/92 p-5 text-white shadow-[0_-20px_70px_rgba(0,0,0,0.32)] backdrop-blur-xl transition duration-300 md:bottom-4 md:right-4 md:top-4 md:w-[330px] md:rounded-2xl md:border ${
-          selectedBlock
-            ? "translate-y-0 opacity-100 md:translate-x-0"
-            : "translate-y-full opacity-0 md:translate-x-[calc(100%+2rem)] md:translate-y-0"
-        }`}
+  className={`fixed inset-x-3 bottom-3 z-[60] h-[280px] max-h-[calc(100dvh-7rem)] overflow-hidden rounded-[1.5rem] border border-white/10 bg-[#0f0f10]/95 p-5 text-white shadow-[0_-20px_70px_rgba(0,0,0,0.32)] backdrop-blur-xl transition duration-300 md:absolute md:inset-x-auto md:bottom-4 md:right-4 md:top-4 md:z-30 md:h-auto md:max-h-none md:w-[330px] md:rounded-2xl md:border md:overflow-y-auto ${
+    selectedBlock
+      ? "translate-y-0 opacity-100 md:translate-x-0"
+      : "pointer-events-none translate-y-[calc(100%+2rem)] opacity-0 md:translate-x-[calc(100%+2rem)] md:translate-y-0"
+  }`}
+>
+  {selectedBlock ? (
+  <div className="h-full overflow-y-auto pr-1 md:h-auto md:overflow-visible md:pr-0">
+    <button
+      type="button"
+      onClick={closeSelectedBlock}
+      className="absolute right-4 top-4 z-10 rounded-full border border-white/14 bg-black/24 p-2 text-white/70 transition hover:bg-white/10 hover:text-white"
+      aria-label={text.close}
+    >
+      <X className="h-4 w-4" aria-hidden="true" />
+    </button>
+
+    <div className="pr-12">
+      <span
+        className={`inline-flex rounded-full px-3 py-1 text-xs font-semibold ${getContrastText(
+          selectedBlock.category
+        )}`}
+        style={{ backgroundColor: getBlockColor(selectedBlock) }}
       >
-        {selectedBlock ? (
-          <>
-            <div className="flex items-start justify-between gap-4">
-              <div>
-                <span
-                  className={`inline-flex rounded-full px-3 py-1 text-xs font-semibold ${getContrastText(
-                    selectedBlock.category
-                  )}`}
-                  style={{ backgroundColor: getBlockColor(selectedBlock) }}
-                >
-                  {CATEGORY_LABELS[selectedBlock.category][locale]}
-                </span>
+        {CATEGORY_LABELS[selectedBlock.category][locale]}
+      </span>
 
-                <h3 className="mt-4 text-3xl font-semibold tracking-tight">
-                  {selectedBlock.name}
-                </h3>
-              </div>
+      <h3 className="mt-4 break-words text-3xl font-semibold leading-tight tracking-tight">
+        {selectedBlock.name}
+      </h3>
+    </div>
 
-              <button
-                type="button"
-                onClick={closeSelectedBlock}
-                className="rounded-full border border-white/14 p-2 text-white/60 transition hover:bg-white/10 hover:text-white"
-                aria-label={text.close}
-              >
-                <X className="h-4 w-4" aria-hidden="true" />
-              </button>
-            </div>
+    <div className="mt-5 rounded-2xl border border-white/10 bg-white/8 p-4">
+      <p className="text-xs font-semibold uppercase tracking-[0.22em] text-white/45">
+        {locale === "tr" ? "Kat Bilgisi" : "Floor"}
+      </p>
 
-            <div className="mt-5 rounded-2xl border border-white/10 bg-white/[0.06] p-4">
-              <p className="text-xs font-semibold uppercase tracking-[0.22em] text-white/42">
-                {text.floor}
-              </p>
-              <p className="mt-1 text-base font-semibold">
-                {FLOOR_LABELS[selectedBlock.floor][locale]}
-              </p>
-            </div>
+      <p className="mt-2 text-base font-semibold text-white">
+        {FLOOR_LABELS[selectedBlock.floor][locale]}
+      </p>
+    </div>
 
-            <p className="mt-5 text-sm leading-7 text-white/68">
-              {selectedBlock.description[locale]}
-            </p>
+    <p className="mt-5 text-sm leading-6 text-white/68">
+      {selectedBlock.description?.[locale] ??
+        selectedBlock.description?.tr ??
+        selectedBlock.description?.en ??
+        (locale === "tr"
+          ? `${selectedBlock.name}, CityMall içinde yer alıyor.`
+          : `${selectedBlock.name} is located inside CityMall.`)}
+    </p>
 
-            <Link
-              href={getBlockHref(locale, selectedBlock)}
-              className="mt-6 inline-flex w-full items-center justify-center gap-2 rounded-full bg-[#FFD100] px-5 py-3 text-sm font-semibold text-black transition hover:bg-[#F7941D]"
-            >
-              {text.viewStores}
-              <ArrowRight className="h-4 w-4" aria-hidden="true" />
-            </Link>
-          </>
-        ) : null}
-      </div>
+    <Link
+      href={getBlockHref(selectedBlock, locale)}
+      className="mt-6 inline-flex w-full items-center justify-center gap-2 rounded-full bg-[#E8312A] px-5 py-3 text-sm font-semibold text-white transition hover:-translate-y-0.5 hover:bg-white hover:text-text-primary"
+    >
+      {locale === "tr" ? "Mağazaları Gör" : "View Stores"}
+      <ArrowRight className="h-4 w-4" aria-hidden="true" />
+    </Link>
+  </div>
+) : null}
+</div>
 
       {!isReady && !loadError ? (
         <div className="absolute inset-0 z-40 flex items-center justify-center bg-[#0f0f10] text-white">
