@@ -40,44 +40,44 @@ const content = {
   tr: {
     title: "CityMall'ı Keşfet.",
     primaryCta: "Mağazaları Gör",
-secondaryCta: "Ziyareti Planla",
+    secondaryCta: "Ziyareti Planla",
     cards: {
       fashion: {
-      eyebrow: "Moda / Premium",
-      title: "Moda",
-  description:
-    "Slow motion vitrin hissi, sezon stilleri ve premium alışveriş rotaları.",
-  alt: "Premium fashion shopping atmosphere",
-  cardCta: "Koleksiyonu Gör",
-},
-dining: {
-  eyebrow: "Restoranlar",
-  title: "Yemek",
-  description: "Sıcak tonlar, restoranlar ve lezzet molaları.",
-  alt: "Warm dining atmosphere",
-  cardCta: "Restoranları Keşfet",
-},
-cinema: {
-  eyebrow: "Cinemall",
-  title: "Sinema",
-  description: "Koyu neon atmosfer, film ve seans deneyimi.",
-  alt: "Cinema atmosphere",
-  cardCta: "Seansları Gör",
-},
-events: {
-  eyebrow: "Neler Oluyor?",
-  title: "Etkinlikler",
-  description: "CityMall’de bu hafta olanları keşfet.",
-  alt: "Live event atmosphere",
-  cardCta: "Programa Bak",
-},
-explore: {
-  eyebrow: "Kat Rehberi",
-  title: "AVM Haritası",
-  description: "Katlar, hizmetler ve ziyaret rotaları.",
-  alt: "Interactive mall map preview",
-  cardCta: "Kat Planını Gör",
-},
+        eyebrow: "Moda / Premium",
+        title: "Moda",
+        description:
+          "Slow motion vitrin hissi, sezon stilleri ve premium alışveriş rotaları.",
+        alt: "Premium fashion shopping atmosphere",
+        cardCta: "Koleksiyonu Gör",
+      },
+      dining: {
+        eyebrow: "Restoranlar",
+        title: "Yemek",
+        description: "Sıcak tonlar, restoranlar ve lezzet molaları.",
+        alt: "Warm dining atmosphere",
+        cardCta: "Restoranları Keşfet",
+      },
+      cinema: {
+        eyebrow: "Cinemall",
+        title: "Sinema",
+        description: "Koyu neon atmosfer, film ve seans deneyimi.",
+        alt: "Cinema atmosphere",
+        cardCta: "Seansları Gör",
+      },
+      events: {
+        eyebrow: "Neler Oluyor?",
+        title: "Etkinlikler",
+        description: "CityMall’de bu hafta olanları keşfet.",
+        alt: "Live event atmosphere",
+        cardCta: "Programa Bak",
+      },
+      explore: {
+        eyebrow: "Kat Rehberi",
+        title: "AVM Haritası",
+        description: "Katlar, hizmetler ve ziyaret rotaları.",
+        alt: "Interactive mall map preview",
+        cardCta: "Kat Planını Gör",
+      },
     },
   },
   en: {
@@ -86,41 +86,41 @@ explore: {
     secondaryCta: "Plan Your Visit",
     cards: {
       fashion: {
-  eyebrow: "Fashion / Luxury",
-  title: "Fashion",
-  description:
-    "Slow-motion window feeling, seasonal styles and premium shopping routes.",
-  alt: "Premium fashion shopping atmosphere",
-  cardCta: "View Collection",
-},
-dining: {
-  eyebrow: "Resrtaurants",
-  title: "Dining",
-  description: "Warm tones, restaurants and tasteful breaks.",
-  alt: "Warm dining atmosphere",
-  cardCta: "Explore Restaurants",
-},
-cinema: {
-  eyebrow: "Cinemall",
-  title: "Cinema",
-  description: "Dark neon atmosphere, movies and showtimes.",
-  alt: "Cinema atmosphere",
-  cardCta: "View Showtimes",
-},
-events: {
-  eyebrow: "What’s Happening",
-  title: "Events",
-  description: "Discover what’s happening at CityMall this week.",
-  alt: "Live event atmosphere",
-  cardCta: "See Program",
-},
-explore: {
-  eyebrow: "Explore Mall",
-  title: "Explore",
-  description: "Floors, services and visitor routes.",
-  alt: "Interactive mall map preview",
-  cardCta: "View Floor Plan",
-},
+        eyebrow: "Fashion / Luxury",
+        title: "Fashion",
+        description:
+          "Slow-motion window feeling, seasonal styles and premium shopping routes.",
+        alt: "Premium fashion shopping atmosphere",
+        cardCta: "View Collection",
+      },
+      dining: {
+        eyebrow: "Restaurants",
+        title: "Dining",
+        description: "Warm tones, restaurants and tasteful breaks.",
+        alt: "Warm dining atmosphere",
+        cardCta: "Explore Restaurants",
+      },
+      cinema: {
+        eyebrow: "Cinemall",
+        title: "Cinema",
+        description: "Dark neon atmosphere, movies and showtimes.",
+        alt: "Cinema atmosphere",
+        cardCta: "View Showtimes",
+      },
+      events: {
+        eyebrow: "What’s Happening",
+        title: "Events",
+        description: "Discover what’s happening at CityMall this week.",
+        alt: "Live event atmosphere",
+        cardCta: "See Program",
+      },
+      explore: {
+        eyebrow: "Floor Guide",
+        title: "Mall Map",
+        description: "Floors, services and visitor routes.",
+        alt: "Interactive mall map preview",
+        cardCta: "View Floor Plan",
+      },
     },
   },
 };
@@ -264,8 +264,6 @@ export function PreviewHeroGrid({ locale }: PreviewHeroGridProps) {
             <h1 className="max-w-5xl text-4xl font-semibold tracking-tight text-text-primary md:text-6xl lg:text-7xl">
               {copy.title}
             </h1>
-
-            
           </div>
 
           <div className="flex flex-col gap-3 sm:flex-row lg:pb-1">
@@ -311,14 +309,14 @@ function PreviewHeroCard({ card }: { card: HeroCard }) {
       <img
         src={card.poster ?? card.image}
         alt={card.alt}
-        className={`absolute inset-0 -z-30 h-full w-full scale-[1.01] object-cover transition duration-300 ease-out group-hover:scale-[1.055] ${
+        className={`absolute inset-0 z-0 h-full w-full scale-[1.01] object-cover transition duration-300 ease-out group-hover:scale-[1.055] ${
           shouldShowImage ? "opacity-100" : "opacity-0"
         }`}
       />
 
       {card.video && !hasVideoError ? (
         <video
-          className={`hero-background-video absolute inset-0 -z-20 h-full w-full scale-[1.01] object-cover transition duration-300 ease-out group-hover:scale-[1.055] ${
+          className={`hero-background-video absolute inset-0 z-[1] h-full w-full scale-[1.01] object-cover transition duration-300 ease-out group-hover:scale-[1.055] ${
             isVideoReady ? "opacity-100" : "opacity-0"
           }`}
           autoPlay
@@ -337,40 +335,44 @@ function PreviewHeroCard({ card }: { card: HeroCard }) {
       ) : null}
 
       <div
-        className={`absolute inset-0 -z-10 bg-gradient-to-b ${card.overlay} transition duration-500 group-hover:opacity-88`}
+        className={`absolute inset-0 z-[2] bg-gradient-to-b ${card.overlay} transition duration-500 group-hover:opacity-88`}
       />
 
-      <div className="absolute inset-0 -z-10 opacity-0 transition duration-500 group-hover:opacity-100">
+      <div className="absolute inset-0 z-[3] opacity-0 transition duration-500 group-hover:opacity-100">
         <div className="absolute inset-x-6 top-6 h-px bg-gradient-to-r from-transparent via-white/35 to-transparent" />
         <div className="absolute inset-y-6 right-6 w-px bg-gradient-to-b from-transparent via-white/20 to-transparent" />
       </div>
 
       {card.variant === "explore" ? <ExploreMapPreview /> : null}
 
-      <div className="mt-auto max-w-lg transition duration-500 group-hover:-translate-y-1.5">
-        <div className="mb-3 flex items-center gap-2">
-          <span className="flex h-10 w-10 items-center justify-center rounded-2xl border border-white/15 bg-white/10 backdrop-blur">
+      <div
+  className={`relative z-20 mt-auto max-w-lg overflow-hidden transition duration-500 group-hover:-translate-y-1.5 lg:max-h-none ${
+    card.variant === "explore" ? "max-h-[62%]" : "max-h-[50%]"
+  }`}
+>
+        <div className="mb-2 flex min-w-0 items-center gap-2 md:mb-3">
+          <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-2xl border border-white/15 bg-white/10 backdrop-blur">
             <Icon className="h-4 w-4" aria-hidden="true" />
           </span>
 
-          <p className="text-[0.68rem] font-semibold uppercase tracking-[0.25em] text-white/62">
+          <p className="truncate text-[0.68rem] font-semibold uppercase tracking-[0.25em] text-white/62">
             {card.eyebrow}
           </p>
         </div>
 
         <h2
-          className={`font-semibold leading-[0.95] tracking-tight ${card.titleClassName}`}
+          className={`line-clamp-2 font-semibold leading-[0.95] tracking-tight ${card.titleClassName}`}
         >
           {card.title}
         </h2>
 
-        <p className="mt-3 max-w-md text-sm leading-6 text-white/72">
+        <p className="mt-2 line-clamp-2 max-w-md text-sm leading-6 text-white/72 md:mt-3">
           {card.description}
         </p>
 
-        <div className="mt-5 inline-flex items-center gap-2 text-sm font-semibold text-white/86 transition duration-300 group-hover:gap-3 group-hover:text-white">
+        <div className="mt-3 inline-flex shrink-0 items-center gap-2 text-sm font-semibold text-white/86 transition duration-300 group-hover:gap-3 group-hover:text-white md:mt-5">
           {card.cardCta}
-          <ArrowRight className="h-4 w-4" aria-hidden="true" />
+          <ArrowRight className="h-4 w-4 shrink-0" aria-hidden="true" />
         </div>
       </div>
     </Link>
@@ -379,24 +381,27 @@ function PreviewHeroCard({ card }: { card: HeroCard }) {
 
 function ExploreMapPreview() {
   return (
-    <div className="pointer-events-none absolute inset-x-5 top-5 z-0 rounded-[1.35rem] border border-white/14 bg-white/[0.08] p-4 opacity-80 backdrop-blur-md transition duration-500 group-hover:border-white/26 group-hover:bg-white/[0.12]">
-      <div className="mb-3 flex items-center justify-between gap-3">
-        <div>
-          <p className="text-[0.62rem] font-semibold uppercase tracking-[0.22em] text-white/46">
+    <div className="pointer-events-none absolute inset-x-5 top-5 z-10 max-h-[32%] overflow-hidden rounded-[1.35rem] border border-white/14 bg-white/[0.08] p-4 opacity-80 backdrop-blur-md transition duration-500 group-hover:border-white/26 group-hover:bg-white/[0.12] lg:max-h-none">
+      <div className="mb-3 flex min-w-0 items-center justify-between gap-3">
+        <div className="min-w-0">
+          <p className="truncate text-[0.62rem] font-semibold uppercase tracking-[0.22em] text-white/46">
             Floor Guide
           </p>
-          <p className="mt-1 text-sm font-semibold text-white/82">
+          <p className="mt-1 line-clamp-1 text-sm font-semibold text-white/82">
             Ground Level
           </p>
         </div>
 
-        <div className="relative flex h-10 w-10 items-center justify-center rounded-full border border-white/20 bg-white/10">
+        <div className="relative flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-white/20 bg-white/10">
           <span className="map-pulse absolute h-6 w-6 rounded-full bg-white/25 [animation:mapPulse_2.4s_ease-in-out_infinite]" />
-          <MapPinned className="relative h-4 w-4 text-white" aria-hidden="true" />
+          <MapPinned
+            className="relative h-4 w-4 text-white"
+            aria-hidden="true"
+          />
         </div>
       </div>
 
-      <div className="grid grid-cols-4 gap-2">
+      <div className="hidden grid-cols-4 gap-2 lg:grid">
         <span className="map-line-drift h-9 rounded-xl bg-white/18 [animation:mapLineDrift_3s_ease-in-out_infinite]" />
         <span className="h-9 rounded-xl bg-white/10" />
         <span className="h-9 rounded-xl bg-white/16" />
