@@ -537,7 +537,7 @@ const GROUND_BLOCKS: FloorBlock[] = [
 ];
 
 const FIRST_BLOCKS: FloorBlock[] = [
-  makeBlock("first", "f-discounterra", "Discountterra", "fashion", 0, 0, 33.0, 13.6, {
+  makeBlock("first", "f-discounterra", "Discounterra", "fashion", 0, 0, 33.0, 13.6, {
     visualColor: "#5b18e8",
     route: "/stores",
   }),
