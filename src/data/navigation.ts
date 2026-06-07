@@ -9,11 +9,11 @@ export const mainNavigation: NavigationItem[] = [
     },
   },
   {
-    href: "/dining",
-    label: {
-      tr: "Yeme-İçme",
-      en: "Dining",
-    },
+   href: "/dining",
+   label: {
+     tr: "Yeme & İçme",
+     en: "Dining",
+   },
   },
   {
     href: "/campaigns",

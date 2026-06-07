@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { Search, X } from "lucide-react";
+import { ArrowRight, Search, X } from "lucide-react";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { campaigns } from "@/data/campaigns";
 import { diningPlaces } from "@/data/dining";
@@ -12,207 +12,238 @@ import type { Locale } from "@/types/content";
 
 type SearchOverlayProps = {
   locale: Locale;
-  isOpen: boolean;
   onClose: () => void;
+  isOpen?: boolean;
+  open?: boolean;
+  isSearchOpen?: boolean;
 };
 
-type SearchFilter = "all" | "store" | "dining" | "campaign" | "event" | "movie";
+type SearchKind = "store" | "dining" | "campaign" | "event" | "movie";
 
 type SearchResult = {
   id: string;
-  filter: Exclude<SearchFilter, "all">;
-  type: string;
+  kind: SearchKind;
+  label: string;
   title: string;
   description: string;
   href: string;
-  keywords: string;
+  searchableText: string;
 };
-
-type SearchRecord = Record<string, unknown>;
-type LocalizedValue = Partial<Record<Locale, string>>;
 
 const content = {
   tr: {
-    title: "Sitede ara",
-    description: "Mağaza, restoran, kampanya, etkinlik veya film arayın.",
-    placeholder: "Mağaza, kampanya, etkinlik ara...",
-    close: "Kapat",
-    empty: "Sonuç bulunamadı",
-    result: "sonuç",
-    filters: {
-      all: "Tümü",
-      store: "Mağazalar",
-      dining: "Yeme-İçme",
-      campaign: "Kampanyalar",
-      event: "Etkinlikler",
-      movie: "Sinema",
-    },
-    categories: {
+    placeholder: "Ne arıyorsunuz?",
+    example: "Örn: Puma, Burger King, Filmler",
+    noResults: "Sonuç bulunamadı",
+    labels: {
       store: "Mağaza",
-      dining: "Yeme-İçme",
+      dining: "Yeme & İçme",
       campaign: "Kampanya",
       event: "Etkinlik",
       movie: "Sinema",
     },
   },
   en: {
-    title: "Search the site",
-    description: "Search stores, restaurants, campaigns, events or movies.",
-    placeholder: "Search stores, campaigns, events...",
-    close: "Close",
-    empty: "No results found",
-    result: "results",
-    filters: {
-      all: "All",
-      store: "Stores",
-      dining: "Dining",
-      campaign: "Campaigns",
-      event: "Events",
-      movie: "Cinema",
-    },
-    categories: {
+    placeholder: "What are you looking for?",
+    example: "e.g: Puma, Burger King, Movies",
+    noResults: "No results found",
+    labels: {
       store: "Store",
       dining: "Dining",
       campaign: "Campaign",
       event: "Event",
-      movie: "Cinema",
+      movie: "Movie",
     },
   },
 };
 
-const filterOrder: SearchFilter[] = [
-  "all",
-  "store",
-  "dining",
-  "campaign",
-  "event",
-  "movie",
-];
+function isRecord(value: unknown): value is Record<string, unknown> {
+  return typeof value === "object" && value !== null;
+}
 
 function getLocalizedValue(value: unknown, locale: Locale) {
   if (typeof value === "string") {
     return value;
   }
 
-  if (value && typeof value === "object") {
-    const localized = value as LocalizedValue;
-    return localized[locale] ?? localized.tr ?? localized.en ?? "";
+  if (!isRecord(value)) {
+    return "";
   }
 
-  return "";
+  const localizedValue = value[locale] ?? value.tr ?? value.en;
+
+  return typeof localizedValue === "string" ? localizedValue : "";
 }
 
-function getPlainValue(value: unknown) {
-  if (typeof value === "string") {
-    return value;
-  }
-
-  return "";
+function getStringValue(value: unknown) {
+  return typeof value === "string" ? value : "";
 }
 
-function normalize(value: string) {
+function normalizeText(value: string, locale: Locale) {
   return value
-    .toLocaleLowerCase("tr-TR")
-    .replaceAll("ı", "i")
-    .replaceAll("ğ", "g")
-    .replaceAll("ü", "u")
-    .replaceAll("ş", "s")
-    .replaceAll("ö", "o")
-    .replaceAll("ç", "c")
+    .toLocaleLowerCase(locale === "tr" ? "tr-TR" : "en-US")
     .normalize("NFD")
-    .replace(/[\u0300-\u036f]/g, "")
-    .trim();
+    .replace(/[\u0300-\u036f]/g, "");
 }
 
-function buildSearchResults(locale: Locale): SearchResult[] {
-  const labels = content[locale].categories;
+function getKindSearchKeywords(kind: SearchKind, locale: Locale) {
+  const keywords = {
+    tr: {
+      store: "mağaza mağazalar alışveriş marka markalar store stores shopping shop shops",
+      dining:
+        "yeme içme restoran restoranlar cafe kafe yemek food dining burger kahve coffee restaurant restaurants",
+      campaign:
+        "kampanya kampanyalar fırsat fırsatlar indirim indirimler promotion promotions campaign campaigns offer offers discount discounts",
+      event:
+        "etkinlik etkinlikler aktivite aktiviteler program festival events event what happening live",
+      movie:
+        "film filmler sinema cinemall seans seanslar vizyon movie movies cinema showtime showtimes",
+    },
+    en: {
+      store:
+        "store stores shopping mall shop shops mağaza mağazalar marka markalar alışveriş",
+      dining:
+        "dining food restaurant restaurants cafe coffee yeme içme restoran yemek burger kahve",
+      campaign:
+        "campaign campaigns promotion promotions offer offers discount discounts kampanya kampanyalar fırsat fırsatlar indirim indirimler",
+      event:
+        "event events activities activity program festival etkinlik etkinlikler aktivite aktiviteler",
+      movie:
+        "movie movies cinema cinemall showtime showtimes film filmler sinema seans seanslar",
+    },
+  };
 
-  const storeResults = stores.map((store) => {
-    const record = store as unknown as SearchRecord;
-    const title = getLocalizedValue(record.name, locale);
-    const description = getLocalizedValue(record.description, locale);
-    const category = getPlainValue(record.category);
+  return keywords[locale][kind];
+}
 
-    return {
-      id: `store-${getPlainValue(record.id)}`,
-      filter: "store" as const,
-      type: labels.store,
-      title,
-      description,
-      href: `/${locale}/stores`,
-      keywords: [title, description, category].join(" "),
-    };
-  });
+function createResult({
+  item,
+  kind,
+  label,
+  locale,
+  href,
+  fallbackId,
+}: {
+  item: unknown;
+  kind: SearchKind;
+  label: string;
+  locale: Locale;
+  href: string;
+  fallbackId: string;
+}): SearchResult | null {
+  if (!isRecord(item)) {
+    return null;
+  }
 
-  const diningResults = diningPlaces.map((place) => {
-    const record = place as unknown as SearchRecord;
-    const title = getLocalizedValue(record.name, locale);
-    const description = getLocalizedValue(record.description, locale);
-    const category = getPlainValue(record.category);
-    const cuisine = getLocalizedValue(record.cuisine, locale);
+  const id = getStringValue(item.id) || fallbackId;
 
-    return {
-      id: `dining-${getPlainValue(record.id)}`,
-      filter: "dining" as const,
-      type: labels.dining,
-      title,
-      description,
-      href: `/${locale}/dining`,
-      keywords: [title, description, category, cuisine].join(" "),
-    };
-  });
+  const title =
+    getLocalizedValue(item.name, locale) ||
+    getLocalizedValue(item.title, locale) ||
+    getStringValue(item.slug) ||
+    label;
 
-  const campaignResults = campaigns.map((campaign) => {
-    const record = campaign as unknown as SearchRecord;
-    const title = getLocalizedValue(record.title, locale);
-    const description = getLocalizedValue(record.description, locale);
-    const badge = getLocalizedValue(record.badge, locale);
-    const storeName = getLocalizedValue(record.storeName, locale);
+  const description =
+    getLocalizedValue(item.description, locale) ||
+    getLocalizedValue(item.summary, locale) ||
+    getLocalizedValue(item.subtitle, locale) ||
+    getLocalizedValue(item.category, locale) ||
+    "";
 
-    return {
-      id: `campaign-${getPlainValue(record.id)}`,
-      filter: "campaign" as const,
-      type: labels.campaign,
-      title,
-      description,
-      href: `/${locale}/campaigns`,
-      keywords: [title, description, badge, storeName].join(" "),
-    };
-  });
+  const slug = getStringValue(item.slug);
 
-  const eventResults = events.map((event) => {
-    const record = event as unknown as SearchRecord;
-    const title = getLocalizedValue(record.title, locale);
-    const description = getLocalizedValue(record.description, locale);
-    const location = getLocalizedValue(record.location, locale);
+  const searchableText = [
+    title,
+    description,
+    slug,
+    label,
+    getKindSearchKeywords(kind, locale),
+    getStringValue(item.category),
+    getStringValue(item.floor),
+    getLocalizedValue(item.cuisine, locale),
+    getLocalizedValue(item.location, locale),
+  ]
+    .filter(Boolean)
+    .join(" ");
 
-    return {
-      id: `event-${getPlainValue(record.id)}`,
-      filter: "event" as const,
-      type: labels.event,
-      title,
-      description,
-      href: `/${locale}/events`,
-      keywords: [title, description, location].join(" "),
-    };
-  });
+  return {
+    id,
+    kind,
+    label,
+    title,
+    description,
+    href,
+    searchableText,
+  };
+}
 
-  const movieResults = movies.map((movie) => {
-    const record = movie as unknown as SearchRecord;
-    const title = getLocalizedValue(record.title, locale);
-    const description = getLocalizedValue(record.description, locale);
-    const genre = getLocalizedValue(record.genre, locale);
+function createSearchResults(locale: Locale): SearchResult[] {
+  const copy = content[locale];
 
-    return {
-      id: `movie-${getPlainValue(record.id)}`,
-      filter: "movie" as const,
-      type: labels.movie,
-      title,
-      description,
-      href: `/${locale}/cinema`,
-      keywords: [title, description, genre].join(" "),
-    };
-  });
+  const storeResults = (stores as readonly unknown[])
+    .map((item, index) =>
+      createResult({
+        item,
+        kind: "store",
+        label: copy.labels.store,
+        locale,
+        href: `/${locale}/stores`,
+        fallbackId: `store-${index}`,
+      })
+    )
+    .filter((item): item is SearchResult => Boolean(item));
+
+  const diningResults = (diningPlaces as readonly unknown[])
+    .map((item, index) =>
+      createResult({
+        item,
+        kind: "dining",
+        label: copy.labels.dining,
+        locale,
+        href: `/${locale}/dining`,
+        fallbackId: `dining-${index}`,
+      })
+    )
+    .filter((item): item is SearchResult => Boolean(item));
+
+  const campaignResults = (campaigns as readonly unknown[])
+    .map((item, index) =>
+      createResult({
+        item,
+        kind: "campaign",
+        label: copy.labels.campaign,
+        locale,
+        href: `/${locale}/campaigns`,
+        fallbackId: `campaign-${index}`,
+      })
+    )
+    .filter((item): item is SearchResult => Boolean(item));
+
+  const eventResults = (events as readonly unknown[])
+    .map((item, index) =>
+      createResult({
+        item,
+        kind: "event",
+        label: copy.labels.event,
+        locale,
+        href: `/${locale}/events`,
+        fallbackId: `event-${index}`,
+      })
+    )
+    .filter((item): item is SearchResult => Boolean(item));
+
+  const movieResults = (movies as readonly unknown[])
+    .map((item, index) =>
+      createResult({
+        item,
+        kind: "movie",
+        label: copy.labels.movie,
+        locale,
+        href: `/${locale}/cinema`,
+        fallbackId: `movie-${index}`,
+      })
+    )
+    .filter((item): item is SearchResult => Boolean(item));
 
   return [
     ...storeResults,
@@ -220,73 +251,50 @@ function buildSearchResults(locale: Locale): SearchResult[] {
     ...campaignResults,
     ...eventResults,
     ...movieResults,
-  ].filter((item) => item.title);
+  ];
 }
 
-function rankResult(result: SearchResult, query: string) {
-  if (!query) {
-    return 0;
-  }
-
-  const title = normalize(result.title);
-  const keywords = normalize(result.keywords);
-
-  if (title === query) {
-    return 0;
-  }
-
-  if (title.startsWith(query)) {
-    return 1;
-  }
-
-  if (title.includes(query)) {
-    return 2;
-  }
-
-  if (keywords.includes(query)) {
-    return 3;
-  }
-
-  return 4;
-}
-
-export function SearchOverlay({ locale, isOpen, onClose }: SearchOverlayProps) {
+export function SearchOverlay({
+  locale,
+  onClose,
+  isOpen,
+  open,
+  isSearchOpen,
+}: SearchOverlayProps) {
+  const active = isOpen ?? open ?? isSearchOpen ?? true;
   const copy = content[locale];
-  const inputRef = useRef<HTMLInputElement>(null);
+  const inputRef = useRef<HTMLInputElement | null>(null);
   const [query, setQuery] = useState("");
-  const [activeFilter, setActiveFilter] = useState<SearchFilter>("all");
 
-  const allResults = useMemo(() => buildSearchResults(locale), [locale]);
+  const searchIndex = useMemo(() => createSearchResults(locale), [locale]);
 
-  const filteredResults = useMemo(() => {
-    const normalizedQuery = normalize(query);
+  const results = useMemo(() => {
+    const trimmedQuery = query.trim();
 
-    return allResults
-      .filter((item) => {
-        const matchesQuery =
-          !normalizedQuery || normalize(item.keywords).includes(normalizedQuery);
+    if (!trimmedQuery) {
+      return [];
+    }
 
-        const matchesFilter =
-          activeFilter === "all" || item.filter === activeFilter;
+    const normalizedQuery = normalizeText(trimmedQuery, locale);
 
-        return matchesQuery && matchesFilter;
-      })
-      .sort((a, b) => {
-        const rankA = rankResult(a, normalizedQuery);
-        const rankB = rankResult(b, normalizedQuery);
-
-        if (rankA !== rankB) {
-          return rankA - rankB;
-        }
-
-        return a.title.localeCompare(b.title, locale);
-      });
-  }, [activeFilter, allResults, locale, query]);
+    return searchIndex
+      .filter((item) =>
+        normalizeText(item.searchableText, locale).includes(normalizedQuery)
+      )
+      .slice(0, 7);
+  }, [locale, query, searchIndex]);
 
   useEffect(() => {
-    if (!isOpen) {
+    if (!active) {
       return;
     }
+
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+
+    const focusTimer = window.setTimeout(() => {
+      inputRef.current?.focus();
+    }, 80);
 
     function handleKeyDown(event: KeyboardEvent) {
       if (event.key === "Escape") {
@@ -295,144 +303,164 @@ export function SearchOverlay({ locale, isOpen, onClose }: SearchOverlayProps) {
     }
 
     window.addEventListener("keydown", handleKeyDown);
-    document.body.style.overflow = "hidden";
-
-    const focusTimeout = window.setTimeout(() => {
-      inputRef.current?.focus();
-    }, 50);
 
     return () => {
+      window.clearTimeout(focusTimer);
       window.removeEventListener("keydown", handleKeyDown);
-      document.body.style.overflow = "";
-      window.clearTimeout(focusTimeout);
+      document.body.style.overflow = previousOverflow;
     };
-  }, [isOpen, onClose]);
+  }, [active, onClose]);
 
   useEffect(() => {
-    if (!isOpen) {
+    if (!active) {
       setQuery("");
-      setActiveFilter("all");
     }
-  }, [isOpen]);
+  }, [active]);
 
-  if (!isOpen) {
+  if (!active) {
     return null;
   }
 
   return (
     <div
-      className="fixed inset-0 z-[100] bg-text-primary/40 p-4 backdrop-blur-sm"
-      onMouseDown={onClose}
+      className="fixed inset-0 z-[120] overflow-y-auto bg-[rgba(10,10,10,0.82)] text-white backdrop-blur-[16px] backdrop-saturate-150 [animation:searchOverlayFade_250ms_ease-out_both]"
+      onMouseDown={(event) => {
+        if (event.target === event.currentTarget) {
+          onClose();
+        }
+      }}
       role="dialog"
       aria-modal="true"
-      aria-label={copy.title}
+      aria-label={copy.placeholder}
     >
-      <div
-        className="mx-auto flex h-full max-w-5xl flex-col overflow-hidden rounded-[2rem] border border-border-default bg-surface-default shadow-overlay"
-        onMouseDown={(event) => event.stopPropagation()}
+      <style>{`
+        @keyframes searchOverlayFade {
+          from {
+            opacity: 0;
+          }
+
+          to {
+            opacity: 1;
+          }
+        }
+
+        @keyframes searchPanelRise {
+          from {
+            opacity: 0;
+            transform: translateY(20px);
+          }
+
+          to {
+            opacity: 1;
+            transform: translateY(0);
+          }
+        }
+
+        @keyframes searchResultFade {
+          from {
+            opacity: 0;
+            transform: translateY(10px);
+          }
+
+          to {
+            opacity: 1;
+            transform: translateY(0);
+          }
+        }
+      `}</style>
+
+      <button
+        type="button"
+        onClick={onClose}
+        className="fixed right-5 top-5 z-20 flex h-14 w-14 items-center justify-center rounded-full border border-white/18 bg-white/[0.04] text-white transition duration-300 hover:bg-white/[0.08] hover:text-white/70 md:right-8 md:top-8 md:h-16 md:w-16"
+        aria-label="Close search"
       >
-        <div className="border-b border-border-default p-5 md:p-6">
-          <div className="flex items-start justify-between gap-4">
-            <div>
-              <p className="text-sm font-semibold uppercase tracking-[0.25em] text-text-muted">
-                {copy.title}
-              </p>
+        <X className="h-7 w-7 md:h-8 md:w-8" aria-hidden="true" />
+      </button>
 
-              <h2 className="mt-2 text-2xl font-semibold text-text-primary md:text-3xl">
-                {copy.description}
-              </h2>
-            </div>
+      <div className="pointer-events-none fixed inset-0 z-0">
+        <div className="absolute left-[12%] top-[18%] h-40 w-40 rounded-full bg-[#E8312A]/18 blur-3xl" />
+        <div className="absolute right-[12%] top-[26%] h-52 w-52 rounded-full bg-[#0072BC]/16 blur-3xl" />
+        <div className="absolute bottom-[18%] left-[42%] h-44 w-44 rounded-full bg-[#FFD100]/12 blur-3xl" />
+      </div>
 
-            <button
-              type="button"
-              onClick={onClose}
-              className="inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-full border border-border-default bg-surface-muted text-text-primary transition hover:bg-surface-subtle"
-              aria-label={copy.close}
-            >
-              <X className="h-5 w-5" aria-hidden="true" />
-            </button>
-          </div>
-
-          <div className="mt-6 flex items-center gap-3 rounded-2xl border border-border-default bg-surface-muted px-4 py-3">
-            <Search
-              className="h-5 w-5 shrink-0 text-text-muted"
-              aria-hidden="true"
-            />
-
+      <div className="relative z-10 mx-auto flex min-h-screen w-full max-w-5xl flex-col justify-center px-6 py-28 [animation:searchPanelRise_300ms_cubic-bezier(0.22,1,0.36,1)_both] md:px-10">
+        <form
+          onSubmit={(event) => event.preventDefault()}
+          className="group/search relative"
+        >
+          <div className="relative border-b border-white/30 transition duration-300 focus-within:border-white/90">
             <input
               ref={inputRef}
               value={query}
               onChange={(event) => setQuery(event.target.value)}
               placeholder={copy.placeholder}
-              className="w-full bg-transparent text-base font-medium text-text-primary outline-none placeholder:text-text-muted"
+              className="w-full bg-transparent py-5 pr-16 text-4xl font-semibold tracking-tight text-white outline-none placeholder:text-white/42 md:py-7 md:text-6xl"
+              type="search"
+              autoComplete="off"
+              spellCheck={false}
+            />
+
+            <Search
+              className="absolute right-0 top-1/2 h-9 w-9 -translate-y-1/2 text-white/55 transition duration-300 group-focus-within/search:text-white md:h-11 md:w-11"
+              aria-hidden="true"
             />
           </div>
 
-          <div className="mt-4 flex gap-2 overflow-x-auto pb-1">
-            {filterOrder.map((filter) => {
-              const isActive = activeFilter === filter;
+          <p className="mt-4 text-sm italic leading-6 text-white/40 md:text-base">
+            {copy.example}
+          </p>
+        </form>
 
-              return (
-                <button
-                  key={filter}
-                  type="button"
-                  onClick={() => setActiveFilter(filter)}
-                  className={`whitespace-nowrap rounded-full border px-4 py-2 text-sm font-semibold transition ${
-                    isActive
-                      ? "border-brand-primary bg-brand-primary text-brand-foreground shadow-card"
-                      : "border-border-default bg-surface-muted text-text-secondary hover:bg-surface-subtle hover:text-text-primary"
-                  }`}
+        <div className="mt-10">
+          {query.trim() && results.length === 0 ? (
+            <p className="py-12 text-center text-lg font-medium text-white/50">
+              {copy.noResults}
+            </p>
+          ) : null}
+
+          {results.length > 0 ? (
+            <div className="overflow-hidden border-y border-white/10">
+              {results.map((result, index) => (
+                <Link
+                  key={`${result.kind}-${result.id}`}
+                  href={result.href}
+                  onClick={onClose}
+                  className="group/result grid grid-cols-[82px_1fr_auto] items-center gap-4 border-t border-white/10 px-1 py-5 opacity-0 transition duration-300 first:border-t-0 hover:bg-white/[0.06] md:grid-cols-[130px_1fr_auto] md:px-4 md:py-6 [animation:searchResultFade_320ms_ease-out_forwards]"
+                  style={{
+                    animationDelay: `${index * 45}ms`,
+                  }}
                 >
-                  {copy.filters[filter]}
-                </button>
-              );
-            })}
-          </div>
-        </div>
+                  <span className="text-[0.62rem] font-semibold uppercase tracking-[0.22em] text-white/36 md:text-xs">
+                    {result.label}
+                  </span>
 
-        <div className="flex-1 overflow-y-auto p-5 md:p-6">
-          {filteredResults.length ? (
-            <div>
-              <p className="mb-4 text-sm font-medium text-text-muted">
-                {filteredResults.length} {copy.result}
-              </p>
-
-              <div className="grid gap-3">
-                {filteredResults.map((result) => (
-                  <Link
-                    key={result.id}
-                    href={result.href}
-                    onClick={onClose}
-                    className="group rounded-3xl border border-border-default bg-surface-muted p-5 transition hover:-translate-y-0.5 hover:bg-surface-subtle hover:shadow-card"
-                  >
-                    <div className="flex flex-wrap items-center gap-3">
-                      <span className="rounded-full bg-surface-default px-3 py-1 text-xs font-semibold text-text-muted shadow-card">
-                        {result.type}
-                      </span>
-
-                      <h3 className="text-lg font-semibold text-text-primary">
-                        {result.title}
-                      </h3>
-                    </div>
+                  <span className="min-w-0">
+                    <span className="block truncate text-2xl font-semibold tracking-tight text-white md:text-3xl">
+                      {result.title}
+                    </span>
 
                     {result.description ? (
-                      <p className="mt-3 line-clamp-2 text-sm leading-6 text-text-secondary">
+                      <span className="mt-1 hidden max-w-2xl truncate text-sm text-white/38 md:block">
                         {result.description}
-                      </p>
+                      </span>
                     ) : null}
-                  </Link>
-                ))}
-              </div>
+                  </span>
+
+                  <span className="flex h-11 w-11 items-center justify-center rounded-full border border-white/12 text-white/64 transition duration-300 group-hover/result:border-white/35 group-hover/result:bg-white/10 group-hover/result:text-white">
+                    <ArrowRight
+                      className="h-5 w-5 transition duration-300 group-hover/result:translate-x-0.5"
+                      aria-hidden="true"
+                    />
+                  </span>
+                </Link>
+              ))}
             </div>
-          ) : (
-            <div className="flex min-h-60 items-center justify-center rounded-3xl border border-dashed border-border-default bg-surface-muted p-8 text-center">
-              <p className="text-sm font-medium text-text-muted">
-                {copy.empty}
-              </p>
-            </div>
-          )}
+          ) : null}
         </div>
       </div>
     </div>
   );
 }
+
+export default SearchOverlay;

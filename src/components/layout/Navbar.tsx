@@ -27,7 +27,7 @@ const content = {
     cta: "Ziyaret Planla",
     links: {
       stores: "Mağazalar",
-      dining: "Restoranlar",
+      dining: "Yeme & İçme",
       events: "Etkinlikler",
       cinema: "Cinemall",
       visit: "Ziyaret Planla",

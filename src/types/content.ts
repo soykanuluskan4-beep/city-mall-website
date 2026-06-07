@@ -91,15 +91,22 @@ export type Store = {
 };
 
 export type DiningCuisineType =
+  | "fast-food"
   | "turkish"
   | "italian"
-  | "fast-food"
+  | "world"
   | "cafe"
   | "dessert"
+  | "snack"
   | "coffee"
-  | "healthy"
-  | "world"
-  | "snack";
+  | "chicken"
+  | "bistro"
+  | "restaurant"
+  | "pide"
+  | "meatballs"
+  | "pizza"
+  | "asian"
+  | "burger";
 
 export type DiningPlace = {
   id: string;
