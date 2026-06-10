@@ -17,6 +17,11 @@ type NavItem = {
   key: "stores" | "dining" | "events" | "cinema" | "visit";
 };
 
+type MobileNavItem = {
+  href: string;
+  key: "stores" | "dining" | "events" | "cinema" | "map";
+};
+
 const content = {
   tr: {
     brand: "CityMall Cyprus",
@@ -68,16 +73,13 @@ const desktopNavItems: NavItem[] = [
   { href: "map", key: "visit" },
 ];
 
-const mobileNavItems = [
+const mobileNavItems: MobileNavItem[] = [
   { href: "stores", key: "stores" },
   { href: "dining", key: "dining" },
   { href: "events", key: "events" },
   { href: "cinema", key: "cinema" },
-  { href: "kids", key: "kids" },
   { href: "map", key: "map" },
-  { href: "services", key: "services" },
-  { href: "contact", key: "contact" },
-] as const;
+];
 
 const socialLinks = [
   { label: "Instagram", icon: InstagramIcon },
@@ -147,8 +149,8 @@ export function Navbar({ locale }: NavbarProps) {
       <header
         className={`preview-navbar fixed inset-x-0 top-0 z-[100] transition-all duration-300 ${
           isScrolled || isMenuOpen
-          ? "border-b border-[#E8312A]/35 bg-[#0f0f10]/88 shadow-[0_20px_70px_rgba(232,49,42,0.18)] backdrop-blur-xl"
-          : "border-b border-transparent bg-transparent"
+            ? "border-b border-[#E8312A]/35 bg-[#0f0f10]/88 shadow-[0_20px_70px_rgba(232,49,42,0.18)] backdrop-blur-xl"
+            : "border-b border-transparent bg-transparent"
         }`}
       >
         <style>{`
@@ -182,22 +184,22 @@ export function Navbar({ locale }: NavbarProps) {
           }`}
         >
           <Link
-  href={`/${locale}`}
-  className="flex items-center"
-  aria-label="CityMall Cyprus"
->
-  <Image
-    src="/citymall-logo.png"
-    alt="CityMall Cyprus"
-    width={154}
-    height={54}
-    priority
-    className="h-auto w-[132px] transition duration-300 md:w-[154px]"
-    style={{
-      filter: isScrolled ? "none" : "brightness(0) invert(1)",
-    }}
-  />
-</Link>
+            href={`/${locale}`}
+            className="flex items-center"
+            aria-label="CityMall Cyprus"
+          >
+            <Image
+              src="/citymall-logo.png"
+              alt="CityMall Cyprus"
+              width={154}
+              height={54}
+              priority
+              className="h-auto w-[132px] transition duration-300 md:w-[154px]"
+              style={{
+                filter: isScrolled ? "none" : "brightness(0) invert(1)",
+              }}
+            />
+          </Link>
 
           <nav className="hidden items-center gap-8 text-sm font-semibold lg:flex">
             {desktopNavItems.map((item) => {
@@ -209,7 +211,7 @@ export function Navbar({ locale }: NavbarProps) {
                   key={item.key}
                   href={href}
                   className={`preview-navbar-link group relative font-semibold text-white drop-shadow-[0_1px_12px_rgba(0,0,0,0.45)] transition ${
-                   isActive ? "text-white" : "text-white/88 hover:text-white"
+                    isActive ? "text-white" : "text-white/88 hover:text-white"
                   }`}
                 >
                   {copy.links[item.key]}
@@ -234,30 +236,30 @@ export function Navbar({ locale }: NavbarProps) {
             </button>
 
             <div className="hidden items-center rounded-full border border-white/18 bg-white/10 p-1 text-xs font-semibold text-white backdrop-blur-md sm:flex">
-  <Link
-    href={switchLocalePath(pathname, "tr")}
-    className={`rounded-full px-3 py-2 text-white transition ${
-      locale === "tr"
-        ? "bg-white/18 shadow-[0_0_22px_rgba(255,255,255,0.12)]"
-        : "text-white/70 hover:bg-white/10 hover:text-white"
-    }`}
-    onClick={closeMenu}
-  >
-    TR
-  </Link>
+              <Link
+                href={switchLocalePath(pathname, "tr")}
+                className={`rounded-full px-3 py-2 text-white transition ${
+                  locale === "tr"
+                    ? "bg-white/18 shadow-[0_0_22px_rgba(255,255,255,0.12)]"
+                    : "text-white/70 hover:bg-white/10 hover:text-white"
+                }`}
+                onClick={closeMenu}
+              >
+                TR
+              </Link>
 
-  <Link
-    href={switchLocalePath(pathname, "en")}
-    className={`rounded-full px-3 py-2 text-white transition ${
-      locale === "en"
-        ? "bg-white/18 shadow-[0_0_22px_rgba(255,255,255,0.12)]"
-        : "text-white/70 hover:bg-white/10 hover:text-white"
-    }`}
-    onClick={closeMenu}
-  >
-    EN
-  </Link>
-</div>
+              <Link
+                href={switchLocalePath(pathname, "en")}
+                className={`rounded-full px-3 py-2 text-white transition ${
+                  locale === "en"
+                    ? "bg-white/18 shadow-[0_0_22px_rgba(255,255,255,0.12)]"
+                    : "text-white/70 hover:bg-white/10 hover:text-white"
+                }`}
+                onClick={closeMenu}
+              >
+                EN
+              </Link>
+            </div>
 
             <Link
               href={`/${locale}/map`}
@@ -330,10 +332,10 @@ export function Navbar({ locale }: NavbarProps) {
                   href={switchLocalePath(pathname, "tr")}
                   onClick={closeMenu}
                   className={`rounded-2xl px-4 py-3 text-center text-sm font-semibold text-white transition ${
-  locale === "tr"
-    ? "bg-white/18 shadow-[0_0_22px_rgba(255,255,255,0.12)]"
-    : "text-white/60 hover:bg-white/10 hover:text-white"
-}`}
+                    locale === "tr"
+                      ? "bg-white/18 shadow-[0_0_22px_rgba(255,255,255,0.12)]"
+                      : "text-white/60 hover:bg-white/10 hover:text-white"
+                  }`}
                 >
                   TR
                 </Link>
@@ -341,23 +343,16 @@ export function Navbar({ locale }: NavbarProps) {
                 <Link
                   href={switchLocalePath(pathname, "en")}
                   onClick={closeMenu}
-                  className={`rounded-2xl px-4 py-3 text-center text-sm font-semibold transition ${
+                  className={`rounded-2xl px-4 py-3 text-center text-sm font-semibold text-white transition ${
                     locale === "en"
-                      ? "bg-white text-text-primary"
-                      : "text-white/52"
+                      ? "bg-white/18 shadow-[0_0_22px_rgba(255,255,255,0.12)]"
+                      : "text-white/60 hover:bg-white/10 hover:text-white"
                   }`}
                 >
                   EN
                 </Link>
               </div>
             </div>
-
-            <Link
-  href={`/${locale}/map`}
-  className="hidden whitespace-nowrap rounded-full border border-white/28 bg-white/10 px-5 py-3 text-sm font-semibold text-white backdrop-blur-md transition hover:-translate-y-0.5 hover:bg-white hover:text-text-primary xl:inline-flex"
->
-  {copy.cta}
-</Link>
 
             <div className="mt-auto pt-10">
               <p className="mb-4 text-xs font-semibold uppercase tracking-[0.25em] text-white/34">
