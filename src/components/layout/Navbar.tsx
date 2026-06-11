@@ -262,13 +262,6 @@ export function Navbar({ locale }: NavbarProps) {
             </div>
 
             <Link
-              href={`/${locale}/map`}
-              className="hidden whitespace-nowrap rounded-full border border-[#FFD100]/55 bg-white/10 px-5 py-3 text-sm font-semibold text-white backdrop-blur-md transition hover:-translate-y-0.5 hover:bg-[#FFD100] hover:text-black xl:inline-flex"
-            >
-              {copy.cta}
-            </Link>
-
-            <Link
               href={switchLocalePath(pathname, nextLocale)}
               className="flex h-11 items-center rounded-full border border-white/14 bg-white/8 px-3 text-sm font-semibold text-white backdrop-blur-md transition hover:bg-white/14 sm:hidden"
               onClick={closeMenu}
