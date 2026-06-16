@@ -22,7 +22,7 @@ export const stores: Store[] = [
       tr: "Günlük ihtiyaçlar ve pratik alışveriş seçenekleri.",
       en: "Everyday essentials and practical shopping options.",
     },
-    category: "home",
+    category: "books",
     floor: "basement",
     occasions: ["birthday", "eid", "new-year", "kids"],
     featured: false,

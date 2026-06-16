@@ -526,7 +526,7 @@ const GROUND_BLOCKS: FloorBlock[] = [
     opacity: 0.6,
     height: 0.9,
   }),
-  makeBlock("ground", "g-dp-parfumes", "D&P Parfumes", "beauty", 61.2, 91.2, 11.4, 8.8, {
+  makeBlock("ground", "g-dp-perfumum", "D&P Perfumum", "beauty", 61.2, 91.2, 11.4, 8.8, {
     visualColor: "#f45ec3",
   }),
   makeBlock("ground", "g-cashier", "Vezne", "cashier", 46.5, 60.3, 7.0, 3.0, {
@@ -573,7 +573,7 @@ const FIRST_BLOCKS: FloorBlock[] = [
   }),
 
   // PUMA görselde L formunda. İki blok tek mağaza gibi davranır.
- makeBlock("first", "f-puma-main", "PUMA", "sport", 0, 74.0, 18.6, 14.8, {
+ makeBlock("first", "f-puma-main", "Puma", "sport", 0, 74.0, 18.6, 14.8, {
   visualColor: "#4b4b4b",
 }),
   makeBlock("first", "f-section", "Section", "beauty", 90.6, 13.6, 9.4, 13.5, {
@@ -588,7 +588,7 @@ const FIRST_BLOCKS: FloorBlock[] = [
   makeBlock("first", "f-passion", "Passion", "fashion", 90.6, 31.8, 9.4, 11.2, {
     visualColor: "#f21ca0",
   }),
-  makeBlock("first", "f-sketchers", "Sketchers", "sport", 90.6, 43.0, 9.4, 11.8, {
+  makeBlock("first", "f-skechers", "Skechers", "sport", 90.6, 43.0, 9.4, 11.8, {
   visualColor: "#9a9a9a",
 }),
   makeBlock("first", "f-saydam", "Saydam", "fashion", 90.6, 54.8, 9.4, 8.0, {
@@ -597,7 +597,7 @@ const FIRST_BLOCKS: FloorBlock[] = [
   makeBlock("first", "f-buff-bloom", "Buff & Bloom", "fashion", 94.0, 62.8, 6.0, 10.2, {
   visualColor: "#2f2f2f",
 }),
-makeBlock("first", "f-colins", "COLIN'S", "service", 84.2, 75.2, 13.8, 18.8, {
+makeBlock("first", "f-colins", "Colin's", "service", 84.2, 75.2, 13.8, 18.8, {
   visualColor: "#4E8F97",
 }),
   makeBlock("first", "f-uso-parfume", "U.S.O Parfume", "beauty", 37.0, 44.8, 16.5, 2.4, {
@@ -632,13 +632,13 @@ const SECOND_BLOCKS: FloorBlock[] = [
     height: 1.1,
     visualColor: "#5b18e8",
   }),
-  makeBlock("second", "s-no33", "No 33 Limon Tantuni", "food", 0, 49.6, 9.8, 7.0, {
+  makeBlock("second", "s-no33", "No 33. Limon Tantuni", "food", 0, 49.6, 9.8, 7.0, {
     visualColor: "#3f3f3f",
   }),
   makeBlock("second", "s-orkide", "Orkide", "food", 0, 56.6, 9.8, 7.6, {
     visualColor: "#d4b200",
   }),
-  makeBlock("second", "s-sampi-pide", "Samp Pide", "food", 0, 64.2, 9.8, 7.8, {
+  makeBlock("second", "s-sampi-pide", "Sampi Pide", "food", 0, 64.2, 9.8, 7.8, {
     visualColor: "#7fbf4d",
   }),
   makeBlock("second", "s-sultanahmet", "Sultanahmet Köftecisi", "food", 0, 72.0, 9.8, 10.8, {

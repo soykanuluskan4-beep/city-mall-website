@@ -43,7 +43,7 @@ const content = {
     listedStores: "mağaza listeleniyor",
     results: "sonuç",
     newThisMonth: "Yeni Açılanlar",
-    comingSoon: "Yakında CityMall’de",
+    comingSoon: "Yakında CityMall’da",
     noResultsTitle: "Aradığın mağaza bulunamadı",
     noResultsText:
       "Kategori, kat, durum veya özel gün filtresini değiştirerek tekrar deneyebilirsin.",

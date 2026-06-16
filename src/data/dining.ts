@@ -39,7 +39,7 @@ export const diningPlaces: DiningPlace[] = [
       tr: "-1. katta tatlı, lokma ve hızlı atıştırmalık molası.",
       en: "A basement-level stop for desserts, lokma and quick snacks.",
     },
-    category: "cafe",
+    category: "other",
     floor: "basement",
     cuisine: {
       tr: "Tatlı & Atıştırmalık",
@@ -248,8 +248,8 @@ export const diningPlaces: DiningPlace[] = [
     id: "dining-010",
     slug: "sampi-pide",
     name: {
-      tr: "Sampı Pide",
-      en: "Sampı Pide",
+      tr: "Sampi Pide",
+      en: "Sampi Pide",
     },
     description: {
       tr: "2. katta pide ve fırın lezzetleriyle doyurucu bir mola.",
