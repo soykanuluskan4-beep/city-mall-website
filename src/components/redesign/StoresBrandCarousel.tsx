@@ -115,6 +115,7 @@ const storeBrands: StoreBrand[] = [
   {
     name: "Dogo",
     image: "/stores/dogo.JPG",
+    logo: "/logos/dogo.png",
   },
   {
     name: "Efor",
